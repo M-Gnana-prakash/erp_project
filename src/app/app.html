@@ -14,3 +14,16 @@
   [needValidationStatusMessage]="true" [borderStyle]="'1px solid #ccc'" [outline]="'none'" [sizeVariant]="'md'"
   (statusChange)="onStatusChange($event)">
 </app-mcv-password-field>
+
+<app-mcv-radio-field [options]="radioOptions" [value]="radioValue()" [required]="true" [layout]="'horizontal'"
+  [needValidationStatusMessage]="true" (statusChange)="onStatusChange($event)" (valueChange)="radioValue.set($event)">
+</app-mcv-radio-field>
+
+<app-mcv-radio-field [options]="genderOptions" [value]="genderValue()" [required]="true" [layout]="'vertical'"
+  [needValidationStatusMessage]="true" (statusChange)="onStatusChange($event)" (valueChange)="genderValue.set($event)">
+</app-mcv-radio-field>
+
+<app-mcv-toggle-field [value]="toggleValue()" [required]="true" [disabled]="false" [onLabel]="'Yes'" [offLabel]="'No'"
+  [activeColor]="'#2563eb'" [inactiveColor]="'#d1d5db'" [knobColor]="'#ffffff'" [sizeVariant]="'md'"
+  (valueChange)="onToggleChange($event)">
+</app-mcv-toggle-field>

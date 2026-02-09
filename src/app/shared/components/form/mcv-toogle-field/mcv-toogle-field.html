@@ -1,0 +1,38 @@
+<div class="flex items-center gap-3">
+    <!-- Toggle Switch Container -->
+    <button type="button" (click)="toggle()" [disabled]="disabled"
+        class="relative inline-flex items-center rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        [ngClass]="{
+      'w-11 h-6': sizeVariant === 'sm',
+      'w-14 h-7': sizeVariant === 'md',
+      'w-16 h-8': sizeVariant === 'lg',
+      'opacity-50 cursor-not-allowed': disabled,
+      'cursor-pointer': !disabled
+    }" [style.background-color]="value ? activeColor : inactiveColor">
+
+        <!-- Toggle Knob -->
+        <span class="inline-block rounded-full shadow-lg transform transition-transform duration-300 ease-in-out"
+            [ngClass]="{
+        'w-4 h-4': sizeVariant === 'sm',
+        'w-5 h-5': sizeVariant === 'md',
+        'w-6 h-6': sizeVariant === 'lg',
+        'translate-x-1': !value,
+        'translate-x-6': value && sizeVariant === 'sm',
+        'translate-x-7': value && sizeVariant === 'md',
+        'translate-x-8': value && sizeVariant === 'lg'
+      }" [style.background-color]="knobColor">
+        </span>
+    </button>
+
+    <!-- Label Text -->
+    <span class="font-medium select-none transition-colors duration-200" [ngClass]="{
+      'text-sm': sizeVariant === 'sm',
+      'text-base': sizeVariant === 'md',
+      'text-lg': sizeVariant === 'lg',
+      'text-gray-900': value,
+      'text-gray-600': !value,
+      'opacity-50': disabled
+    }">
+        {{ value ? onLabel : offLabel }}
+    </span>
+</div>
