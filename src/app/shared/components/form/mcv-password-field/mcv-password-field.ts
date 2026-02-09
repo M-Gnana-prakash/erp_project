@@ -2,19 +2,22 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-mcv-email-field',
+  selector: 'app-mcv-password-field',
   imports: [CommonModule],
-  templateUrl: './mcv-email-field.html',
-  styleUrl: './mcv-email-field.css',
+  templateUrl: './mcv-password-field.html',
+  styleUrl: './mcv-password-field.css',
 })
-export class McvEmailField {
+export class McvPasswordField {
   // Inputs
   @Input() value: string = '';
-  @Input() placeholder: string = '';
+  @Input() placeholder: string = 'Password';
+  @Input() minLength: number = 8;
+  @Input() maxLength: number = Infinity;
+  @Input() regex: RegExp | null = null;
   @Input() required: boolean = false;
-  @Input() allowMultiple: boolean = false;
   @Input() disabled: boolean = false;
   @Input() readonly: boolean = false;
+  @Input() canDisplayEye: boolean = true;
   @Input() needValidationStatusMessage: boolean = false;
 
   // CSS Inputs
@@ -30,6 +33,7 @@ export class McvEmailField {
 
   public isFocused: boolean = false;
   public isTouched: boolean = false;
+  public showPassword: boolean = false;
 
   // Output
   @Output() statusChange = new EventEmitter<{
@@ -53,28 +57,31 @@ export class McvEmailField {
     this.validate();
   }
 
+  toggleVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
   public validate() {
     const currentErrors: string[] = [];
 
-    //Required check
+    // Required check
     if (this.required && !this.value) {
-      currentErrors.push('This Field is required')
+      currentErrors.push('Password is required');
     }
 
-    //Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (this.value && !this.allowMultiple && !emailRegex.test(this.value)) {
-      currentErrors.push('Invalid email format')
+    // Min length check
+    if (this.value && this.value.length < this.minLength) {
+      currentErrors.push(`Minimum length is ${this.minLength}`);
     }
 
-    //Multiple email validation
-    if (this.allowMultiple && this.value) {
-      const emails = this.value.split(',');
-      const invalidEmails = emails.filter(email => !emailRegex.test(email.trim()));
+    // Max length check
+    if (this.value && this.value.length > this.maxLength) {
+      currentErrors.push(`Maximum length is ${this.maxLength}`);
+    }
 
-      if (invalidEmails.length > 0) {
-        currentErrors.push('One or more email addresses are invalid')
-      }
+    // Regex pattern match
+    if (this.regex && this.value && !this.regex.test(this.value)) {
+      currentErrors.push('Invalid format');
     }
 
     this.errors = currentErrors;
@@ -86,3 +93,4 @@ export class McvEmailField {
     });
   }
 }
+
