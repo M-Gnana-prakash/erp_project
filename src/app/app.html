@@ -1,16 +1,49 @@
-<app-mcv-input-field [value]="name()" [placeholder]="'Enter your name'" [minLength]="3" [maxLength]="10"
-  [required]="true" [regex]="/^[a-zA-Z]+$/" [disabled]="false" [readonly]="false" [needValidationStatusMessage]="true"
-  [borderStyle]="'1px solid #ccc'" [outline]="'none'" [textColor]="'#333'" [backgroundColor]="'#fff'"
-  [sizeVariant]="'md'" (statusChange)="onStatusChange($event)">
+<app-mcv-input-field 
+  [value]="name()" 
+  [placeholder]="'Enter your name'" 
+  [minLength]="3" 
+  [maxLength]="10"
+  [required]="true" 
+  [regex]="/^[a-zA-Z]+$/" 
+  [disabled]="false" 
+  [readonly]="false" 
+  [needValidationStatusMessage]="true"
+  [borderStyle]="'1px solid #ccc'" 
+  [outline]="'none'" 
+  [textColor]="'#333'" 
+  [backgroundColor]="'#fff'"
+  [sizeVariant]="'md'" 
+  (statusChange)="onStatusChange($event)">
 </app-mcv-input-field>
 
-<app-mcv-email-field [value]="email()" [placeholder]="'Enter your name'" [allowMultiple]="false" [required]="true"
-  [disabled]="false" [readonly]="false" [needValidationStatusMessage]="true" [borderStyle]="'1px solid #ccc'"
-  [outline]="'none'" [textColor]="'#333'" [backgroundColor]="'#fff'" [sizeVariant]="'md'"
+<app-mcv-email-field 
+  [value]="email()" 
+  [placeholder]="'Enter your name'" 
+  [allowMultiple]="false" 
+  [required]="true"
+  [disabled]="false" 
+  [readonly]="false" 
+  [needValidationStatusMessage]="true" 
+  [borderStyle]="'1px solid #ccc'"
+  [outline]="'none'" 
+  [textColor]="'#333'" 
+  [backgroundColor]="'#fff'" 
+  [sizeVariant]="'md'"
   (statusChange)="onStatusChange($event)">
 </app-mcv-email-field>
 
-<app-mcv-password-field [placeholder]="'Enter your password'" [required]="true" [minLength]="6"
-  [needValidationStatusMessage]="true" [borderStyle]="'1px solid #ccc'" [outline]="'none'" [sizeVariant]="'md'"
+<app-mcv-password-field 
+  [value]="password()"
+  [placeholder]="'Enter your password'" 
+  [required]="true" 
+  [minLength]="6"
+  [canDisplayEye]="true"
+  [disabled]="false" 
+  [readonly]="false" 
+  [regex]="/^[a-zA-Z0-9@$!%*?&]+$/"
+  [needValidationStatusMessage]="true" 
+  [borderStyle]="'1px solid #ccc'" 
+  [outline]="'none'" 
+  [sizeVariant]="'md'"
   (statusChange)="onStatusChange($event)">
 </app-mcv-password-field>

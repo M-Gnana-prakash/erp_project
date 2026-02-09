@@ -14,6 +14,7 @@ export class App {
 
   email = signal<string>('');
   name = signal<string>('');
+  password = signal<string>('');
 
   onStatusChange(event: any) {
     console.log(event);
