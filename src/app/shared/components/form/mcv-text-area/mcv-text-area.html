@@ -1,0 +1,20 @@
+<div class="flex flex-col w-full gap-1">
+    <textarea [value]="value" [placeholder]="placeholder" [rows]="rows" [disabled]="disabled" [readOnly]="readonly"
+        (input)="onInputChange($event)" (focus)="isFocused = true" (blur)="isFocused = false"
+        class="w-full rounded transition-all duration-200 focus:outline-none resize-none" [ngClass]="{
+            'px-2 py-1 text-xs': sizeVariant === 'sm',
+            'px-3 py-2 text-sm': sizeVariant === 'md',
+            'px-4 py-3 text-base': sizeVariant === 'lg',
+            'opacity-50 cursor-not-allowed': disabled
+        }" [style.border]="isFocused ? activeBorderStyle : borderStyle"
+        [style.outline]="isFocused ? activeOutline : outline" [style.color]="isFocused ? activeTextColor : textColor"
+        [style.background-color]="isFocused ? activeBackgroundColor : backgroundColor"></textarea>
+
+    @if (needValidationStatusMessage && errors.length > 0) {
+    <div class="mt-1">
+        @for (error of errors; track error) {
+        <p class="text-red-500 text-xs mt-0.5">{{ error }}</p>
+        }
+    </div>
+    }
+</div>
