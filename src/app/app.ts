@@ -18,6 +18,7 @@ export class App {
 
   email = signal<string>('');
   name = signal<string>('');
+  password = signal<string>('');
 
   radioValue = signal<string>('');
   radioOptions: RadioOption[] = [

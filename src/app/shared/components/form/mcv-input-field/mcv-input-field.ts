@@ -31,12 +31,14 @@ export class McvInputField {
   @Input() sizeVariant: 'sm' | 'md' | 'lg' = 'md';
 
   public isFocused: boolean = false;
+  public isTouched: boolean = false;
 
   // Output
   @Output() statusChange = new EventEmitter<{
     value: string;
     valid: boolean;
     errors: string[];
+    touched: boolean;
   }>();
 
   public errors: string[] = [];
@@ -44,6 +46,12 @@ export class McvInputField {
   onInputChange(event: Event) {
     const target = event.target as HTMLInputElement;
     this.value = target.value;
+    this.validate();
+  }
+
+  onBlur() {
+    this.isFocused = false;
+    this.isTouched = true;
     this.validate();
   }
 
@@ -75,6 +83,7 @@ export class McvInputField {
       value: this.value,
       valid: this.errors.length === 0,
       errors: this.errors,
+      touched: this.isTouched
     });
   }
 }

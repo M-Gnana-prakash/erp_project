@@ -13,9 +13,11 @@ export class McvPasswordField {
   @Input() placeholder: string = 'Password';
   @Input() minLength: number = 8;
   @Input() maxLength: number = Infinity;
+  @Input() regex: RegExp | null = null;
   @Input() required: boolean = false;
   @Input() disabled: boolean = false;
   @Input() readonly: boolean = false;
+  @Input() canDisplayEye: boolean = true;
   @Input() needValidationStatusMessage: boolean = false;
 
   // CSS Inputs
@@ -30,6 +32,7 @@ export class McvPasswordField {
   @Input() sizeVariant: 'sm' | 'md' | 'lg' = 'md';
 
   public isFocused: boolean = false;
+  public isTouched: boolean = false;
   public showPassword: boolean = false;
 
   // Output
@@ -37,6 +40,7 @@ export class McvPasswordField {
     value: string;
     valid: boolean;
     errors: string[];
+    touched: boolean;
   }>();
 
   public errors: string[] = [];
@@ -44,6 +48,12 @@ export class McvPasswordField {
   onInputChange(event: Event) {
     const target = event.target as HTMLInputElement;
     this.value = target.value;
+    this.validate();
+  }
+
+  onBlur() {
+    this.isFocused = false;
+    this.isTouched = true;
     this.validate();
   }
 
@@ -69,11 +79,17 @@ export class McvPasswordField {
       currentErrors.push(`Maximum length is ${this.maxLength}`);
     }
 
+    // Regex pattern match
+    if (this.regex && this.value && !this.regex.test(this.value)) {
+      currentErrors.push('Invalid format');
+    }
+
     this.errors = currentErrors;
     this.statusChange.emit({
       value: this.value,
       valid: this.errors.length === 0,
       errors: this.errors,
+      touched: this.isTouched
     });
   }
 }
