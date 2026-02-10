@@ -1,0 +1,28 @@
+<div class="range-container flex items-center gap-2">
+  <input
+    type="date"
+    [disabled]="disabled"
+    (input)="onStartDateChange($event.target.value)"
+    class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed align-text-center w-flexible"
+  />
+
+  <span class="text-gray-600 font-medium">to</span>
+
+  <input
+    type="date"
+    [disabled]="disabled"
+    (input)="onEndDateChange($event.target.value)"
+    class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed align-text-center w-flexible"
+  />
+</div>
+
+@if (errors.length) {
+  <div class="mt-2 text-sm text-red-600 space-y-1">
+    @for ( error of errors; track error) {
+      <div class="flex items-center gap-1">
+        <span class="font-semibold">•</span>
+        <span>{{ error }}</span>
+      </div>
+    }
+  </div>
+}
