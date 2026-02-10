@@ -12,6 +12,12 @@
   (statusChange)="onStatusChange($event)">
 </app-mcv-email-field>
 
+<app-mcv-password-field [value]="password()" [placeholder]="'Enter your password'" [required]="true" [minLength]="6"
+  [canDisplayEye]="true" [disabled]="false" [readonly]="false" [regex]="/^[a-zA-Z0-9@$!%*?&]+$/"
+  [needValidationStatusMessage]="true" [borderStyle]="'1px solid #ccc'" [outline]="'none'" [sizeVariant]="'md'"
+  (statusChange)="onStatusChange($event)">
+</app-mcv-password-field>
+
 
 <app-mcv-phone-field [value]="phone()" [placeholder]="'Enter your Phone Number'" [required]="true" [disabled]="false"
   [readonly]="false" [needValidationStatusMessage]="true" [borderStyle]="'1px solid #ccc'" [outline]="'none'"
@@ -39,11 +45,7 @@
   Check me!
 </app-mcv-checkbox>
 
-<app-mcv-password-field [value]="password()" [placeholder]="'Enter your password'" [required]="true" [minLength]="6"
-  [canDisplayEye]="true" [disabled]="false" [readonly]="false" [regex]="/^[a-zA-Z0-9@$!%*?&]+$/"
-  [needValidationStatusMessage]="true" [borderStyle]="'1px solid #ccc'" [outline]="'none'" [sizeVariant]="'md'"
-  (statusChange)="onStatusChange($event)">
-</app-mcv-password-field>
+
 
 <app-mcv-radio-field [options]="radioOptions" [value]="radioValue()" [required]="true" [layout]="'horizontal'"
   [needValidationStatusMessage]="true" (statusChange)="onStatusChange($event)" (valueChange)="radioValue.set($event)">
