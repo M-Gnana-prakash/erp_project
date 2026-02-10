@@ -30,10 +30,16 @@
 app-mcv-input-field,
 app-mcv-email-field,
 app-mcv-password-field,
+app-mcv-phone-field,
+app-mcv-text-area,
+app-mcv-date-picker,
+app-mcv-time-picker,
+app-mcv-date-range-picker,
+app-mcv-checkbox,
 app-mcv-radio-field,
 app-mcv-toggle-field {
     display: block;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
 }
 
 /* Radio spacing tweak */
