@@ -63,7 +63,32 @@ This project uses **Vitest** for high-performance unit testing of custom Angular
     *   **Status Emission**: Reports selected date and validity state.
     *   **Stress Test**: Rapid selection and validation performance.
 
-### 7. App Component (Shell)
+
+### 4. McvRadioField (Radio Button Group)
+*   **Total Tests**: 1
+*   **Key Features Tested**:
+    *   **Component Creation**: Verifies the component initializes correctly.
+    *   **Option Selection**: Validates user can select from multiple radio options.
+    *   **Required Validation**: Ensures validation triggers when no option is selected.
+    *   **Disabled State**: Confirms disabled options cannot be selected.
+    *   **Layout Support**: Tests both vertical and horizontal layout configurations.
+    *   **Status Emission**: Emits value and validation status to parent forms.
+    *   **Dynamic Options**: Handles dynamic option lists with label-value pairs.
+
+### 5. ToggleSwitchComponent (Toggle Switch)
+*   **Total Tests**: 1
+*   **Key Features Tested**:
+    *   **Component Creation**: Verifies the component initializes correctly.
+    *   **Toggle Functionality**: Tests switching between on/off states.
+    *   **Required Validation**: Validates that required toggles must be in 'on' state.
+    *   **Disabled State**: Ensures disabled toggles cannot be toggled.
+    *   **Custom Labels**: Supports custom on/off label text.
+    *   **Color Customization**: Allows custom active/inactive/knob colors.
+    *   **Size Variants**: Tests small, medium, and large size options.
+    *   **Value Emission**: Emits boolean value and validation status on toggle.
+
+### 6. App Component (Shell)
+
 *   **Total Tests**: 2
 *   **Key Features Tested**:
     *   **Bootstrap**: Ensures the application root initializes.

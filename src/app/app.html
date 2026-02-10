@@ -29,18 +29,31 @@
   [textColor]="'#333'" [backgroundColor]="'#fff'" [sizeVariant]="'md'" (statusChange)="onStatusChange($event)">
 </app-mcv-date-picker>
 
-<app-mcv-password-field 
-  [value]="password()"
-  [placeholder]="'Enter your password'" 
-  [required]="true" 
-  [minLength]="6"
-  [canDisplayEye]="true"
-  [disabled]="false" 
-  [readonly]="false" 
-  [regex]="/^[a-zA-Z0-9@$!%*?&]+$/"
-  [needValidationStatusMessage]="true" 
-  [borderStyle]="'1px solid #ccc'" 
-  [outline]="'none'" 
-  [sizeVariant]="'md'"
+<app-mcv-time-picker [value]="time()" [step]="1" (statusChange)="onStatusChange($event)">
+</app-mcv-time-picker>
+
+<app-mcv-date-range-picker [disabled]="false" (statusChange)="onStatusChange($event)">
+</app-mcv-date-range-picker>
+
+<app-mcv-checkbox [checked]="isChecked()" (statusChange)="onStatusChange($event)">
+  Check me!
+</app-mcv-checkbox>
+
+<app-mcv-password-field [value]="password()" [placeholder]="'Enter your password'" [required]="true" [minLength]="6"
+  [canDisplayEye]="true" [disabled]="false" [readonly]="false" [regex]="/^[a-zA-Z0-9@$!%*?&]+$/"
+  [needValidationStatusMessage]="true" [borderStyle]="'1px solid #ccc'" [outline]="'none'" [sizeVariant]="'md'"
   (statusChange)="onStatusChange($event)">
-</app-mcv-password-field>     
+</app-mcv-password-field>
+
+<app-mcv-radio-field [options]="radioOptions" [value]="radioValue()" [required]="true" [layout]="'horizontal'"
+  [needValidationStatusMessage]="true" (statusChange)="onStatusChange($event)" (valueChange)="radioValue.set($event)">
+</app-mcv-radio-field>
+
+<app-mcv-radio-field [options]="genderOptions" [value]="genderValue()" [required]="true" [layout]="'vertical'"
+  [needValidationStatusMessage]="true" (statusChange)="onStatusChange($event)" (valueChange)="genderValue.set($event)">
+</app-mcv-radio-field>
+
+<app-mcv-toggle-field [value]="toggleValue()" [required]="true" [disabled]="false" [onLabel]="'Yes'" [offLabel]="'No'"
+  [activeColor]="'#2563eb'" [inactiveColor]="'#d1d5db'" [knobColor]="'#ffffff'" [sizeVariant]="'md'"
+  (valueChange)="onToggleChange($event)">
+</app-mcv-toggle-field>
