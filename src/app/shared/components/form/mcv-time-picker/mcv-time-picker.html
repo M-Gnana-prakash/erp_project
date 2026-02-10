@@ -1,0 +1,16 @@
+<input
+  type="time"
+  [value]="value"
+  [step]="step * 60"
+  [disabled]="disabled"
+  (input)="onStatusChange($event.target.value)"
+  class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed align-text-center w-flexible"
+/>
+
+@if (errors.length) {
+  <div class="mt-2 space-y-1">
+    @for ( error of errors; track error) {
+      <div class="text-sm text-red-600">{{ error }}</div>
+    }
+  </div>
+}

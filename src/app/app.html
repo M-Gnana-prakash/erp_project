@@ -32,6 +32,23 @@
   (statusChange)="onStatusChange($event)">
 </app-mcv-email-field>
 
+<app-mcv-time-picker 
+  [value]="time()" 
+  [step]="1" 
+  (statusChange)="onStatusChange($event)">
+</app-mcv-time-picker>
+
+<app-mcv-date-range-picker 
+  [disabled]="false"
+  (statusChange)="onStatusChange($event)">      
+</app-mcv-date-range-picker>
+
+<app-mcv-checkbox 
+  [checked]="isChecked()" 
+  (statusChange)="onStatusChange($event)">
+  Check me! 
+</app-mcv-checkbox>
+
 <app-mcv-password-field 
   [value]="password()"
   [placeholder]="'Enter your password'" 
