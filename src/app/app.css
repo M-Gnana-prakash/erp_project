@@ -1,0 +1,64 @@
+/* Page Background */
+:host {
+    display: block;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 40px 0;
+}
+
+/* Main Form Container */
+.form-container {
+    width: 420px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 30px 35px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* Heading */
+.form-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: #1f2937;
+}
+
+/* Field Spacing */
+app-mcv-input-field,
+app-mcv-email-field,
+app-mcv-password-field,
+app-mcv-radio-field,
+app-mcv-toggle-field {
+    display: block;
+    margin-bottom: 18px;
+}
+
+/* Radio spacing tweak */
+app-mcv-radio-field {
+    padding: 8px 0;
+}
+
+/* Toggle spacing */
+app-mcv-toggle-field {
+    padding-top: 5px;
+}
+
+/* Optional Submit Button Style */
+.submit-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #2563eb;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #1d4ed8;
+}
