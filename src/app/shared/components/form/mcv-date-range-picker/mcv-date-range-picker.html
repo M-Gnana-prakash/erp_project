@@ -1,28 +1,71 @@
-<div class="range-container flex items-center gap-2">
-  <input
-    type="date"
-    [disabled]="disabled"
-    (input)="onStartDateChange($event.target.value)"
-    class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed align-text-center w-flexible"
-  />
+<div class="relative w-80 calendar-wrapper">
 
-  <span class="text-gray-600 font-medium">to</span>
+  <!-- Input -->
+  <div class="relative">
+    <input [disabled]="disabled" readonly (click)="toggle()" [value]="format(start) + (end ? ' – ' + format(end) : '')"
+      placeholder="Enter a date range" class="w-full px-4 py-2 pr-10 border border-gray-300 rounded-md
+             focus:ring-2 focus:ring-blue-500 cursor-pointer bg-white
+             disabled:bg-gray-100 disabled:cursor-not-allowed" />
 
-  <input
-    type="date"
-    [disabled]="disabled"
-    (input)="onEndDateChange($event.target.value)"
-    class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed align-text-center w-flexible"
-  />
-</div>
-
-@if (errors.length) {
-  <div class="mt-2 text-sm text-red-600 space-y-1">
-    @for ( error of errors; track error) {
-      <div class="flex items-center gap-1">
-        <span class="font-semibold">•</span>
-        <span>{{ error }}</span>
-      </div>
-    }
+    <span (click)="toggle()" class="absolute right-3 top-1/2 -translate-y-1/2 text-blue-600 cursor-pointer">
+      📅
+    </span>
   </div>
-}
+
+  <!-- Popup -->
+  <div *ngIf="show" class="absolute z-50 mt-2 bg-white rounded-lg shadow-xl w-80 overflow-hidden">
+
+    <!-- Header -->
+    <div class="bg-gray-100 px-4 py-3 flex justify-between items-center">
+
+      <div class="flex items-center gap-2 font-semibold text-gray-700">
+
+        <select class="border rounded px-2 py-1 text-sm" [value]="current.getMonth()"
+          (change)="setMonth($any($event.target).value)">
+
+          <option *ngFor="let m of months; let i = index" [value]="i">
+            {{ m }}
+          </option>
+
+        </select>
+
+      </div>
+
+      <div class="flex gap-2 text-gray-600">
+        <button (click)="change(-1)">‹</button>
+        <button (click)="change(1)">›</button>
+      </div>
+
+    </div>
+
+    <!-- Weekdays -->
+    <div class="grid grid-cols-7 text-center text-xs text-gray-500 py-2 border-b">
+      <div *ngFor="let d of ['S','M','T','W','T','F','S']">
+        {{ d }}
+      </div>
+    </div>
+
+    <!-- Dates -->
+    <div class="grid grid-cols-7 text-center p-3 gap-y-2 text-sm">
+
+      <div *ngFor="let d of days" (click)="select(d)" class="relative cursor-pointer">
+
+        <!-- Range background -->
+        <div *ngIf="inRange(d)" class="absolute inset-0 bg-blue-100">
+        </div>
+
+        <!-- Date circle -->
+        <div class="relative z-10 w-8 h-8 mx-auto flex items-center justify-center rounded-full" [ngClass]="{
+            'bg-blue-600 text-white': isEdge(d),
+            'hover:bg-gray-200': !isEdge(d)
+          }">
+          {{ d.getDate() }}
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

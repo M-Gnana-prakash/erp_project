@@ -1,86 +1,118 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  Input,
+  Output,
+  EventEmitter
+} from '@angular/core';
 
 @Component({
   selector: 'app-mcv-date-range-picker',
+  standalone: true,
   imports: [CommonModule],
-  templateUrl: './mcv-date-range-picker.html',
-  styleUrls: ['./mcv-date-range-picker.css']
+  templateUrl: './mcv-date-range-picker.html'
 })
-export class McvDateRangePicker implements OnInit {
+export class McvDateRangePicker {
 
-  // Input properties
-  @Input() startDate: Date | null = null;
-  @Input() endDate: Date | null = null;
-  @Input() minDate: Date | null = null;
-  @Input() maxDate: Date | null = null;
-  @Input() required = false;
+  // ✅ INPUT
   @Input() disabled = false;
 
-  // Output event
+  // ✅ OUTPUT
   @Output() statusChange = new EventEmitter<{
-    startDate: Date | null;
-    endDate: Date | null;
-    valid: boolean;
-    errors: string[];
+    start: Date | null;
+    end: Date | null;
   }>();
 
-  // Validation state
-  errors: string[] = [];
-  valid = false;
+  show = false;
+  current = new Date();
+  days: Date[] = [];
 
-  // Lifecycle hook
-  ngOnInit(): void {
-    this.validateAndEmit();
+  start: Date | null = null;
+  end: Date | null = null;
+
+  months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  constructor() {
+    this.buildCalendar();
   }
 
-  // Methods to handle date changes
-  onStartDateChange(value: string): void {
-    this.startDate = value ? new Date(value) : null;
-    this.validateAndEmit();
+  toggle() {
+    if (this.disabled) return;
+    this.show = !this.show;
   }
 
-  // Methods to handle date changes
-  onEndDateChange(value: string): void {
-    this.endDate = value ? new Date(value) : null;
-    this.validateAndEmit();
+  buildCalendar() {
+    const y = this.current.getFullYear();
+    const m = this.current.getMonth();
+    const total = new Date(y, m + 1, 0).getDate();
+
+    this.days = Array.from({ length: total }, (_, i) =>
+      new Date(y, m, i + 1)
+    );
   }
 
-  // Method to validate the date range and emit status
-  private validateAndEmit(): void {
-    this.validate();
+  change(step: number) {
+    this.current = new Date(
+      this.current.getFullYear(),
+      this.current.getMonth() + step,
+      1
+    );
+    this.buildCalendar();
+  }
+
+  setMonth(monthIndex: number) {
+    this.current = new Date(
+      this.current.getFullYear(),
+      Number(monthIndex),
+      1
+    );
+    this.buildCalendar();
+  }
+
+  select(d: Date) {
+
+    if (!this.start || this.end) {
+      this.start = d;
+      this.end = null;
+    } else {
+      if (d < this.start) {
+        this.end = this.start;
+        this.start = d;
+      } else {
+        this.end = d;
+      }
+    }
+
+    // Emit selected range
     this.statusChange.emit({
-      startDate: this.startDate,
-      endDate: this.endDate,
-      valid: this.valid,
-      errors: this.errors
+      start: this.start,
+      end: this.end
     });
   }
 
-  // Method to validate the date range
-  private validate(): void {
-    this.errors = [];
+  isEdge(d: Date) {
+    return (
+      this.start?.toDateString() === d.toDateString() ||
+      this.end?.toDateString() === d.toDateString()
+    );
+  }
 
-    // Check required fields
-    if (this.required && (!this.startDate || !this.endDate)) {
-      this.errors.push('Date range is required');
+  inRange(d: Date) {
+    return this.start && this.end && d > this.start && d < this.end;
+  }
+
+  format(d: Date | null) {
+    return d ? d.toLocaleDateString() : '';
+  }
+
+  @HostListener('document:click', ['$event'])
+  close(e: any) {
+    if (!e.target.closest('.calendar-wrapper')) {
+      this.show = false;
     }
-
-    // Check date order
-    if (this.startDate && this.endDate && this.startDate > this.endDate) {
-      this.errors.push('Start date must be before end date');
-    }
-
-    // Check min date constraints
-    if (this.minDate && this.startDate && this.startDate < this.minDate) {
-      this.errors.push('Start date is before minimum allowed');
-    }
-
-    // Check max date constraints
-    if (this.maxDate && this.endDate && this.endDate > this.maxDate) {
-      this.errors.push('End date is after maximum allowed');
-    }
-
-    this.valid = this.errors.length === 0;
   }
 }
