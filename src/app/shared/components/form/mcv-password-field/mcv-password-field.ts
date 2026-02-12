@@ -1,49 +1,79 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+//Styles
+export interface McvPasswordFieldStyles {
+  borderStyle?: string;
+  outline?: string;
+  textColor?: string;
+  backgroundColor?: string;
+  activeBorderStyle?: string;
+  activeOutline?: string;
+  activeTextColor?: string;
+  activeBackgroundColor?: string;
+  sizeVariant?: 'sm' | 'md' | 'lg';
+}
+
 @Component({
   selector: 'app-mcv-password-field',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './mcv-password-field.html',
   styleUrl: './mcv-password-field.css',
 })
 export class McvPasswordField {
-  // Inputs
+
   @Input() value: string = '';
-  @Input() placeholder: string = 'Password';
-  @Input() minLength: number = 8;
-  @Input() maxLength: number = Infinity;
-  @Input() regex: RegExp | null = null;
+  @Input() placeholder: string = '';
   @Input() required: boolean = false;
   @Input() disabled: boolean = false;
   @Input() readonly: boolean = false;
-  @Input() canDisplayEye: boolean = true;
-  @Input() needValidationStatusMessage: boolean = false;
+  @Input() minLength: number = 0;
 
-  // CSS Inputs
-  @Input() borderStyle: string = '1px solid #ccc';
-  @Input() outline: string = 'none';
-  @Input() textColor: string = '#333';
-  @Input() backgroundColor: string = '#fff';
-  @Input() activeBorderStyle: string = '1px solid #007bff';
-  @Input() activeOutline: string = 'none';
-  @Input() activeTextColor: string = '#333';
-  @Input() activeBackgroundColor: string = '#fff';
-  @Input() sizeVariant: 'sm' | 'md' | 'lg' = 'md';
+  // Validation message shown by default
+  @Input() needValidationStatusMessage: boolean = true;
+
+  // Whole styles for password field
+  @Input() styles: McvPasswordFieldStyles = {};
 
   public isFocused: boolean = false;
-  public isTouched: boolean = false;
   public showPassword: boolean = false;
+  public errors: string[] = [];
 
-  // Output
+  private defaultStyles: McvPasswordFieldStyles = {
+    borderStyle: '1px solid #ccc',
+    outline: 'none',
+    textColor: '#333',
+    backgroundColor: '#fff',
+    activeBorderStyle: '1px solid #007bff',
+    activeOutline: 'none',
+    activeTextColor: '#333',
+    activeBackgroundColor: '#fff',
+    sizeVariant: 'md',
+  };
+
+  get computedStyles(): McvPasswordFieldStyles {
+    const individualStyles: McvPasswordFieldStyles = {};
+    if (this.borderStyle) individualStyles.borderStyle = this.borderStyle;
+    if (this.outline) individualStyles.outline = this.outline;
+    if (this.sizeVariant) individualStyles.sizeVariant = this.sizeVariant;
+
+    return { ...this.defaultStyles, ...this.styles, ...individualStyles };
+  }
+
+  @Input() canDisplayEye: boolean = true;
+  @Input() regex: string | RegExp = '';
+
+  // Individual style inputs
+  @Input() borderStyle: string = '';
+  @Input() outline: string = '';
+  @Input() sizeVariant: 'sm' | 'md' | 'lg' = 'md';
+
   @Output() statusChange = new EventEmitter<{
     value: string;
     valid: boolean;
     errors: string[];
-    touched: boolean;
   }>();
-
-  public errors: string[] = [];
 
   onInputChange(event: Event) {
     const target = event.target as HTMLInputElement;
@@ -51,46 +81,32 @@ export class McvPasswordField {
     this.validate();
   }
 
-  onBlur() {
-    this.isFocused = false;
-    this.isTouched = true;
-    this.validate();
-  }
-
   toggleVisibility() {
+    if (this.disabled) return;
     this.showPassword = !this.showPassword;
   }
 
   public validate() {
     const currentErrors: string[] = [];
 
-    // Required check
+    // Required validation
     if (this.required && !this.value) {
       currentErrors.push('Password is required');
     }
 
-    // Min length check
-    if (this.value && this.value.length < this.minLength) {
-      currentErrors.push(`Minimum length is ${this.minLength}`);
+    // Min Length validation
+    if (this.value && this.minLength > 0 && this.value.length < this.minLength) {
+      currentErrors.push(`Password must be at least ${this.minLength} characters`);
     }
 
-    // Max length check
-    if (this.value && this.value.length > this.maxLength) {
-      currentErrors.push(`Maximum length is ${this.maxLength}`);
-    }
-
-    // Regex pattern match
-    if (this.regex && this.value && !this.regex.test(this.value)) {
-      currentErrors.push('Invalid format');
-    }
-
+    // Update errors
     this.errors = currentErrors;
+
+    // Emit validation status
     this.statusChange.emit({
       value: this.value,
       valid: this.errors.length === 0,
       errors: this.errors,
-      touched: this.isTouched
     });
   }
 }
-

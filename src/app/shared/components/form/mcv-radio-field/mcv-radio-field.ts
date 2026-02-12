@@ -1,9 +1,18 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+//Styles
+export interface McvRadioFieldStyles {
+    borderColor?: string;
+    selectedColor?: string;
+    backgroundColor?: string;
+    labelColor?: string;
+    sizeVariant?: 'sm' | 'md' | 'lg';
+}
+
 export interface RadioOption {
     label: string;
-    value: any;
+    value: string;
     disabled?: boolean;
 }
 
@@ -15,39 +24,63 @@ export interface RadioOption {
     styleUrl: './mcv-radio-field.css',
 })
 export class McvRadioField {
-    @Input() label: string = '';
+
+    @Input() value: string = '';
     @Input() options: RadioOption[] = [];
-    @Input() name: string = `radio-group-${Math.random().toString(36).substr(2, 9)}`;
-    @Input() value: any = null;
+    @Input() name: string = 'radio-group-' + Math.random().toString(36).substr(2, 9); // Unique name if not provided
     @Input() required: boolean = false;
     @Input() disabled: boolean = false;
-    @Input() layout: 'vertical' | 'horizontal' = 'vertical';
-    @Input() sizeVariant: 'sm' | 'md' | 'lg' = 'md';
-    @Input() needValidationStatusMessage: boolean = false;
+    @Input() readonly: boolean = false;
+    @Input() label: string = ''; // Group label
+    @Input() layout: 'horizontal' | 'vertical' = 'vertical';
+
+    // Validation message shown by default
+    @Input() needValidationStatusMessage: boolean = true;
+
+    // Whole styles for radio field
+    @Input() styles: McvRadioFieldStyles = {};
+
+    public errors: string[] = [];
+
+    private defaultStyles: McvRadioFieldStyles = {
+        borderColor: '#ccc',
+        selectedColor: '#007bff',
+        backgroundColor: '#fff',
+        labelColor: '#333',
+        sizeVariant: 'md',
+    };
+
+    get computedStyles(): McvRadioFieldStyles {
+        return { ...this.defaultStyles, ...this.styles };
+    }
 
     @Output() statusChange = new EventEmitter<{
-        value: any;
+        value: string;
         valid: boolean;
         errors: string[];
     }>();
 
-    @Output() valueChange = new EventEmitter<any>();
+    @Output() valueChange = new EventEmitter<string>();
 
-    public errors: string[] = [];
-
-    onOptionChange(selectedValue: any) {
-        if (this.disabled) return;
-        this.value = selectedValue;
+    onOptionChange(optionValue: string) {
+        if (this.disabled || this.readonly) return;
+        this.value = optionValue;
         this.valueChange.emit(this.value);
         this.validate();
     }
 
     public validate() {
-        this.errors = [];
-        if (this.required && (this.value === null || this.value === undefined || this.value === '')) {
-            this.errors.push('This field is required');
+        const currentErrors: string[] = [];
+
+        // Required validation
+        if (this.required && !this.value) {
+            currentErrors.push('Selection is required');
         }
 
+        // Update errors
+        this.errors = currentErrors;
+
+        // Emit validation status
         this.statusChange.emit({
             value: this.value,
             valid: this.errors.length === 0,

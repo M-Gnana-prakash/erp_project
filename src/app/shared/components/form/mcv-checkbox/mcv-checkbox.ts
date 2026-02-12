@@ -1,44 +1,92 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+//Styles
+export interface McvCheckboxStyles {
+  borderColor?: string;
+  checkColor?: string;
+  backgroundColor?: string;
+  activeBorderColor?: string;
+  activeBackgroundColor?: string;
+  labelColor?: string;
+  sizeVariant?: 'sm' | 'md' | 'lg';
+}
 
 @Component({
   selector: 'app-mcv-checkbox',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './mcv-checkbox.html',
-  styleUrls: ['./mcv-checkbox.css']
+  styleUrl: './mcv-checkbox.css',
 })
-export class McvCheckbox implements OnInit {
+export class McvCheckbox {
 
-  // Input properties
-  @Input() checked = false;
-  @Input() disabled = false;
-  @Input() required = false;
+  @Input() value: boolean = false;
+  @Input() set checked(val: boolean) {
+    this.value = val;
+  }
+  @Input() label: string = '';
+  @Input() required: boolean = false;
+  @Input() disabled: boolean = false;
+  @Input() readonly: boolean = false;
 
-  // Output event
+  // Validation message shown by default
+  @Input() needValidationStatusMessage: boolean = true;
+
+  // Whole styles for checkbox
+  @Input() styles: McvCheckboxStyles = {};
+
+  public isFocused: boolean = false;
+  public errors: string[] = [];
+
+  private defaultStyles: McvCheckboxStyles = {
+    borderColor: '#ccc',
+    checkColor: '#fff',
+    backgroundColor: '#fff',
+    activeBorderColor: '#007bff',
+    activeBackgroundColor: '#007bff',
+    labelColor: '#333',
+    sizeVariant: 'md',
+  };
+
+  get computedStyles(): McvCheckboxStyles {
+    return { ...this.defaultStyles, ...this.styles };
+  }
+
   @Output() statusChange = new EventEmitter<{
-    checked: boolean;
+    value: boolean;
     valid: boolean;
+    errors: string[];
   }>();
 
-  valid = false;
-
-  // Lifecycle hook
-  ngOnInit(): void {
-    this.validateAndEmit();
+  onInputChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    this.value = target.checked;
+    this.validate();
   }
 
-  // Method to handle checkbox toggle
-  onToggle(value: boolean): void {
-    this.checked = value;
-    this.validateAndEmit();
+  toggle() {
+    if (this.disabled || this.readonly) return;
+    this.value = !this.value;
+    this.validate();
   }
 
-  // Method to validate the checkbox state and emit status
-  private validateAndEmit(): void {
-    this.valid = this.required ? this.checked : true;
+  public validate() {
+    const currentErrors: string[] = [];
 
-    // Emit the current status
+    // Required validation (must be checked if required)
+    if (this.required && !this.value) {
+      currentErrors.push('This field is required');
+    }
+
+    // Update errors
+    this.errors = currentErrors;
+
+    // Emit validation status
     this.statusChange.emit({
-      checked: this.checked,
-      valid: this.valid
+      value: this.value,
+      valid: this.errors.length === 0,
+      errors: this.errors,
     });
   }
 }

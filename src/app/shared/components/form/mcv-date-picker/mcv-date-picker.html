@@ -1,19 +1,37 @@
 <div class="flex flex-col w-full gap-1">
-    <input type="date" [value]="value" [min]="minDate" [max]="maxDate" [disabled]="disabled" [readOnly]="readonly"
-        (input)="onInputChange($event)" (focus)="isFocused = true" (blur)="isFocused = false"
-        class="w-full rounded transition-all duration-200 focus:outline-none" [ngClass]="{
-            'px-2 py-1 text-xs': sizeVariant === 'sm',
-            'px-3 py-2 text-sm': sizeVariant === 'md',
-            'px-4 py-3 text-base': sizeVariant === 'lg',
-            'opacity-50 cursor-not-allowed': disabled
-        }" [style.border]="isFocused ? activeBorderStyle : borderStyle"
-        [style.outline]="isFocused ? activeOutline : outline" [style.color]="isFocused ? activeTextColor : textColor"
-        [style.background-color]="isFocused ? activeBackgroundColor : backgroundColor" />
 
+    @if (label) {
+    <label [class]="{
+            'text-xs': computedStyles.sizeVariant === 'sm',
+            'text-sm': computedStyles.sizeVariant === 'md',
+            'text-base': computedStyles.sizeVariant === 'lg'
+        }" class="font-medium text-gray-700 mb-1">
+        {{ label }} @if(required){<span class="text-red-500">*</span>}
+    </label>
+    }
+
+    <div class="flex items-center w-full rounded transition-all duration-200"
+        [style.border]="isFocused ? computedStyles.activeBorderStyle : computedStyles.borderStyle"
+        [style.outline]="isFocused ? computedStyles.activeOutline : computedStyles.outline"
+        [style.background-color]="isFocused ? computedStyles.activeBackgroundColor : computedStyles.backgroundColor">
+
+        <input type="date" [value]="value" [placeholder]="placeholder" [disabled]="disabled" [readOnly]="readonly"
+            [min]="min" [max]="max" (input)="onInputChange($event)" (focus)="isFocused = true"
+            (blur)="isFocused = false" class="w-full bg-transparent border-none focus:outline-none" [ngClass]="{
+                 'px-2 py-1 text-xs': computedStyles.sizeVariant === 'sm',
+                 'px-3 py-2 text-sm': computedStyles.sizeVariant === 'md',
+                 'px-4 py-3 text-base': computedStyles.sizeVariant === 'lg',
+                 'opacity-50 cursor-not-allowed': disabled
+               }" [style.color]="isFocused ? computedStyles.activeTextColor : computedStyles.textColor" />
+    </div>
+
+    <!-- Validation -->
     @if (needValidationStatusMessage && errors.length > 0) {
     <div class="mt-1">
         @for (error of errors; track error) {
-        <p class="text-red-500 text-xs mt-0.5">{{ error }}</p>
+        <p class="text-red-500 text-xs mt-0.5">
+            {{ error }}
+        </p>
         }
     </div>
     }

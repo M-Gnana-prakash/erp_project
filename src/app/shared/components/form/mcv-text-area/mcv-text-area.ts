@@ -1,45 +1,81 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+//Styles
+export interface McvTextAreaStyles {
+  borderStyle?: string;
+  outline?: string;
+  textColor?: string;
+  backgroundColor?: string;
+  activeBorderStyle?: string;
+  activeOutline?: string;
+  activeTextColor?: string;
+  activeBackgroundColor?: string;
+  sizeVariant?: 'sm' | 'md' | 'lg';
+}
+
 @Component({
   selector: 'app-mcv-text-area',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './mcv-text-area.html',
   styleUrl: './mcv-text-area.css',
 })
 export class McvTextArea {
-  // Inputs
+
   @Input() value: string = '';
   @Input() placeholder: string = '';
-  @Input() rows: number = 3;
-  @Input() minLength: number = 0;
-  @Input() maxLength: number = Infinity;
   @Input() required: boolean = false;
   @Input() disabled: boolean = false;
   @Input() readonly: boolean = false;
-  @Input() needValidationStatusMessage: boolean = false;
+  @Input() rows: number = 4;
+  @Input() minLength: number = 0;
+  @Input() maxLength: number = 0;
 
-  // CSS Inputs
-  @Input() borderStyle: string = '1px solid #ccc';
-  @Input() outline: string = 'none';
-  @Input() textColor: string = '#333';
-  @Input() backgroundColor: string = '#fff';
-  @Input() activeBorderStyle: string = '1px solid #007bff';
-  @Input() activeOutline: string = 'none';
-  @Input() activeTextColor: string = '#333';
-  @Input() activeBackgroundColor: string = '#fff';
-  @Input() sizeVariant: 'sm' | 'md' | 'lg' = 'md';
+  // Validation message shown by default
+  @Input() needValidationStatusMessage: boolean = true;
+
+  // Whole styles for text area
+  @Input() styles: McvTextAreaStyles = {};
 
   public isFocused: boolean = false;
+  public errors: string[] = [];
 
-  // Output
+  private defaultStyles: McvTextAreaStyles = {
+    borderStyle: '1px solid #ccc',
+    outline: 'none',
+    textColor: '#333',
+    backgroundColor: '#fff',
+    activeBorderStyle: '1px solid #007bff',
+    activeOutline: 'none',
+    activeTextColor: '#333',
+    activeBackgroundColor: '#fff',
+    sizeVariant: 'md',
+  };
+
+  get computedStyles(): McvTextAreaStyles {
+    const individualStyles: McvTextAreaStyles = {};
+    if (this.borderStyle) individualStyles.borderStyle = this.borderStyle;
+    if (this.outline) individualStyles.outline = this.outline;
+    if (this.textColor) individualStyles.textColor = this.textColor;
+    if (this.backgroundColor) individualStyles.backgroundColor = this.backgroundColor;
+    if (this.sizeVariant) individualStyles.sizeVariant = this.sizeVariant;
+
+    return { ...this.defaultStyles, ...this.styles, ...individualStyles };
+  }
+
+  // Individual style inputs
+  @Input() borderStyle: string = '';
+  @Input() outline: string = '';
+  @Input() textColor: string = '';
+  @Input() backgroundColor: string = '';
+  @Input() sizeVariant: 'sm' | 'md' | 'lg' = 'md';
+
   @Output() statusChange = new EventEmitter<{
     value: string;
     valid: boolean;
     errors: string[];
   }>();
-
-  public errors: string[] = [];
 
   onInputChange(event: Event) {
     const target = event.target as HTMLTextAreaElement;
@@ -50,22 +86,25 @@ export class McvTextArea {
   public validate() {
     const currentErrors: string[] = [];
 
-    // Required check
+    // Required validation
     if (this.required && !this.value) {
       currentErrors.push('This field is required');
     }
 
-    // Min length check
-    if (this.value && this.value.length < this.minLength) {
-      currentErrors.push(`Minimum length is ${this.minLength}`);
+    // Length validation
+    if (this.value) {
+      if (this.minLength > 0 && this.value.length < this.minLength) {
+        currentErrors.push(`Minimum length is ${this.minLength} characters`);
+      }
+      if (this.maxLength > 0 && this.value.length > this.maxLength) {
+        currentErrors.push(`Maximum length is ${this.maxLength} characters`);
+      }
     }
 
-    // Max length check
-    if (this.value && this.value.length > this.maxLength) {
-      currentErrors.push(`Maximum length is ${this.maxLength}`);
-    }
-
+    // Update errors
     this.errors = currentErrors;
+
+    // Emit validation status
     this.statusChange.emit({
       value: this.value,
       valid: this.errors.length === 0,
@@ -73,4 +112,3 @@ export class McvTextArea {
     });
   }
 }
-
