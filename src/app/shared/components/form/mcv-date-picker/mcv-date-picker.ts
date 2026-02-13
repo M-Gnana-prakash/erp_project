@@ -38,6 +38,13 @@ export class McvDatePicker {
   // Styles
   @Input() styles: McvDatePickerStyles = {};
 
+  // Individual style inputs
+  @Input() borderStyle: string = '';
+  @Input() outline: string = '';
+  @Input() textColor: string = '';
+  @Input() backgroundColor: string = '';
+  @Input() sizeVariant: 'sm' | 'md' | 'lg' = 'md';
+
   public isFocused = false;
   public errors: string[] = [];
 
@@ -54,7 +61,14 @@ export class McvDatePicker {
   };
 
   get computedStyles(): McvDatePickerStyles {
-    return { ...this.defaultStyles, ...this.styles };
+    const individualStyles: McvDatePickerStyles = {};
+    if (this.borderStyle) individualStyles.borderStyle = this.borderStyle;
+    if (this.outline) individualStyles.outline = this.outline;
+    if (this.textColor) individualStyles.textColor = this.textColor;
+    if (this.backgroundColor) individualStyles.backgroundColor = this.backgroundColor;
+    if (this.sizeVariant) individualStyles.sizeVariant = this.sizeVariant;
+
+    return { ...this.defaultStyles, ...this.styles, ...individualStyles };
   }
 
   @Output() statusChange = new EventEmitter<{

@@ -27,7 +27,7 @@ export class App {
   birthDate = signal<string>('');
   time = signal<string>('');
   isChecked = signal<boolean>(false);
-  dateRange = signal<{ startDate: Date | null; endDate: Date | null }>({ startDate: null, endDate: null });
+  dateRange = signal<{ start: Date | null; end: Date | null }>({ start: null, end: null });
   password = signal<string>('');
 
   radioValue = signal<string>('');

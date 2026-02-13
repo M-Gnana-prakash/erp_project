@@ -18,6 +18,13 @@ export class McvDateRangePicker {
   // ✅ INPUT
   @Input() disabled = false;
 
+  @Input() set value(val: { start: Date | null; end: Date | null } | null) {
+    if (val) {
+      this.start = val.start;
+      this.end = val.end;
+    }
+  }
+
   // ✅ OUTPUT
   @Output() statusChange = new EventEmitter<{
     start: Date | null;

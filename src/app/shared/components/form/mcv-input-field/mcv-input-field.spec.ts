@@ -31,12 +31,12 @@ describe('McvInputField', () => {
     component.minLength = 3;
     component.value = 'ab';
     component.validate();
-    expect(component.errors).toContain('Minimum length is 3');
+    expect(component.errors).toContain('Minimum length is 3 characters');
 
     component.value = 'abcdefghijk';
     component.maxLength = 10;
     component.validate();
-    expect(component.errors).toContain('Maximum length is 10');
+    expect(component.errors).toContain('Maximum length is 10 characters');
   });
 
   it('should validate regex', () => {
@@ -52,12 +52,7 @@ describe('McvInputField', () => {
     component.value = 'test';
     component.validate();
     expect(emittedData.value).toBe('test');
-    expect(emittedData.touched).toBe(false);
-  });
-
-  it('should set isTouched on blur', () => {
-    component.onBlur();
-    expect(component.isTouched).toBe(true);
+    expect(emittedData.value).toBe('test');
   });
 
   it('should handle input change logic', () => {

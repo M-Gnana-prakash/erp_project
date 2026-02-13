@@ -29,10 +29,10 @@ describe('McvDatePicker', () => {
   });
 
   it('should validate minimum date', () => {
-    component.minDate = '2023-01-01';
+    component.min = '2023-01-01';
     component.value = '2022-12-31';
     component.validate();
-    expect(component.errors).toContain('Date must be on or after 2023-01-01');
+    expect(component.errors).toContain('Date should be on or after 2023-01-01');
 
     component.value = '2023-01-01';
     component.validate();
@@ -40,10 +40,10 @@ describe('McvDatePicker', () => {
   });
 
   it('should validate maximum date', () => {
-    component.maxDate = '2023-12-31';
+    component.max = '2023-12-31';
     component.value = '2024-01-01';
     component.validate();
-    expect(component.errors).toContain('Date must be on or before 2023-12-31');
+    expect(component.errors).toContain('Date should be on or before 2023-12-31');
 
     component.value = '2023-12-31';
     component.validate();

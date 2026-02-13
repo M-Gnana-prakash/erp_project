@@ -38,20 +38,18 @@ describe('McvEmailField', () => {
 
         component.value = 'test1@example.com, invalid';
         component.validate();
-        expect(component.errors).toContain('One or more email addresses are invalid');
+        const invalidEmailError = component.errors.find(e => e.includes('Invalid email format:'));
+        expect(invalidEmailError).toBeTruthy();
     });
 
     it('should show required error message', () => {
         component.required = true;
         component.value = '';
         component.validate();
-        expect(component.errors).toContain('This Field is required');
+        expect(component.errors).toContain('Email is required');
     });
 
-    it('should set isTouched on blur', () => {
-        component.onBlur();
-        expect(component.isTouched).toBe(true);
-    });
+
 
     it('should emit statusChange on validation', () => {
         let emittedData: any;

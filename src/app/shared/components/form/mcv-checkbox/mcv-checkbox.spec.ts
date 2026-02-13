@@ -22,28 +22,28 @@ describe('McvCheckbox', () => {
   });
 
   it('should toggle checked state', () => {
-    component.onToggle(true);
-    expect(component.checked).toBe(true);
-    component.onToggle(false);
-    expect(component.checked).toBe(false);
+    component.toggle();
+    expect(component.value).toBe(true);
+    component.toggle();
+    expect(component.value).toBe(false);
   });
 
   it('should validate required state', () => {
     component.required = true;
-    component.checked = false;
-    (component as any).validateAndEmit();
-    expect(component.valid).toBe(false);
+    component.value = false;
+    component.validate();
+    expect(component.errors.length).toBeGreaterThan(0);
 
-    component.checked = true;
-    (component as any).validateAndEmit();
-    expect(component.valid).toBe(true);
+    component.value = true;
+    component.validate();
+    expect(component.errors.length).toBe(0);
   });
 
   it('should emit statusChange on toggle', () => {
     let emittedData: any;
     component.statusChange.subscribe(data => emittedData = data);
-    component.onToggle(true);
-    expect(emittedData.checked).toBe(true);
+    component.toggle();
+    expect(emittedData.value).toBe(true);
     expect(emittedData.valid).toBe(true);
   });
 });

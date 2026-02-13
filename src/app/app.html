@@ -38,7 +38,7 @@
 <app-mcv-time-picker [value]="time()" [step]="1" (statusChange)="onStatusChange($event)">
 </app-mcv-time-picker>
 
-<app-mcv-date-range-picker [disabled]="false" (statusChange)="onStatusChange($event)">
+<app-mcv-date-range-picker [value]="dateRange()" [disabled]="false" (statusChange)="dateRange.set($event)">
 </app-mcv-date-range-picker>
 
 <app-mcv-checkbox [checked]="isChecked()" (statusChange)="onStatusChange($event)">

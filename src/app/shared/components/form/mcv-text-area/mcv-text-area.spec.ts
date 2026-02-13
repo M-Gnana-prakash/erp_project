@@ -32,7 +32,7 @@ describe('McvTextArea', () => {
     component.minLength = 10;
     component.value = 'short';
     component.validate();
-    expect(component.errors).toContain('Minimum length is 10');
+    expect(component.errors).toContain('Minimum length is 10 characters');
 
     component.value = 'this is long enough';
     component.validate();
@@ -43,7 +43,7 @@ describe('McvTextArea', () => {
     component.maxLength = 5;
     component.value = 'too long';
     component.validate();
-    expect(component.errors).toContain('Maximum length is 5');
+    expect(component.errors).toContain('Maximum length is 5 characters');
 
     component.value = 'fine';
     component.validate();

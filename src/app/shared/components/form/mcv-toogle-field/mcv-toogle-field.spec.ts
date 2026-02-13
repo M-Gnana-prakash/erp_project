@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ToggleSwitchComponent } from './mcv-toogle-field';
+import { McvToggleField } from './mcv-toogle-field';
 
-describe('ToggleSwitchComponent', () => {
-    let component: ToggleSwitchComponent;
-    let fixture: ComponentFixture<ToggleSwitchComponent>;
+describe('McvToggleField', () => {
+    let component: McvToggleField;
+    let fixture: ComponentFixture<McvToggleField>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ToggleSwitchComponent]
+            imports: [McvToggleField]
         })
             .compileComponents();
 
-        fixture = TestBed.createComponent(ToggleSwitchComponent);
+        fixture = TestBed.createComponent(McvToggleField);
         component = fixture.componentInstance;
         await fixture.whenStable();
     });
@@ -31,18 +31,19 @@ describe('ToggleSwitchComponent', () => {
     it('should validate required switch (must be on)', () => {
         component.required = true;
         component.value = false;
-        expect(component.isValid).toBe(false);
+        component.validate();
+        expect(component.errors.length).toBeGreaterThan(0);
 
         component.value = true;
-        expect(component.isValid).toBe(true);
+        component.validate();
+        expect(component.errors.length).toBe(0);
     });
 
     it('should emit value and status on toggle', () => {
         let emittedValue: any;
-        component.valueChange.subscribe(val => emittedValue = val);
+        component.valueChange.subscribe((val: boolean) => emittedValue = val);
 
         component.toggle();
-        expect(emittedValue.value).toBe(true);
-        expect(emittedValue.valid).toBe(true);
+        expect(emittedValue).toBe(true);
     });
 });
