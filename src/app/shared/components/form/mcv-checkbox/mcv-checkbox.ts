@@ -76,7 +76,7 @@ export class McvCheckbox {
 
     // Required validation (must be checked if required)
     if (this.required && !this.value) {
-      currentErrors.push('This field is required');
+      currentErrors.push('Checkbox is required');
     }
 
     // Update errors

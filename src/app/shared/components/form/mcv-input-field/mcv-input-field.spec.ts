@@ -24,7 +24,7 @@ describe('McvInputField', () => {
     component.required = true;
     component.value = '';
     component.validate();
-    expect(component.errors).toContain('This field is required');
+    expect(component.errors).toContain('User Name is required');
   });
 
   it('should validate length', () => {

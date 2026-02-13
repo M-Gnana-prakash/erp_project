@@ -128,7 +128,7 @@ export class McvPhoneField {
 
     // Required validation
     if (this.required && !this.value) {
-      currentErrors.push('This field is required');
+      currentErrors.push('Phone Number is required');
     }
 
     // Allowed characters validation

@@ -90,7 +90,7 @@ export class McvInputField {
 
     // Required validation
     if (this.required && !this.value) {
-      currentErrors.push('This field is required');
+      currentErrors.push('User Name is required');
     }
 
     // Length validation

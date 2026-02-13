@@ -93,7 +93,7 @@ export class McvDatePicker {
 
     // Required
     if (this.required && !this.value) {
-      currentErrors.push('This field is required');
+      currentErrors.push('Date is required');
     }
 
     // Format validation

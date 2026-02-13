@@ -88,7 +88,7 @@ export class McvTextArea {
 
     // Required validation
     if (this.required && !this.value) {
-      currentErrors.push('This field is required');
+      currentErrors.push('Description is required');
     }
 
     // Length validation

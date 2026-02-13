@@ -32,7 +32,7 @@ describe('McvRadioField', () => {
         component.required = true;
         component.value = '';
         component.validate();
-        expect(component.errors).toContain('Selection is required');
+        expect(component.errors).toContain('Click any option');
     });
 
     it('should emit statusChange on selection', () => {

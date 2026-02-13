@@ -25,7 +25,7 @@ describe('McvPhoneField', () => {
     component.required = true;
     component.value = '';
     component.validate();
-    expect(component.errors).toContain('This field is required');
+    expect(component.errors).toContain('Phone Number is required');
   });
 
   it('should validate phone number format', () => {

@@ -25,7 +25,7 @@ describe('McvDatePicker', () => {
     component.required = true;
     component.value = '';
     component.validate();
-    expect(component.errors).toContain('This field is required');
+    expect(component.errors).toContain('Date is required');
   });
 
   it('should validate minimum date', () => {

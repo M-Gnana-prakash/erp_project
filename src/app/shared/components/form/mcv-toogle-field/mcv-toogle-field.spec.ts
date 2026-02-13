@@ -44,7 +44,7 @@ describe('McvToggleField', () => {
         component.valueChange.subscribe((val: boolean) => emittedValue = val);
 
         component.toggle();
-        expect(emittedValue).toBe(true);
+        expect(emittedValue.value).toBe(true);
         expect(emittedValue.valid).toBe(true);
     });
 });

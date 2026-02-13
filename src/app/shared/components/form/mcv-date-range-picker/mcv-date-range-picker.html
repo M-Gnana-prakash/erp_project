@@ -13,58 +13,59 @@
   </div>
 
   <!-- Popup -->
-  @if(show){class="absolute z-50 mt-2 bg-white rounded-lg shadow-xl w-80 overflow-hidden"
-  <!-- Header -->
-  <div class="bg-gray-100 px-4 py-3 flex justify-between items-center">
+  <div *ngIf="show" class="absolute z-50 mt-2 bg-white rounded-lg shadow-xl w-80 overflow-hidden">
 
-    <div class="flex items-center gap-2 font-semibold text-gray-700">
+    <!-- Header -->
+    <div class="bg-gray-100 px-4 py-3 flex justify-between items-center">
 
-      <select class="border rounded px-2 py-1 text-sm" [value]="current.getMonth()"
-        (change)="setMonth($any($event.target).value)">
+      <div class="flex items-center gap-2 font-semibold text-gray-700">
 
-        <option *ngFor="let m of months; let i = index" [value]="i">
-          {{ m }}
-        </option>
+        <select class="border rounded px-2 py-1 text-sm" [value]="current.getMonth()"
+          (change)="setMonth($any($event.target).value)">
 
-      </select>
+          <option *ngFor="let m of months; let i = index" [value]="i">
+            {{ m }}
+          </option>
 
-    </div>
+        </select>
 
-    <div class="flex gap-2 text-gray-600">
-      <button (click)="change(-1)">‹</button>
-      <button (click)="change(1)">›</button>
-    </div>
-
-  </div>
-
-  <!-- Weekdays -->
-  <div class="grid grid-cols-7 text-center text-xs text-gray-500 py-2 border-b">
-    <div *ngFor="let d of ['S','M','T','W','T','F','S']">
-      {{ d }}
-    </div>
-  </div>
-
-  <!-- Dates -->
-  <div class="grid grid-cols-7 text-center p-3 gap-y-2 text-sm">
-
-    <div *ngFor="let d of days" (click)="select(d)" class="relative cursor-pointer">
-
-      <!-- Range background -->
-      <div *ngIf="inRange(d)" class="absolute inset-0 bg-blue-100">
       </div>
 
-      <!-- Date circle -->
-      <div class="relative z-10 w-8 h-8 mx-auto flex items-center justify-center rounded-full" [ngClass]="{
+      <div class="flex gap-2 text-gray-600">
+        <button (click)="change(-1)">‹</button>
+        <button (click)="change(1)">›</button>
+      </div>
+
+    </div>
+
+    <!-- Weekdays -->
+    <div class="grid grid-cols-7 text-center text-xs text-gray-500 py-2 border-b">
+      <div *ngFor="let d of ['S','M','T','W','T','F','S']">
+        {{ d }}
+      </div>
+    </div>
+
+    <!-- Dates -->
+    <div class="grid grid-cols-7 text-center p-3 gap-y-2 text-sm">
+
+      <div *ngFor="let d of days" (click)="select(d)" class="relative cursor-pointer">
+
+        <!-- Range background -->
+        <div *ngIf="inRange(d)" class="absolute inset-0 bg-blue-100">
+        </div>
+
+        <!-- Date circle -->
+        <div class="relative z-10 w-8 h-8 mx-auto flex items-center justify-center rounded-full" [ngClass]="{
             'bg-blue-600 text-white': isEdge(d),
             'hover:bg-gray-200': !isEdge(d)
           }">
-        {{ d.getDate() }}
+          {{ d.getDate() }}
+        </div>
+
       </div>
 
     </div>
 
   </div>
-
-  }
 
 </div>
