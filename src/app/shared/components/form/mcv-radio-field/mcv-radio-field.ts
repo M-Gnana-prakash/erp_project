@@ -62,23 +62,25 @@ export class McvRadioField {
 
     @Output() valueChange = new EventEmitter<string>();
 
-    onOptionChange(optionValue: string) {
+    onOptionChange(selectedValue: string) {
         if (this.disabled || this.readonly) return;
-        this.value = optionValue;
+
+        // If the same value is clicked, deselect it (optional, but requested earlier)
+        if (this.value === selectedValue) {
+            this.value = '';
+        } else {
+            this.value = selectedValue;
+        }
+
         this.valueChange.emit(this.value);
         this.validate();
     }
 
     public validate() {
-        const currentErrors: string[] = [];
-
-        // Required validation
+        this.errors = [];
         if (this.required && !this.value) {
-            currentErrors.push('Selection is required');
+            this.errors.push('Click any option');
         }
-
-        // Update errors
-        this.errors = currentErrors;
 
         // Emit validation status
         this.statusChange.emit({

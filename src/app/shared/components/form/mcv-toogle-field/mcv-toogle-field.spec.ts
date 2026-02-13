@@ -45,5 +45,6 @@ describe('McvToggleField', () => {
 
         component.toggle();
         expect(emittedValue).toBe(true);
+        expect(emittedValue.valid).toBe(true);
     });
 });

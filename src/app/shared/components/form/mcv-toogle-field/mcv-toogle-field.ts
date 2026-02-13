@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 //Styles
@@ -13,10 +13,10 @@ export interface McvToggleFieldStyles {
 
 @Component({
     selector: 'app-mcv-toggle-field',
+    templateUrl: './mcv-toogle-field.html',
+    styleUrls: ['./mcv-toogle-field.css'],
     standalone: true,
     imports: [CommonModule],
-    templateUrl: './mcv-toogle-field.html',
-    styleUrl: './mcv-toogle-field.css',
 })
 export class McvToggleField {
 
@@ -35,7 +35,7 @@ export class McvToggleField {
     // Whole styles for toggle field
     @Input() styles: McvToggleFieldStyles = {};
 
-    // Individual style inputs
+    // Individual style inputs (for backward compatibility)
     @Input() activeColor: string = '';
     @Input() inactiveColor: string = '';
     @Input() knobColor: string = '';
@@ -53,54 +53,51 @@ export class McvToggleField {
         sizeVariant: 'md',
     };
 
-    get computedStyles(): McvToggleFieldStyles {
-        const individualStyles: McvToggleFieldStyles = {};
-        if (this.activeColor) individualStyles.activeTrackColor = this.activeColor;
-        if (this.inactiveColor) individualStyles.trackColor = this.inactiveColor;
-        if (this.knobColor) individualStyles.knobColor = this.knobColor;
-        if (this.activeColor) individualStyles.activeKnobColor = '#fff'; // Default or calculated?
-        if (this.sizeVariant) individualStyles.sizeVariant = this.sizeVariant;
-
-        return { ...this.defaultStyles, ...this.styles, ...individualStyles };
-    }
-
     @Output() statusChange = new EventEmitter<{
         value: boolean;
         valid: boolean;
         errors: string[];
     }>();
 
-    @Output() valueChange = new EventEmitter<boolean>();
+    @Output() valueChange = new EventEmitter<any>();
 
-    toggle() {
-        if (this.disabled || this.readonly) return;
-        this.value = !this.value;
-        this.valueChange.emit(this.value);
-        this.validate();
+    get computedStyles(): McvToggleFieldStyles {
+        const individualStyles: McvToggleFieldStyles = {};
+        if (this.activeColor) individualStyles.activeTrackColor = this.activeColor;
+        if (this.inactiveColor) individualStyles.trackColor = this.inactiveColor;
+        if (this.knobColor) individualStyles.knobColor = this.knobColor;
+        if (this.activeColor) individualStyles.activeKnobColor = '#fff';
+        if (this.sizeVariant) individualStyles.sizeVariant = this.sizeVariant;
+
+        return { ...this.defaultStyles, ...this.styles, ...individualStyles };
     }
 
-    onInputChange(event: Event) {
-        const target = event.target as HTMLInputElement;
-        this.value = target.checked;
+    toggle(event?: Event) {
+        if (this.disabled || this.readonly) return;
+
+        this.value = !this.value;
+
+        // Clear focus to remove the blue outline
+        if (event && event.currentTarget) {
+            (event.currentTarget as HTMLElement).blur();
+        }
+
         this.validate();
     }
 
     public validate() {
-        const currentErrors: string[] = [];
-
-        // Required validation (must be true)
+        this.errors = [];
         if (this.required && !this.value) {
-            currentErrors.push('This field is required');
+            this.errors.push('');
         }
 
-        // Update errors
-        this.errors = currentErrors;
-
-        // Emit validation status
-        this.statusChange.emit({
+        const status = {
             value: this.value,
             valid: this.errors.length === 0,
             errors: this.errors,
-        });
+        };
+
+        this.valueChange.emit(status);
+        this.statusChange.emit(status);
     }
 }

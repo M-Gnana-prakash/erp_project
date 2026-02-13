@@ -1,39 +1,42 @@
 <div class="flex flex-col gap-1">
-  <div class="flex items-center gap-2 cursor-pointer" (click)="toggle()" [class.cursor-not-allowed]="disabled"
-    [class.opacity-50]="disabled">
+  <div class="flex items-center gap-3">
+    <!-- Toggle Switch Container -->
+    <button type="button" (click)="toggle($event)" [disabled]="disabled"
+      class="relative inline-flex items-center rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-0"
+      [ngClass]="{
+        'w-11 h-6': computedStyles.sizeVariant === 'sm',
+        'w-14 h-7': computedStyles.sizeVariant === 'md',
+        'w-16 h-8': computedStyles.sizeVariant === 'lg',
+        'opacity-50 cursor-not-allowed': disabled,
+        'cursor-pointer': !disabled,
+        'focus:ring-blue-500': value,
+        'focus:ring-gray-200': !value
+      }" [style.background-color]="value ? computedStyles.activeTrackColor : computedStyles.trackColor">
 
-    <!-- Toggle Switch Visual -->
-    <div class="relative transition-all duration-200 rounded-full" [ngClass]="{
-                'w-8 h-4': computedStyles.sizeVariant === 'sm',
-                'w-10 h-5': computedStyles.sizeVariant === 'md',
-                'w-12 h-6': computedStyles.sizeVariant === 'lg'
-             }" [style.background-color]="value ? computedStyles.activeTrackColor : computedStyles.trackColor">
+      <!-- Toggle Knob -->
+      <span class="inline-block rounded-full shadow-lg transform transition-transform duration-300 ease-in-out"
+        [ngClass]="{
+          'w-4 h-4': computedStyles.sizeVariant === 'sm',
+          'w-5 h-5': computedStyles.sizeVariant === 'md',
+          'w-6 h-6': computedStyles.sizeVariant === 'lg',
+          'translate-x-1': !value,
+          'translate-x-6': value && computedStyles.sizeVariant === 'sm',
+          'translate-x-7': value && computedStyles.sizeVariant === 'md',
+          'translate-x-8': value && computedStyles.sizeVariant === 'lg'
+        }" [style.background-color]="value ? computedStyles.activeKnobColor : computedStyles.knobColor">
+      </span>
+    </button>
 
-      <!-- Knob -->
-      <div class="absolute top-0 bottom-0 m-auto rounded-full transition-all duration-200 shadow-sm" [ngClass]="{
-                    'w-3 h-3 left-0.5': computedStyles.sizeVariant === 'sm' && !value,
-                    'w-3 h-3 left-[calc(100%-0.875rem)]': computedStyles.sizeVariant === 'sm' && value,
-                    
-                    'w-4 h-4 left-0.5': computedStyles.sizeVariant === 'md' && !value,
-                    'w-4 h-4 left-[calc(100%-1.125rem)]': computedStyles.sizeVariant === 'md' && value,
-
-                    'w-5 h-5 left-0.5': computedStyles.sizeVariant === 'lg' && !value,
-                    'w-5 h-5 left-[calc(100%-1.375rem)]': computedStyles.sizeVariant === 'lg' && value
-                 }" [style.background-color]="value ? computedStyles.activeKnobColor : computedStyles.knobColor"></div>
-    </div>
-
-    <!-- Hidden Input -->
-    <input type="checkbox" [checked]="value" [disabled]="disabled" [required]="required"
-      (change)="onInputChange($event)" (focus)="isFocused = true" (blur)="isFocused = false" class="sr-only" />
-
-    <!-- Label -->
-    @if (label) {
-    <span [style.color]="computedStyles.labelColor" [ngClass]="{
-                    'text-xs': computedStyles.sizeVariant === 'sm',
-                    'text-sm': computedStyles.sizeVariant === 'md',
-                    'text-base': computedStyles.sizeVariant === 'lg'
-                  }">
-      {{ label }}
+    <!-- Label Text -->
+    @if (label || onLabel || offLabel) {
+    <span class="font-medium select-none transition-colors duration-200" [style.color]="computedStyles.labelColor"
+      [ngClass]="{
+        'text-sm': computedStyles.sizeVariant === 'sm',
+        'text-base': computedStyles.sizeVariant === 'md',
+        'text-lg': computedStyles.sizeVariant === 'lg',
+        'opacity-50': disabled
+      }">
+      {{ label }} {{ value ? onLabel : offLabel }}
     </span>
     }
   </div>
