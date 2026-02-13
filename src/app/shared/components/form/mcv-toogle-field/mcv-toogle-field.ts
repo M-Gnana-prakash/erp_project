@@ -1,103 +1,95 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-//Styles
 export interface McvToggleFieldStyles {
-    trackColor?: string;
-    knobColor?: string;
-    activeTrackColor?: string;
-    activeKnobColor?: string;
-    labelColor?: string;
-    sizeVariant?: 'sm' | 'md' | 'lg';
+  trackColor?: string;
+  knobColor?: string;
+  activeTrackColor?: string;
+  activeKnobColor?: string;
+  labelColor?: string;
+  sizeVariant?: 'sm' | 'md' | 'lg';
 }
 
 @Component({
-    selector: 'app-mcv-toggle-field',
-    templateUrl: './mcv-toogle-field.html',
-    styleUrls: ['./mcv-toogle-field.css'],
-    standalone: true,
-    imports: [CommonModule],
+  selector: 'app-mcv-toggle-field',
+  templateUrl: './mcv-toogle-field.html',
+  styleUrls: ['./mcv-toogle-field.css'],
+  standalone: true,
+  imports: [CommonModule],
 })
 export class McvToggleField {
 
-    @Input() value: boolean = false;
-    @Input() label: string = '';
-    @Input() required: boolean = false;
-    @Input() disabled: boolean = false;
-    @Input() readonly: boolean = false;
+  @Input() value: boolean = false;
+  @Input() label: string = '';
+  @Input() required: boolean = false;
+  @Input() disabled: boolean = false;
+  @Input() readonly: boolean = false;
 
-    @Input() onLabel: string = 'On';
-    @Input() offLabel: string = 'Off';
+  @Input() onLabel: string = 'Yes';
+  @Input() offLabel: string = 'No';
 
-    // Validation message shown by default
-    @Input() needValidationStatusMessage: boolean = true;
+  @Input() needValidationStatusMessage: boolean = true;
+  @Input() styles: McvToggleFieldStyles = {};
+  @Input() activeColor: string = '';
+  @Input() inactiveColor: string = '';
+  @Input() knobColor: string = '';
+  @Input() sizeVariant: 'sm' | 'md' | 'lg' = 'md';
 
-    // Whole styles for toggle field
-    @Input() styles: McvToggleFieldStyles = {};
+  public errors: string[] = [];
 
-    // Individual style inputs (for backward compatibility)
-    @Input() activeColor: string = '';
-    @Input() inactiveColor: string = '';
-    @Input() knobColor: string = '';
-    @Input() sizeVariant: 'sm' | 'md' | 'lg' = 'md';
+  private defaultStyles: McvToggleFieldStyles = {
+    trackColor: '#ccc',
+    knobColor: '#fff',
+    activeTrackColor: '#3b82f6',
+    activeKnobColor: '#fff',
+    labelColor: '#333',
+    sizeVariant: 'md',
+  };
 
-    public isFocused: boolean = false;
-    public errors: string[] = [];
+  @Output() valueChange = new EventEmitter<boolean>(); // emits boolean only
+  @Output() statusChange = new EventEmitter<{
+    value: boolean;
+    valid: boolean;
+    errors: string[];
+  }>();
 
-    private defaultStyles: McvToggleFieldStyles = {
-        trackColor: '#ccc',
-        knobColor: '#fff',
-        activeTrackColor: '#007bff',
-        activeKnobColor: '#fff',
-        labelColor: '#333',
-        sizeVariant: 'md',
-    };
+  get computedStyles(): McvToggleFieldStyles {
+    const individual: McvToggleFieldStyles = {};
 
-    @Output() statusChange = new EventEmitter<{
-        value: boolean;
-        valid: boolean;
-        errors: string[];
-    }>();
+    if (this.activeColor) individual.activeTrackColor = this.activeColor;
+    if (this.inactiveColor) individual.trackColor = this.inactiveColor;
+    if (this.knobColor) individual.knobColor = this.knobColor;
+    if (this.sizeVariant) individual.sizeVariant = this.sizeVariant;
 
-    @Output() valueChange = new EventEmitter<any>();
+    return { ...this.defaultStyles, ...this.styles, ...individual };
+  }
 
-    get computedStyles(): McvToggleFieldStyles {
-        const individualStyles: McvToggleFieldStyles = {};
-        if (this.activeColor) individualStyles.activeTrackColor = this.activeColor;
-        if (this.inactiveColor) individualStyles.trackColor = this.inactiveColor;
-        if (this.knobColor) individualStyles.knobColor = this.knobColor;
-        if (this.activeColor) individualStyles.activeKnobColor = '#fff';
-        if (this.sizeVariant) individualStyles.sizeVariant = this.sizeVariant;
+  toggle(event?: Event) {
+    if (this.disabled || this.readonly) return;
 
-        return { ...this.defaultStyles, ...this.styles, ...individualStyles };
+    this.value = !this.value;
+
+    if (event?.currentTarget) {
+      (event.currentTarget as HTMLElement).blur();
     }
 
-    toggle(event?: Event) {
-        if (this.disabled || this.readonly) return;
+    this.validate();
 
-        this.value = !this.value;
+    // Emit boolean only
+    this.valueChange.emit(this.value);
+  }
 
-        // Clear focus to remove the blue outline
-        if (event && event.currentTarget) {
-            (event.currentTarget as HTMLElement).blur();
-        }
+  validate() {
+    this.errors = [];
 
-        this.validate();
+    if (this.required && !this.value) {
+      this.errors.push('This field is required');
     }
 
-    public validate() {
-        this.errors = [];
-        if (this.required && !this.value) {
-            this.errors.push('');
-        }
-
-        const status = {
-            value: this.value,
-            valid: this.errors.length === 0,
-            errors: this.errors,
-        };
-
-        this.valueChange.emit(status);
-        this.statusChange.emit(status);
-    }
+    this.statusChange.emit({
+      value: this.value,
+      valid: this.errors.length === 0,
+      errors: this.errors
+    });
+  }
 }

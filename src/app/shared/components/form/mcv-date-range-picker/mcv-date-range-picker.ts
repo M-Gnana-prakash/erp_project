@@ -14,9 +14,13 @@ import {
   templateUrl: './mcv-date-range-picker.html'
 })
 export class McvDateRangePicker {
+  
+  //Input
+  @Input() label: string = '';
+  @Input() required: boolean = false;
+  @Input() sizeVariant: 'sm' | 'md' | 'lg' = 'md';
+  @Input() disabled: boolean = false;
 
-  // ✅ INPUT
-  @Input() disabled = false;
 
   @Input() set value(val: { start: Date | null; end: Date | null } | null) {
     if (val) {

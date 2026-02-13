@@ -10,10 +10,11 @@ import { McvCheckbox } from './shared/components/form/mcv-checkbox/mcv-checkbox'
 import { McvPasswordField } from "./shared/components/form/mcv-password-field/mcv-password-field";
 import { McvRadioField, RadioOption } from "./shared/components/form/mcv-radio-field/mcv-radio-field";
 import { McvToggleField } from "./shared/components/form/mcv-toogle-field/mcv-toogle-field";
+import { FormDemo } from './form-demo/form-demo';
 
 @Component({
   selector: 'app-root',
-  imports: [McvInputField, McvEmailField, McvPhoneField, McvTextArea, McvDatePicker, McvPasswordField, McvRadioField, McvToggleField, McvTimePicker, McvDateRangePicker, McvCheckbox],
+  imports: [McvInputField, McvEmailField, McvPhoneField, McvTextArea, McvDatePicker, McvPasswordField, McvRadioField, McvToggleField, McvTimePicker, McvDateRangePicker, McvCheckbox, FormDemo],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

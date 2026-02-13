@@ -1,7 +1,11 @@
 <div class="flex flex-col gap-1">
   <div class="flex items-center gap-3">
-    <!-- Toggle Switch Container -->
-    <button type="button" (click)="toggle($event)" [disabled]="disabled"
+
+    <!-- Toggle Button -->
+    <button
+      type="button"
+      (click)="toggle($event)"
+      [disabled]="disabled"
       class="relative inline-flex items-center rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-0"
       [ngClass]="{
         'w-11 h-6': computedStyles.sizeVariant === 'sm',
@@ -11,10 +15,12 @@
         'cursor-pointer': !disabled,
         'focus:ring-blue-500': value,
         'focus:ring-gray-200': !value
-      }" [style.background-color]="value ? computedStyles.activeTrackColor : computedStyles.trackColor">
+      }"
+      [style.background-color]="value ? computedStyles.activeTrackColor : computedStyles.trackColor">
 
-      <!-- Toggle Knob -->
-      <span class="inline-block rounded-full shadow-lg transform transition-transform duration-300 ease-in-out"
+      <!-- Knob -->
+      <span
+        class="inline-block rounded-full shadow-lg transform transition-transform duration-300 ease-in-out"
         [ngClass]="{
           'w-4 h-4': computedStyles.sizeVariant === 'sm',
           'w-5 h-5': computedStyles.sizeVariant === 'md',
@@ -23,32 +29,36 @@
           'translate-x-6': value && computedStyles.sizeVariant === 'sm',
           'translate-x-7': value && computedStyles.sizeVariant === 'md',
           'translate-x-8': value && computedStyles.sizeVariant === 'lg'
-        }" [style.background-color]="value ? computedStyles.activeKnobColor : computedStyles.knobColor">
+        }"
+        [style.background-color]="value ? computedStyles.activeKnobColor : computedStyles.knobColor">
       </span>
     </button>
 
-    <!-- Label Text -->
+    <!-- Label + Yes/No -->
     @if (label || onLabel || offLabel) {
-    <span class="font-medium select-none transition-colors duration-200" [style.color]="computedStyles.labelColor"
-      [ngClass]="{
-        'text-sm': computedStyles.sizeVariant === 'sm',
-        'text-base': computedStyles.sizeVariant === 'md',
-        'text-lg': computedStyles.sizeVariant === 'lg',
-        'opacity-50': disabled
-      }">
-      {{ label }} {{ value ? onLabel : offLabel }}
-    </span>
+      <span
+        class="font-medium select-none transition-colors duration-200"
+        [style.color]="computedStyles.labelColor"
+        [ngClass]="{
+          'text-sm': computedStyles.sizeVariant === 'sm',
+          'text-base': computedStyles.sizeVariant === 'md',
+          'text-lg': computedStyles.sizeVariant === 'lg',
+          'opacity-50': disabled
+        }">
+        {{ label }} {{ value ? onLabel : offLabel }}
+      </span>
     }
+
   </div>
 
   <!-- Validation -->
   @if (needValidationStatusMessage && errors.length > 0) {
-  <div class="mt-1">
-    @for (error of errors; track error) {
-    <p class="text-red-500 text-xs mt-0.5">
-      {{ error }}
-    </p>
-    }
-  </div>
+    <div class="mt-1">
+      @for (error of errors; track error) {
+        <p class="text-red-500 text-xs mt-0.5">
+          {{ error }}
+        </p>
+      }
+    </div>
   }
 </div>

@@ -97,9 +97,24 @@ export class McvDatePicker {
     }
 
     // Format validation
-    if (this.value && isNaN(Date.parse(this.value))) {
-      currentErrors.push('Invalid date format');
+    // if (this.value && isNaN(Date.parse(this.value))) {
+    //   currentErrors.push('Invalid date format');
+    // }
+
+    // Strict format validation (yyyy-MM-dd)
+  if (this.value) {
+  const regex = /^\d{4}-\d{2}-\d{2}$/;
+
+  if (!regex.test(this.value)) {
+    currentErrors.push('Invalid date format (yyyy-MM-dd required)');
+  } else {
+    const year = +this.value.split('-')[0];
+    if (year < 1000 || year > 9999) {
+      currentErrors.push('Year must be 4 digits');
     }
+  }
+}
+
 
     const selectedDate = this.value ? this.parseDate(this.value) : null;
 

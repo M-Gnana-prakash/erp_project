@@ -23,6 +23,7 @@ export interface McvEmailFieldStyles {
 })
 export class McvEmailField {
 
+  @Input() label: string = '';
   @Input() value: string = '';
   @Input() placeholder: string = 'example@domain.com';
   @Input() required: boolean = false;

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, input, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 //Styles
@@ -22,7 +22,7 @@ export interface McvInputFieldStyles {
   styleUrl: './mcv-input-field.css',
 })
 export class McvInputField {
-
+  @Input() label: string = '';
   @Input() value: string = '';
   @Input() type: string = 'text'; // Allow text, number, etc.
   @Input() placeholder: string = '';

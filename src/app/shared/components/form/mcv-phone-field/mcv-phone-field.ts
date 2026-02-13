@@ -24,6 +24,7 @@ export interface McvPhoneFieldStyles {
 
 export class McvPhoneField {
 
+  @Input() label: string = '';
   @Input() value: string = '';
   @Input() countryCode: string = '+91';
   @Input() showCountryCode: boolean = true;

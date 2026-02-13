@@ -23,6 +23,7 @@ export interface McvPasswordFieldStyles {
 })
 export class McvPasswordField {
 
+  @Input() label: string = '';
   @Input() value: string = '';
   @Input() placeholder: string = '';
   @Input() required: boolean = false;

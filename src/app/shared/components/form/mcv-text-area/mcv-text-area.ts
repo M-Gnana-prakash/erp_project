@@ -23,6 +23,7 @@ export interface McvTextAreaStyles {
 })
 export class McvTextArea {
 
+  @Input() label: string = '';
   @Input() value: string = '';
   @Input() placeholder: string = '';
   @Input() required: boolean = false;

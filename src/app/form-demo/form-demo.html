@@ -1,0 +1,92 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="grid grid-cols-4 gap-4">
+
+  <!-- Name -->
+  <app-mcv-input-field
+    label="Name"
+    [value]="form.get('name')?.value"
+    (statusChange)="form.get('name')?.setValue($event.value)">
+  </app-mcv-input-field>
+
+  <!-- Email -->
+  <app-mcv-email-field
+    label="Email"
+    [value]="form.get('email')?.value"
+    (statusChange)="form.get('email')?.setValue($event.value)">
+  </app-mcv-email-field>
+
+  <!-- Password -->
+  <app-mcv-password-field
+    label="Password"
+    [value]="form.get('password')?.value"
+    (statusChange)="form.get('password')?.setValue($event.value)">
+  </app-mcv-password-field>
+
+  <!-- Phone -->
+  <app-mcv-phone-field
+    label="Phone Number"
+    [value]="form.get('phone')?.value"
+    (statusChange)="form.get('phone')?.setValue($event.value)">
+  </app-mcv-phone-field>
+
+  <!-- Date Picker -->
+  <app-mcv-date-picker
+    label="Date of Birth"
+    [value]="form.get('dob')?.value"
+    (statusChange)="form.get('dob')?.setValue($event.value)">
+  </app-mcv-date-picker>
+
+  <!-- Text Area -->
+  <app-mcv-text-area
+    label="Description"
+    [value]="form.get('description')?.value"
+    (statusChange)="form.get('description')?.setValue($event.value)">
+  </app-mcv-text-area>
+
+  <!-- Time Picker -->
+  <app-mcv-time-picker
+    label="Select Time"
+    [value]="form.get('time')?.value"
+    (statusChange)="form.get('time')?.setValue($event.value)">
+  </app-mcv-time-picker>
+
+  <!-- Toggle -->
+  <app-mcv-toggle-field
+    label=""
+    [value]="form.get('isAgreed')?.value"
+    onLabel="Yes"
+    offLabel="No"
+    (valueChange)="form.get('isAgreed')?.setValue($event)">
+  </app-mcv-toggle-field>
+
+  <!-- Date Range -->
+  <app-mcv-date-range-picker
+    label="Select Date Range"
+    [value]="form.get('dateRange')?.value"
+    (statusChange)="form.get('dateRange')?.setValue($event)">
+  </app-mcv-date-range-picker>
+
+  <!-- Checkbox -->
+  <app-mcv-checkbox
+    label=""
+    [checked]="form.get('CheckboxControlValueAccessor')?.value"
+    (statusChange)="form.get('CheckboxControlValueAccessor')?.setValue($event.value)">
+  </app-mcv-checkbox>
+
+  <!-- Radio Field -->
+  <app-mcv-radio-field
+    label="Gender"
+    [options]="[
+      { label: 'Male', value: 'male' },
+      { label: 'Female', value: 'female' },
+      { label: 'Other', value: 'other' }
+    ]"
+    [value]="form.get('gender')?.value"
+    (statusChange)="form.get('gender')?.setValue($event.value)">
+  </app-mcv-radio-field>
+
+  <!-- Submit -->
+  <button type="submit" class="bg-blue-500 text-white p-2 rounded">
+    Submit
+  </button>
+
+</form>
