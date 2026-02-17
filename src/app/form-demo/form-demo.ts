@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { CheckboxControlValueAccessor, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, signal } from '@angular/core';
+import { CheckboxControlValueAccessor, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 // Import your components
@@ -36,28 +36,46 @@ import { McvTimePicker } from '../shared/components/form/mcv-time-picker/mcv-tim
   templateUrl: './form-demo.html'
 })
 export class FormDemo {
+  name = signal<string>("");
+  email = signal<string>("");
+  password = signal<string>("");
+
+  isSubmitted = signal<boolean>(false);
 
   form: FormGroup;
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
-      name: [''],
-      email: [''],
-      password: [''],
-      phone: [''],
-      dob: [''],
+      name: [this.name(), Validators.required],
+      email: [this.email(), Validators.required],
+      password: [this.password(), Validators.required],
+      phone: ['', Validators.required],
+      dob: ['', Validators.required],
       description: [''],
-      gender: [''],
-      isAgreed: [false],
+      gender: ['', Validators.required],
+      isAgreed: [false, Validators.requiredTrue],
       time: [''],
       dateRange: [''],
-      CheckboxControlValueAccessor: [false],
+      CheckboxControlValueAccessor: [false, Validators.requiredTrue],
     });
   }
 
+  handleStatusChange(controlName: string, event: any) {
+    const control = this.form.get(controlName);
+    if (control) {
+      control.setValue(event.value, { emitEvent: false });
+      if (!event.valid) {
+        control.setErrors({ customError: true });
+      } else {
+        control.setErrors(null);
+      }
+    }
+  }
+
   onSubmit() {
-    console.log('Form Value:', this.form.value);
-    console.log('Form Valid:', this.form.valid);
+    if (this.form.valid) {
+      this.isSubmitted.set(true);
+    }
   }
 }
 

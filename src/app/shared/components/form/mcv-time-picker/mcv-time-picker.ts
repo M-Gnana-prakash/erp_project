@@ -1,18 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-//Styles
-export interface McvTimePickerStyles {
-  borderStyle?: string;
-  outline?: string;
-  textColor?: string;
-  backgroundColor?: string;
-  activeBorderStyle?: string;
-  activeOutline?: string;
-  activeTextColor?: string;
-  activeBackgroundColor?: string;
-  sizeVariant?: 'sm' | 'md' | 'lg';
-}
+import { McvFieldStyles } from '../form-types';
 
 @Component({
   selector: 'app-mcv-time-picker',
@@ -31,17 +19,19 @@ export class McvTimePicker {
   @Input() readonly: boolean = false;
   @Input() min: string = ''; // HH:MM
   @Input() max: string = ''; // HH:MM
+  @Input() step: number = 1;
 
   // Validation message shown by default
   @Input() needValidationStatusMessage: boolean = true;
 
   // Whole styles for time picker
-  @Input() styles: McvTimePickerStyles = {};
+  @Input() styles: McvFieldStyles = {};
 
   public isFocused: boolean = false;
+  public isTouched: boolean = false;
   public errors: string[] = [];
 
-  private defaultStyles: McvTimePickerStyles = {
+  private defaultStyles: McvFieldStyles = {
     borderStyle: '1px solid #ccc',
     outline: 'none',
     textColor: '#333',
@@ -53,53 +43,46 @@ export class McvTimePicker {
     sizeVariant: 'md',
   };
 
-  get computedStyles(): McvTimePickerStyles {
-    const individualStyles: McvTimePickerStyles = {};
-    if (this.borderStyle) individualStyles.borderStyle = this.borderStyle;
-    if (this.outline) individualStyles.outline = this.outline;
-    if (this.textColor) individualStyles.textColor = this.textColor;
-    if (this.backgroundColor) individualStyles.backgroundColor = this.backgroundColor;
-    if (this.sizeVariant) individualStyles.sizeVariant = this.sizeVariant;
-
-    return { ...this.defaultStyles, ...this.styles, ...individualStyles };
+  get computedStyles(): McvFieldStyles {
+    return { ...this.defaultStyles, ...this.styles };
   }
-
-  @Input() step: number = 1;
-
-  // Individual style inputs
-  @Input() borderStyle: string = '';
-  @Input() outline: string = '';
-  @Input() textColor: string = '';
-  @Input() backgroundColor: string = '';
-  @Input() sizeVariant: 'sm' | 'md' | 'lg' = 'md';
 
   @Output() statusChange = new EventEmitter<{
     value: string;
     valid: boolean;
     errors: string[];
+    touched: boolean;
   }>();
 
   onInputChange(event: Event) {
     const target = event.target as HTMLInputElement;
     this.value = target.value;
+    this.isTouched = true;
+    this.validate();
+  }
+
+  onBlur() {
+    this.isFocused = false;
+    this.isTouched = true;
     this.validate();
   }
 
   public validate() {
     const currentErrors: string[] = [];
+    const fieldName = this.label || 'Time';
 
     // Required validation
     if (this.required && !this.value) {
-      currentErrors.push('Time is required');
+      currentErrors.push(`${fieldName} is required`);
     }
 
     // Min/Max time validation
     if (this.value) {
       if (this.min && this.value < this.min) {
-        currentErrors.push(`Time must be after ${this.min}`);
+        currentErrors.push(`${fieldName} must be after ${this.min}`);
       }
       if (this.max && this.value > this.max) {
-        currentErrors.push(`Time must be before ${this.max}`);
+        currentErrors.push(`${fieldName} must be before ${this.max}`);
       }
     }
 
@@ -111,6 +94,7 @@ export class McvTimePicker {
       value: this.value,
       valid: this.errors.length === 0,
       errors: this.errors,
+      touched: this.isTouched
     });
   }
 }

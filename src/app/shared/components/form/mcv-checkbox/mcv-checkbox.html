@@ -7,12 +7,12 @@
                 'w-4 h-4': computedStyles.sizeVariant === 'sm',
                 'w-5 h-5': computedStyles.sizeVariant === 'md',
                 'w-6 h-6': computedStyles.sizeVariant === 'lg'
-             }" [style.border-color]="value ? computedStyles.activeBorderColor : computedStyles.borderColor"
-      [style.background-color]="value ? computedStyles.activeBackgroundColor : computedStyles.backgroundColor"
+             }" [style.border]="value ? ('1px solid ' + computedStyles.selectedColor) : computedStyles.borderStyle"
+      [style.background-color]="value ? computedStyles.selectedColor : computedStyles.backgroundColor"
       [style.border-width]="'1px'">
 
       @if (value) {
-      <svg [style.color]="computedStyles.checkColor" [class]="{
+      <svg style="color: white" [class]="{
                         'w-3 h-3': computedStyles.sizeVariant === 'sm',
                         'w-4 h-4': computedStyles.sizeVariant === 'md',
                         'w-5 h-5': computedStyles.sizeVariant === 'lg'
@@ -39,7 +39,7 @@
   </div>
 
   <!-- Validation -->
-  @if (needValidationStatusMessage && errors.length > 0) {
+  @if (needValidationStatusMessage && errors.length > 0 && isTouched) {
   <div class="mt-1">
     @for (error of errors; track error) {
     <p class="text-red-500 text-xs mt-0.5">

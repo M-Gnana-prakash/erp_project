@@ -1,16 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-//Styles
-export interface McvCheckboxStyles {
-  borderColor?: string;
-  checkColor?: string;
-  backgroundColor?: string;
-  activeBorderColor?: string;
-  activeBackgroundColor?: string;
-  labelColor?: string;
-  sizeVariant?: 'sm' | 'md' | 'lg';
-}
+import { McvFieldStyles } from '../form-types';
 
 @Component({
   selector: 'app-mcv-checkbox',
@@ -34,22 +24,21 @@ export class McvCheckbox {
   @Input() needValidationStatusMessage: boolean = true;
 
   // Whole styles for checkbox
-  @Input() styles: McvCheckboxStyles = {};
+  @Input() styles: McvFieldStyles = {};
 
   public isFocused: boolean = false;
+  public isTouched: boolean = false;
   public errors: string[] = [];
 
-  private defaultStyles: McvCheckboxStyles = {
-    borderColor: '#ccc',
-    checkColor: '#fff',
+  private defaultStyles: McvFieldStyles = {
+    borderStyle: '1px solid #ccc',
+    selectedColor: '#007bff',
     backgroundColor: '#fff',
-    activeBorderColor: '#007bff',
-    activeBackgroundColor: '#007bff',
     labelColor: '#333',
     sizeVariant: 'md',
   };
 
-  get computedStyles(): McvCheckboxStyles {
+  get computedStyles(): McvFieldStyles {
     return { ...this.defaultStyles, ...this.styles };
   }
 
@@ -57,26 +46,30 @@ export class McvCheckbox {
     value: boolean;
     valid: boolean;
     errors: string[];
+    touched: boolean;
   }>();
 
   onInputChange(event: Event) {
     const target = event.target as HTMLInputElement;
     this.value = target.checked;
+    this.isTouched = true;
     this.validate();
   }
 
   toggle() {
     if (this.disabled || this.readonly) return;
     this.value = !this.value;
+    this.isTouched = true;
     this.validate();
   }
 
   public validate() {
     const currentErrors: string[] = [];
+    const fieldName = this.label || 'Checkbox';
 
     // Required validation (must be checked if required)
     if (this.required && !this.value) {
-      currentErrors.push('Checkbox is required');
+      currentErrors.push(`${fieldName} must be checked`);
     }
 
     // Update errors
@@ -87,6 +80,7 @@ export class McvCheckbox {
       value: this.value,
       valid: this.errors.length === 0,
       errors: this.errors,
+      touched: this.isTouched
     });
   }
 }

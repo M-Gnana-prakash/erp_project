@@ -1,92 +1,114 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="grid grid-cols-4 gap-4">
 
   <!-- Name -->
-  <app-mcv-input-field
-    label="Name"
-    [value]="form.get('name')?.value"
-    (statusChange)="form.get('name')?.setValue($event.value)">
+  <app-mcv-input-field label="Name" [value]="form.get('name')?.value"
+    (statusChange)="handleStatusChange('name', $event)" [placeholder]="'Enter the input value'" [minLength]="3"
+    [maxLength]="10" [required]="true" [regex]="/^[a-zA-Z]+$/" [disabled]="false" [readonly]="false" [styles]="{
+      borderStyle: '1px solid #ccc',
+      outline: 'none',
+      textColor: '#333',
+      backgroundColor: '#fff',
+      sizeVariant: 'md'
+    }">
   </app-mcv-input-field>
 
   <!-- Email -->
-  <app-mcv-email-field
-    label="Email"
-    [value]="form.get('email')?.value"
-    (statusChange)="form.get('email')?.setValue($event.value)">
+  <app-mcv-email-field label="Email" [value]="form.get('email')?.value"
+    (statusChange)="handleStatusChange('email', $event)" [placeholder]="'Enter the email value'" [required]="true"
+    [disabled]="false" [readonly]="false" [styles]="{
+      borderStyle: '1px solid #ccc',
+      outline: 'none',
+      textColor: '#333',
+      backgroundColor: '#fff',
+      sizeVariant: 'md'
+    }">
   </app-mcv-email-field>
 
   <!-- Password -->
-  <app-mcv-password-field
-    label="Password"
-    [value]="form.get('password')?.value"
-    (statusChange)="form.get('password')?.setValue($event.value)">
+  <app-mcv-password-field label="Password" [value]="form.get('password')?.value"
+    (statusChange)="handleStatusChange('password', $event)" [placeholder]="'Enter the password value'" [minLength]="8"
+    [maxLength]="16" [required]="true" [regex]="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/"
+    [disabled]="false" [readonly]="false" [styles]="{
+      borderStyle: '1px solid #ccc',
+      outline: 'none',
+      textColor: '#333',
+      backgroundColor: '#fff',
+      activeBorderStyle: '1px solid #007bff',
+      activeOutline: 'none',
+      activeTextColor: '#333',
+      activeBackgroundColor: '#fff',
+      sizeVariant: 'md'
+    }" [canDisplayEye]="true">
   </app-mcv-password-field>
 
   <!-- Phone -->
-  <app-mcv-phone-field
-    label="Phone Number"
-    [value]="form.get('phone')?.value"
-    (statusChange)="form.get('phone')?.setValue($event.value)">
+  <app-mcv-phone-field label="Phone Number" [showCountryCode]="true" [countryCode]="'+1'"
+    [value]="form.get('phone')?.value" (statusChange)="handleStatusChange('phone', $event)">
   </app-mcv-phone-field>
 
   <!-- Date Picker -->
-  <app-mcv-date-picker
-    label="Date of Birth"
-    [value]="form.get('dob')?.value"
-    (statusChange)="form.get('dob')?.setValue($event.value)">
+  <app-mcv-date-picker label="Date of Birth" [value]="form.get('dob')?.value"
+    (statusChange)="handleStatusChange('dob', $event)" [placeholder]="'Enter the date value'" [required]="true"
+    [disabled]="false" [readonly]="false" [styles]="{
+      borderStyle: '1px solid #ccc',
+      outline: 'none',
+      textColor: '#333',
+      backgroundColor: '#fff',
+      sizeVariant: 'md'
+    }" [format]="'yyyy-MM-dd'" [min]="'2026/01/01'" [max]="'2026/02/16'">
   </app-mcv-date-picker>
 
   <!-- Text Area -->
-  <app-mcv-text-area
-    label="Description"
-    [value]="form.get('description')?.value"
-    (statusChange)="form.get('description')?.setValue($event.value)">
+  <app-mcv-text-area label="Description" [value]="form.get('description')?.value"
+    (statusChange)="handleStatusChange('description', $event)">
   </app-mcv-text-area>
 
   <!-- Time Picker -->
-  <app-mcv-time-picker
-    label="Select Time"
-    [value]="form.get('time')?.value"
-    (statusChange)="form.get('time')?.setValue($event.value)">
+  <app-mcv-time-picker label="Select Time" [value]="form.get('time')?.value"
+    (statusChange)="handleStatusChange('time', $event)">
   </app-mcv-time-picker>
 
   <!-- Toggle -->
-  <app-mcv-toggle-field
-    label=""
-    [value]="form.get('isAgreed')?.value"
-    onLabel="Yes"
-    offLabel="No"
-    (valueChange)="form.get('isAgreed')?.setValue($event)">
+  <app-mcv-toggle-field label="Agree to Terms" [value]="form.get('isAgreed')?.value" onLabel="Yes" offLabel="No"
+    [required]="true" (statusChange)="handleStatusChange('isAgreed', $event)">
   </app-mcv-toggle-field>
 
   <!-- Date Range -->
-  <app-mcv-date-range-picker
-    label="Select Date Range"
-    [value]="form.get('dateRange')?.value"
-    (statusChange)="form.get('dateRange')?.setValue($event)">
+  <app-mcv-date-range-picker label="Select Date Range" [value]="form.get('dateRange')?.value"
+    (statusChange)="handleStatusChange('dateRange', $event)">
   </app-mcv-date-range-picker>
 
   <!-- Checkbox -->
-  <app-mcv-checkbox
-    label=""
-    [checked]="form.get('CheckboxControlValueAccessor')?.value"
-    (statusChange)="form.get('CheckboxControlValueAccessor')?.setValue($event.value)">
+  <app-mcv-checkbox label="Subscribe to Newsletter" [checked]="form.get('CheckboxControlValueAccessor')?.value"
+    [required]="true" (statusChange)="handleStatusChange('CheckboxControlValueAccessor', $event)">
   </app-mcv-checkbox>
 
   <!-- Radio Field -->
-  <app-mcv-radio-field
-    label="Gender"
-    [options]="[
+  <app-mcv-radio-field label="Gender" [options]="[
       { label: 'Male', value: 'male' },
       { label: 'Female', value: 'female' },
-      { label: 'Other', value: 'other' }
-    ]"
-    [value]="form.get('gender')?.value"
-    (statusChange)="form.get('gender')?.setValue($event.value)">
+      { label: 'Other', value: 'other', disabled: true }
+    ]" [value]="form.get('gender')?.value" (statusChange)="handleStatusChange('gender', $event)">
   </app-mcv-radio-field>
 
   <!-- Submit -->
-  <button type="submit" class="bg-blue-500 text-white p-2 rounded">
-    Submit
-  </button>
+  <input type="submit" value="Submit" [disabled]="form.invalid"
+    [style.cursor]="form.invalid ? 'not-allowed' : 'pointer'" [style.opacity]="form.invalid ? '0.5' : '1'"
+    style="margin-left: 1rem; margin-top: 1rem; margin-bottom: 1rem; margin-right: 1rem; width: 100px; height: 40px; border-radius: 5px; border: none; background-color: #007bff; color: #fff;">
 
 </form>
+
+@if (isSubmitted()) {
+<p>Form Submitted Successfully</p>
+<p>Name: {{ form.get('name')?.value }}</p>
+<p>Email: {{ form.get('email')?.value }}</p>
+<p>Password: {{ form.get('password')?.value }}</p>
+<p>Phone: {{ form.get('phone')?.value }}</p>
+<p>DOB: {{ form.get('dob')?.value }}</p>
+<p>Description: {{ form.get('description')?.value }}</p>
+<p>Time: {{ form.get('time')?.value }}</p>
+<p>Gender: {{ form.get('gender')?.value }}</p>
+<p>Is Agreed: {{ form.get('isAgreed')?.value }}</p>
+<p>Checkbox: {{ form.get('CheckboxControlValueAccessor')?.value }}</p>
+<p>Date Range: {{ form.get('dateRange')?.value }}</p>
+}

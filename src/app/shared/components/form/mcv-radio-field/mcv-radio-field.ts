@@ -1,14 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-//Styles
-export interface McvRadioFieldStyles {
-    borderColor?: string;
-    selectedColor?: string;
-    backgroundColor?: string;
-    labelColor?: string;
-    sizeVariant?: 'sm' | 'md' | 'lg';
-}
+import { McvFieldStyles } from '../form-types';
 
 export interface RadioOption {
     label: string;
@@ -38,19 +30,20 @@ export class McvRadioField {
     @Input() needValidationStatusMessage: boolean = true;
 
     // Whole styles for radio field
-    @Input() styles: McvRadioFieldStyles = {};
+    @Input() styles: McvFieldStyles = {};
 
     public errors: string[] = [];
+    public isTouched: boolean = false;
 
-    private defaultStyles: McvRadioFieldStyles = {
-        borderColor: '#ccc',
+    private defaultStyles: McvFieldStyles = {
+        borderStyle: '1px solid #ccc',
         selectedColor: '#007bff',
         backgroundColor: '#fff',
         labelColor: '#333',
         sizeVariant: 'md',
     };
 
-    get computedStyles(): McvRadioFieldStyles {
+    get computedStyles(): McvFieldStyles {
         return { ...this.defaultStyles, ...this.styles };
     }
 
@@ -58,6 +51,7 @@ export class McvRadioField {
         value: string;
         valid: boolean;
         errors: string[];
+        touched: boolean;
     }>();
 
     @Output() valueChange = new EventEmitter<string>();
@@ -65,6 +59,7 @@ export class McvRadioField {
     onOptionChange(selectedValue: string) {
         if (this.disabled || this.readonly) return;
 
+        this.isTouched = true;
         // If the same value is clicked, deselect it (optional, but requested earlier)
         if (this.value === selectedValue) {
             this.value = '';
@@ -76,10 +71,17 @@ export class McvRadioField {
         this.validate();
     }
 
+    onBlur() {
+        this.isTouched = true;
+        this.validate();
+    }
+
     public validate() {
         this.errors = [];
+        const fieldName = this.label || 'Selection';
+
         if (this.required && !this.value) {
-            this.errors.push('Click any option');
+            this.errors.push(`${fieldName} is required`);
         }
 
         // Emit validation status
@@ -87,6 +89,7 @@ export class McvRadioField {
             value: this.value,
             valid: this.errors.length === 0,
             errors: this.errors,
+            touched: this.isTouched
         });
     }
 }

@@ -1,47 +1,50 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-//Styles
-export interface McvPasswordFieldStyles {
-  borderStyle?: string;
-  outline?: string;
-  textColor?: string;
-  backgroundColor?: string;
-  activeBorderStyle?: string;
-  activeOutline?: string;
-  activeTextColor?: string;
-  activeBackgroundColor?: string;
-  sizeVariant?: 'sm' | 'md' | 'lg';
-}
+import { McvFieldStyles } from '../form-types';
 
 @Component({
   selector: 'app-mcv-password-field',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './mcv-password-field.html',
   styleUrl: './mcv-password-field.css',
 })
 export class McvPasswordField {
-
+  // Inputs
   @Input() label: string = '';
   @Input() value: string = '';
-  @Input() placeholder: string = '';
+  @Input() placeholder: string = 'Password';
+  @Input() minLength: number = 8;
+  @Input() maxLength: number = Infinity;
+  @Input() set regex(value: string | RegExp | null) {
+    if (typeof value === 'string') {
+      try {
+        const match = value.match(/^\/(.*)\/([gimsuy]*)$/);
+        if (match) {
+          this._regex = new RegExp(match[1], match[2]);
+        } else {
+          this._regex = new RegExp(value);
+        }
+      } catch (e) {
+        this._regex = null;
+      }
+    } else {
+      this._regex = value;
+    }
+  }
+  get regex(): RegExp | null {
+    return this._regex;
+  }
+  private _regex: RegExp | null = null;
   @Input() required: boolean = false;
   @Input() disabled: boolean = false;
   @Input() readonly: boolean = false;
-  @Input() minLength: number = 0;
-
-  // Validation message shown by default
+  @Input() canDisplayEye: boolean = true;
   @Input() needValidationStatusMessage: boolean = true;
 
-  // Whole styles for password field
-  @Input() styles: McvPasswordFieldStyles = {};
+  // CSS Inputs
+  @Input() styles: McvFieldStyles = {};
 
-  public isFocused: boolean = false;
-  public showPassword: boolean = false;
-  public errors: string[] = [];
-
-  private defaultStyles: McvPasswordFieldStyles = {
+  private defaultStyles: McvFieldStyles = {
     borderStyle: '1px solid #ccc',
     outline: 'none',
     textColor: '#333',
@@ -53,61 +56,73 @@ export class McvPasswordField {
     sizeVariant: 'md',
   };
 
-  get computedStyles(): McvPasswordFieldStyles {
-    const individualStyles: McvPasswordFieldStyles = {};
-    if (this.borderStyle) individualStyles.borderStyle = this.borderStyle;
-    if (this.outline) individualStyles.outline = this.outline;
-    if (this.sizeVariant) individualStyles.sizeVariant = this.sizeVariant;
-
-    return { ...this.defaultStyles, ...this.styles, ...individualStyles };
+  get computedStyles(): McvFieldStyles {
+    return { ...this.defaultStyles, ...this.styles };
   }
 
-  @Input() canDisplayEye: boolean = true;
-  @Input() regex: string | RegExp = '';
+  public isFocused: boolean = false;
+  public isTouched: boolean = false;
+  public showPassword: boolean = false;
+  protected readonly Infinity = Infinity;
 
-  // Individual style inputs
-  @Input() borderStyle: string = '';
-  @Input() outline: string = '';
-  @Input() sizeVariant: 'sm' | 'md' | 'lg' = 'md';
-
+  // Output
   @Output() statusChange = new EventEmitter<{
     value: string;
     valid: boolean;
     errors: string[];
+    touched: boolean;
   }>();
+
+  public errors: string[] = [];
 
   onInputChange(event: Event) {
     const target = event.target as HTMLInputElement;
     this.value = target.value;
+    this.isTouched = true;
+    this.validate();
+  }
+
+  onBlur() {
+    this.isFocused = false;
+    this.isTouched = true;
     this.validate();
   }
 
   toggleVisibility() {
-    if (this.disabled) return;
     this.showPassword = !this.showPassword;
   }
 
   public validate() {
     const currentErrors: string[] = [];
+    const fieldName = this.label || 'Password';
 
-    // Required validation
+    // Required check
     if (this.required && !this.value) {
-      currentErrors.push('Password is required');
+      currentErrors.push(`${fieldName} is required`);
     }
 
-    // Min Length validation
-    if (this.value && this.minLength > 0 && this.value.length < this.minLength) {
-      currentErrors.push(`Password must be at least ${this.minLength} characters`);
+    // Min length check
+    if (this.value && this.value.length < this.minLength) {
+      currentErrors.push(`${fieldName} must be at least ${this.minLength} characters`);
     }
 
-    // Update errors
+    // Max length check
+    if (this.value && this.value.length > this.maxLength) {
+      currentErrors.push(`${fieldName} cannot exceed ${this.maxLength} characters`);
+    }
+
+    // Regex pattern match
+    if (this.regex && this.value && !this.regex.test(this.value)) {
+      currentErrors.push(`${fieldName} has an invalid format`);
+    }
+
     this.errors = currentErrors;
-
-    // Emit validation status
     this.statusChange.emit({
       value: this.value,
       valid: this.errors.length === 0,
       errors: this.errors,
+      touched: this.isTouched
     });
   }
 }
+

@@ -1,18 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-//Styles
-export interface McvEmailFieldStyles {
-  borderStyle?: string;
-  outline?: string;
-  textColor?: string;
-  backgroundColor?: string;
-  activeBorderStyle?: string;
-  activeOutline?: string;
-  activeTextColor?: string;
-  activeBackgroundColor?: string;
-  sizeVariant?: 'sm' | 'md' | 'lg';
-}
+import { McvFieldStyles } from '../form-types';
 
 @Component({
   selector: 'app-mcv-email-field',
@@ -29,17 +17,19 @@ export class McvEmailField {
   @Input() required: boolean = false;
   @Input() disabled: boolean = false;
   @Input() readonly: boolean = false;
+  @Input() allowMultiple: boolean = false;
 
   // Validation message shown by default
   @Input() needValidationStatusMessage: boolean = true;
 
   // Whole styles for email field
-  @Input() styles: McvEmailFieldStyles = {};
+  @Input() styles: McvFieldStyles = {};
 
   public isFocused: boolean = false;
+  public isTouched: boolean = false;
   public errors: string[] = [];
 
-  private defaultStyles: McvEmailFieldStyles = {
+  private defaultStyles: McvFieldStyles = {
     borderStyle: '1px solid #ccc',
     outline: 'none',
     textColor: '#333',
@@ -51,47 +41,39 @@ export class McvEmailField {
     sizeVariant: 'md',
   };
 
-  get computedStyles(): McvEmailFieldStyles {
-    const individualStyles: McvEmailFieldStyles = {};
-    if (this.borderStyle) individualStyles.borderStyle = this.borderStyle;
-    if (this.outline) individualStyles.outline = this.outline;
-    if (this.textColor) individualStyles.textColor = this.textColor;
-    if (this.backgroundColor) individualStyles.backgroundColor = this.backgroundColor;
-    if (this.sizeVariant) individualStyles.sizeVariant = this.sizeVariant;
-
-    return { ...this.defaultStyles, ...this.styles, ...individualStyles };
+  get computedStyles(): McvFieldStyles {
+    return { ...this.defaultStyles, ...this.styles };
   }
-
-  @Input() allowMultiple: boolean = false;
-
-  // Individual style inputs
-  @Input() borderStyle: string = '';
-  @Input() outline: string = '';
-  @Input() textColor: string = '';
-  @Input() backgroundColor: string = '';
-  @Input() sizeVariant: 'sm' | 'md' | 'lg' = 'md';
 
   @Output() statusChange = new EventEmitter<{
     value: string;
     valid: boolean;
     errors: string[];
+    touched: boolean;
   }>();
 
   onInputChange(event: Event) {
     const target = event.target as HTMLInputElement;
     this.value = target.value;
+    this.isTouched = true;
+    this.validate();
+  }
+
+  onBlur() {
+    this.isFocused = false;
+    this.isTouched = true;
     this.validate();
   }
 
   public validate() {
     const currentErrors: string[] = [];
+    const fieldName = this.label || 'Email';
 
     // Required validation
     if (this.required && !this.value) {
-      currentErrors.push('Email is required');
+      currentErrors.push(`${fieldName} is required`);
     }
 
-    // Email format validation
     // Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -100,11 +82,11 @@ export class McvEmailField {
         const emails = this.value.split(',').map(e => e.trim());
         const invalidEmails = emails.filter(e => e && !emailRegex.test(e));
         if (invalidEmails.length > 0) {
-          currentErrors.push(`Invalid email format: ${invalidEmails.join(', ')}`);
+          currentErrors.push(`${fieldName} has invalid format: ${invalidEmails.join(', ')}`);
         }
       } else {
         if (!emailRegex.test(this.value)) {
-          currentErrors.push('Invalid email format');
+          currentErrors.push(`${fieldName} has an invalid format`);
         }
       }
     }
@@ -117,6 +99,7 @@ export class McvEmailField {
       value: this.value,
       valid: this.errors.length === 0,
       errors: this.errors,
+      touched: this.isTouched
     });
   }
 }

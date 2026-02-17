@@ -18,23 +18,22 @@
       [class.opacity-50]="disabled || option.disabled">
 
       <input type="radio" [name]="name" [value]="option.value" [checked]="value === option.value"
-        [disabled]="disabled || option.disabled" (click)="onOptionChange(option.value)" class="sr-only peer">
+        [disabled]="disabled || option.disabled" (click)="onOptionChange(option.value)" (blur)="onBlur()"
+        class="sr-only peer">
 
       <!-- Custom Radio Circle -->
-      <div
-        class="rounded-full border transition-all duration-200 flex items-center justify-center
+      <div class="rounded-full border transition-all duration-200 flex items-center justify-center
                     peer-focus:ring-2 peer-focus:ring-offset-1 peer-focus:ring-gray-100
-                    peer-checked:peer-focus:outline-none
-                    peer-checked:border-blue-600 peer-checked:bg-blue-600 border-gray-300 bg-white group-hover:border-blue-400"
-        [ngStyle]="{'border-color': value === option.value ? computedStyles.selectedColor : computedStyles.borderColor}"
-        [ngClass]="{
+                    peer-checked:peer-focus:outline-none"
+        [style.border-color]="value === option.value ? computedStyles.selectedColor : computedStyles.borderStyle"
+        [style.background-color]="computedStyles.backgroundColor" [ngClass]="{
                'w-4 h-4': computedStyles.sizeVariant === 'sm',
                'w-5 h-5': computedStyles.sizeVariant === 'md',
                'w-6 h-6': computedStyles.sizeVariant === 'lg'
              }">
         <!-- Inner dot -->
-        <div class="rounded-full bg-white transform scale-0 transition-transform duration-200"
-          [class.scale-100]="value === option.value" [ngClass]="{
+        <div class="rounded-full transform scale-0 transition-transform duration-200"
+          [style.background-color]="computedStyles.selectedColor" [class.scale-100]="value === option.value" [ngClass]="{
                   'w-1.5 h-1.5': computedStyles.sizeVariant === 'sm',
                   'w-2 h-2': computedStyles.sizeVariant === 'md',
                   'w-2.5 h-2.5': computedStyles.sizeVariant === 'lg'
@@ -53,7 +52,7 @@
   </div>
 
   <!-- Validation -->
-  @if (needValidationStatusMessage && errors.length > 0) {
+  @if (needValidationStatusMessage && errors.length > 0 && isTouched) {
   <div class="mt-1">
     @for (error of errors; track error) {
     <p class="text-red-500 text-xs mt-0.5">

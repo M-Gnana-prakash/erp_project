@@ -1,14 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-export interface McvToggleFieldStyles {
-  trackColor?: string;
-  knobColor?: string;
-  activeTrackColor?: string;
-  activeKnobColor?: string;
-  labelColor?: string;
-  sizeVariant?: 'sm' | 'md' | 'lg';
-}
+import { McvFieldStyles } from '../form-types';
 
 @Component({
   selector: 'app-mcv-toggle-field',
@@ -29,45 +21,36 @@ export class McvToggleField {
   @Input() offLabel: string = 'No';
 
   @Input() needValidationStatusMessage: boolean = true;
-  @Input() styles: McvToggleFieldStyles = {};
-  @Input() activeColor: string = '';
-  @Input() inactiveColor: string = '';
-  @Input() knobColor: string = '';
-  @Input() sizeVariant: 'sm' | 'md' | 'lg' = 'md';
+  @Input() styles: McvFieldStyles = {};
 
   public errors: string[] = [];
+  public isTouched: boolean = false;
 
-  private defaultStyles: McvToggleFieldStyles = {
+  private defaultStyles: McvFieldStyles = {
     trackColor: '#ccc',
-    knobColor: '#fff',
-    activeTrackColor: '#3b82f6',
-    activeKnobColor: '#fff',
+    thumbColor: '#fff',
+    selectedColor: '#3b82f6',
     labelColor: '#333',
     sizeVariant: 'md',
   };
 
-  @Output() valueChange = new EventEmitter<boolean>(); // emits boolean only
+  @Output() valueChange = new EventEmitter<boolean>();
   @Output() statusChange = new EventEmitter<{
     value: boolean;
     valid: boolean;
     errors: string[];
+    touched: boolean;
   }>();
 
-  get computedStyles(): McvToggleFieldStyles {
-    const individual: McvToggleFieldStyles = {};
-
-    if (this.activeColor) individual.activeTrackColor = this.activeColor;
-    if (this.inactiveColor) individual.trackColor = this.inactiveColor;
-    if (this.knobColor) individual.knobColor = this.knobColor;
-    if (this.sizeVariant) individual.sizeVariant = this.sizeVariant;
-
-    return { ...this.defaultStyles, ...this.styles, ...individual };
+  get computedStyles(): McvFieldStyles {
+    return { ...this.defaultStyles, ...this.styles };
   }
 
   toggle(event?: Event) {
     if (this.disabled || this.readonly) return;
 
     this.value = !this.value;
+    this.isTouched = true;
 
     if (event?.currentTarget) {
       (event.currentTarget as HTMLElement).blur();
@@ -81,15 +64,17 @@ export class McvToggleField {
 
   validate() {
     this.errors = [];
+    const fieldName = this.label || 'Toggle';
 
     if (this.required && !this.value) {
-      this.errors.push('This field is required');
+      this.errors.push(`${fieldName} is required`);
     }
 
     this.statusChange.emit({
       value: this.value,
       valid: this.errors.length === 0,
-      errors: this.errors
+      errors: this.errors,
+      touched: this.isTouched
     });
   }
 }

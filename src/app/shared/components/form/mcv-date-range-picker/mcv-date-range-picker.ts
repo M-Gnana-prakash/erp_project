@@ -6,6 +6,7 @@ import {
   Output,
   EventEmitter
 } from '@angular/core';
+import { McvFieldStyles } from '../form-types';
 
 @Component({
   selector: 'app-mcv-date-range-picker',
@@ -14,13 +15,13 @@ import {
   templateUrl: './mcv-date-range-picker.html'
 })
 export class McvDateRangePicker {
-  
+
   //Input
   @Input() label: string = '';
   @Input() required: boolean = false;
-  @Input() sizeVariant: 'sm' | 'md' | 'lg' = 'md';
   @Input() disabled: boolean = false;
-
+  @Input() needValidationStatusMessage: boolean = true;
+  @Input() styles: McvFieldStyles = {};
 
   @Input() set value(val: { start: Date | null; end: Date | null } | null) {
     if (val) {
@@ -29,15 +30,18 @@ export class McvDateRangePicker {
     }
   }
 
-  // ✅ OUTPUT
   @Output() statusChange = new EventEmitter<{
-    start: Date | null;
-    end: Date | null;
+    value: { start: Date | null; end: Date | null };
+    valid: boolean;
+    errors: string[];
+    touched: boolean;
   }>();
 
   show = false;
   current = new Date();
   days: Date[] = [];
+  isTouched = false;
+  errors: string[] = [];
 
   start: Date | null = null;
   end: Date | null = null;
@@ -47,6 +51,18 @@ export class McvDateRangePicker {
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
+  private defaultStyles: McvFieldStyles = {
+    borderStyle: '1px solid #ccc',
+    selectedColor: '#3b82f6',
+    backgroundColor: '#fff',
+    labelColor: '#333',
+    sizeVariant: 'md',
+  };
+
+  get computedStyles(): McvFieldStyles {
+    return { ...this.defaultStyles, ...this.styles };
+  }
+
   constructor() {
     this.buildCalendar();
   }
@@ -54,6 +70,10 @@ export class McvDateRangePicker {
   toggle() {
     if (this.disabled) return;
     this.show = !this.show;
+    if (!this.show) {
+      this.isTouched = true;
+      this.validate();
+    }
   }
 
   buildCalendar() {
@@ -98,10 +118,24 @@ export class McvDateRangePicker {
       }
     }
 
-    // Emit selected range
+    this.isTouched = true;
+    this.validate();
+  }
+
+  validate() {
+    this.errors = [];
+    const fieldName = this.label || 'Date Range';
+
+    if (this.required && (!this.start || !this.end)) {
+      this.errors.push(`${fieldName} is required`);
+    }
+
+    // Emit validation status
     this.statusChange.emit({
-      start: this.start,
-      end: this.end
+      value: { start: this.start, end: this.end },
+      valid: this.errors.length === 0,
+      errors: this.errors,
+      touched: this.isTouched
     });
   }
 

@@ -1,18 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-//Styles
-export interface McvPhoneFieldStyles {
-  borderStyle?: string;
-  outline?: string;
-  textColor?: string;
-  backgroundColor?: string;
-  activeBorderStyle?: string;
-  activeOutline?: string;
-  activeTextColor?: string;
-  activeBackgroundColor?: string;
-  sizeVariant?: 'sm' | 'md' | 'lg';
-}
+import { McvFieldStyles } from '../form-types';
 
 @Component({
   selector: 'app-mcv-phone-field',
@@ -22,13 +10,19 @@ export interface McvPhoneFieldStyles {
   styleUrl: './mcv-phone-field.css',
 })
 
-export class McvPhoneField {
+export class McvPhoneField implements OnInit, OnChanges {
 
   @Input() label: string = '';
-  @Input() value: string = '';
-  @Input() countryCode: string = '+91';
+  @Input() set value(val: string) {
+    this.processIncomingValue(val);
+  }
+  get value(): string {
+    return this._value;
+  }
+  private _value: string = '';
+  @Input() countryCode: string = '';
   @Input() showCountryCode: boolean = true;
-  @Input() placeholder: string = '';
+  @Input() placeholder: string = 'Enter phone number';
   @Input() required: boolean = false;
   @Input() disabled: boolean = false;
   @Input() readonly: boolean = false;
@@ -40,14 +34,14 @@ export class McvPhoneField {
   @Input() defaultCountryCode: string = '+91';
 
   // Whole styles for phone field
-  @Input() styles: McvPhoneFieldStyles = {};
+  @Input() styles: McvFieldStyles = {};
 
-  // 
   public isFocused: boolean = false;
   public isSelectFocused: boolean = false;
+  public isTouched: boolean = false;
   public errors: string[] = [];
 
-  private defaultStyles: McvPhoneFieldStyles = {
+  private defaultStyles: McvFieldStyles = {
     borderStyle: '1px solid #ccc',
     outline: 'none',
     textColor: '#333',
@@ -59,15 +53,8 @@ export class McvPhoneField {
     sizeVariant: 'md',
   };
 
-  get computedStyles(): McvPhoneFieldStyles {
-    const individualStyles: McvPhoneFieldStyles = {};
-    if (this.borderStyle) individualStyles.borderStyle = this.borderStyle;
-    if (this.outline) individualStyles.outline = this.outline;
-    if (this.textColor) individualStyles.textColor = this.textColor;
-    if (this.backgroundColor) individualStyles.backgroundColor = this.backgroundColor;
-    if (this.sizeVariant) individualStyles.sizeVariant = this.sizeVariant;
-
-    return { ...this.defaultStyles, ...this.styles, ...individualStyles };
+  get computedStyles(): McvFieldStyles {
+    return { ...this.defaultStyles, ...this.styles };
   }
   //country codes list
   public countryCodes = [
@@ -83,19 +70,50 @@ export class McvPhoneField {
     { code: '+94', name: 'Sri Lanka' },
   ];
 
-  // Individual style inputs
-  @Input() borderStyle: string = '';
-  @Input() outline: string = '';
-  @Input() textColor: string = '';
-  @Input() backgroundColor: string = '';
-  @Input() sizeVariant: 'sm' | 'md' | 'lg' = 'md';
+  ngOnInit() {
+    this.initCountryCode();
+    this.validate();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['countryCode'] || changes['defaultCountryCode'] || changes['value']) {
+      this.initCountryCode();
+      this.validate();
+    }
+  }
+
+  private initCountryCode() {
+    // Priority: countryCode > defaultCountryCode > fallback +91
+    if (!this.countryCode) {
+      this.countryCode = this.defaultCountryCode || '+91';
+    }
+  }
+
+  private processIncomingValue(val: string) {
+    if (!val) {
+      this._value = '';
+      return;
+    }
+
+    // Determine the code to strip
+    const code = this.countryCode || this.defaultCountryCode || '+91';
+
+    // If val starts with the country code AND we are showing country code separately,
+    // then strip it so we only show digits in the input box.
+    if (this.showCountryCode && val.startsWith(code)) {
+      this._value = val.substring(code.length);
+    } else {
+      this._value = val;
+    }
+  }
 
   @Output() statusChange = new EventEmitter<{
     value: string;
     countryCode: string;
-    fullValue: string;
+    digits: string;
     valid: boolean;
     errors: string[];
+    touched: boolean;
   }>();
 
   private phoneLengthByCountryCode: { [key: string]: number } = {
@@ -114,6 +132,13 @@ export class McvPhoneField {
   onInputChange(event: Event) {
     const target = event.target as HTMLInputElement;
     this.value = target.value;
+    this.isTouched = true;
+    this.validate();
+  }
+
+  onBlur() {
+    this.isFocused = false;
+    this.isTouched = true;
     this.validate();
   }
 
@@ -126,16 +151,17 @@ export class McvPhoneField {
 
   public validate() {
     const currentErrors: string[] = [];
+    const fieldName = this.label || 'Phone Number';
 
     // Required validation
     if (this.required && !this.value) {
-      currentErrors.push('Phone Number is required');
+      currentErrors.push(`${fieldName} is required`);
     }
 
     // Allowed characters validation
     const phoneRegex = /^[0-9\s\+\-\(\)]*$/;
     if (this.value && !phoneRegex.test(this.value)) {
-      currentErrors.push('Invalid phone number format');
+      currentErrors.push(`${fieldName} has an invalid format`);
     }
 
     // Remove non-digits
@@ -153,7 +179,7 @@ export class McvPhoneField {
     if (this.value && digitsOnly.length > 0 && expectedLength) {
       if (digitsOnly.length !== expectedLength) {
         currentErrors.push(
-          `Phone number should be at least ${expectedLength} digits`
+          `${fieldName} should only be ${expectedLength} digits`
         );
       }
     }
@@ -161,13 +187,22 @@ export class McvPhoneField {
     // Update errors
     this.errors = currentErrors;
 
+    let fullValue = '';
+    if (this.showCountryCode) {
+      fullValue = `${effectiveCountryCode}${digitsOnly}`;
+    } else {
+      // Free-form mode: just use the raw value
+      fullValue = this.value;
+    }
+
     // Emit validation status
     this.statusChange.emit({
-      value: this.value,
-      countryCode: effectiveCountryCode,
-      fullValue: `${effectiveCountryCode}${this.value}`,
+      value: fullValue,
+      countryCode: this.showCountryCode ? effectiveCountryCode : '',
+      digits: digitsOnly,
       valid: this.errors.length === 0,
       errors: this.errors,
+      touched: this.isTouched
     });
   }
 }

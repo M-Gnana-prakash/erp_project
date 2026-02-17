@@ -1,18 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-// Styles interface
-export interface McvDatePickerStyles {
-  borderStyle?: string;
-  outline?: string;
-  textColor?: string;
-  backgroundColor?: string;
-  activeBorderStyle?: string;
-  activeOutline?: string;
-  activeTextColor?: string;
-  activeBackgroundColor?: string;
-  sizeVariant?: 'sm' | 'md' | 'lg';
-}
+import { McvFieldStyles } from '../form-types';
 
 @Component({
   selector: 'app-mcv-date-picker',
@@ -21,9 +9,9 @@ export interface McvDatePickerStyles {
   templateUrl: './mcv-date-picker.html',
   styleUrl: './mcv-date-picker.css',
 })
-export class McvDatePicker {
+export class McvDatePicker implements OnInit {
   // Value & config
-  @Input() value: string = '';          // yyyy-MM-dd
+  @Input() value: string = '';          // Value in 'yyyy-MM-dd' format internally
   @Input() label: string = '';
   @Input() placeholder: string = '';
   @Input() required: boolean = false;
@@ -31,24 +19,15 @@ export class McvDatePicker {
   @Input() readonly: boolean = false;
   @Input() min: string = '';            // yyyy-MM-dd
   @Input() max: string = '';            // yyyy-MM-dd
+  @Input() format: string = 'yyyy-MM-dd';
 
   // Validation message
   @Input() needValidationStatusMessage: boolean = true;
 
   // Styles
-  @Input() styles: McvDatePickerStyles = {};
+  @Input() styles: McvFieldStyles = {};
 
-  // Individual style inputs
-  @Input() borderStyle: string = '';
-  @Input() outline: string = '';
-  @Input() textColor: string = '';
-  @Input() backgroundColor: string = '';
-  @Input() sizeVariant: 'sm' | 'md' | 'lg' = 'md';
-
-  public isFocused = false;
-  public errors: string[] = [];
-
-  private defaultStyles: McvDatePickerStyles = {
+  private defaultStyles: McvFieldStyles = {
     borderStyle: '1px solid #ccc',
     outline: 'none',
     textColor: '#333',
@@ -60,77 +39,121 @@ export class McvDatePicker {
     sizeVariant: 'md',
   };
 
-  get computedStyles(): McvDatePickerStyles {
-    const individualStyles: McvDatePickerStyles = {};
-    if (this.borderStyle) individualStyles.borderStyle = this.borderStyle;
-    if (this.outline) individualStyles.outline = this.outline;
-    if (this.textColor) individualStyles.textColor = this.textColor;
-    if (this.backgroundColor) individualStyles.backgroundColor = this.backgroundColor;
-    if (this.sizeVariant) individualStyles.sizeVariant = this.sizeVariant;
-
-    return { ...this.defaultStyles, ...this.styles, ...individualStyles };
+  get computedStyles(): McvFieldStyles {
+    return { ...this.defaultStyles, ...this.styles };
   }
+
+  get normalizedMin(): string {
+    return this.min ? this.min.replace(/\//g, '-') : '';
+  }
+
+  get normalizedMax(): string {
+    return this.max ? this.max.replace(/\//g, '-') : '';
+  }
+
+  public isFocused = false;
+  public isTouched = false;
+  public errors: string[] = [];
 
   @Output() statusChange = new EventEmitter<{
     value: string;
     valid: boolean;
     errors: string[];
+    touched: boolean;
   }>();
+
+  ngOnInit() {
+    this.validate();
+  }
 
   onInputChange(event: Event) {
     const target = event.target as HTMLInputElement;
     this.value = target.value;
+    this.isTouched = true;
     this.validate();
   }
 
-  private parseDate(dateStr: string): Date {
-    // Prevent timezone issues
-    return new Date(dateStr + 'T00:00:00');
+  onBlur() {
+    this.isFocused = false;
+    this.isTouched = true;
+    this.validate();
+  }
+
+  private getDateRegex(format: string): RegExp {
+    const pattern = format
+      .replace('yyyy', '\\d{4}')
+      .replace('MM', '\\d{2}')
+      .replace('dd', '\\d{2}');
+    return new RegExp(`^${pattern}$`);
+  }
+
+  private parseDate(dateStr: string): Date | null {
+    if (!dateStr) return null;
+
+    // Normalize separators to '-'
+    const normalized = dateStr.replace(/\//g, '-');
+
+    // First try standard ISO format (native picker always uses this)
+    if (/^\d{4}-\d{2}-\d{2}$/.test(normalized)) {
+      const d = new Date(normalized + 'T00:00:00');
+      return isNaN(d.getTime()) ? null : d;
+    }
+
+    // Then try custom format if it matches the regex
+    const format = this.format;
+    const regex = this.getDateRegex(format);
+    if (!regex.test(dateStr)) return null;
+
+    try {
+      const parts = {
+        yyyy: dateStr.substr(format.indexOf('yyyy'), 4),
+        MM: dateStr.substr(format.indexOf('MM'), 2),
+        dd: dateStr.substr(format.indexOf('dd'), 2)
+      };
+
+      const date = new Date(+parts.yyyy, +parts.MM - 1, +parts.dd);
+      return isNaN(date.getTime()) ? null : date;
+    } catch (e) {
+      return null;
+    }
   }
 
   public validate() {
     const currentErrors: string[] = [];
+    const fieldName = this.label || 'Date';
 
-    // Required
+    // Required check
     if (this.required && !this.value) {
-      currentErrors.push('Date is required');
+      currentErrors.push(`${fieldName} is required`);
     }
 
-    // Format validation
-    // if (this.value && isNaN(Date.parse(this.value))) {
-    //   currentErrors.push('Invalid date format');
-    // }
-
-    // Strict format validation (yyyy-MM-dd)
-  if (this.value) {
-  const regex = /^\d{4}-\d{2}-\d{2}$/;
-
-  if (!regex.test(this.value)) {
-    currentErrors.push('Invalid date format (yyyy-MM-dd required)');
-  } else {
-    const year = +this.value.split('-')[0];
-    if (year < 1000 || year > 9999) {
-      currentErrors.push('Year must be 4 digits');
+    if (this.value) {
+      const regex = this.getDateRegex(this.format);
+      if (!regex.test(this.value)) {
+        currentErrors.push(`${fieldName} has an invalid format (${this.format} required)`);
+      } else {
+        const parsed = this.parseDate(this.value);
+        if (!parsed) {
+          currentErrors.push(`${fieldName} is not a valid date`);
+        }
+      }
     }
-  }
-}
 
-
-    const selectedDate = this.value ? this.parseDate(this.value) : null;
+    const selectedDate = this.parseDate(this.value);
 
     // Min date
     if (this.min && selectedDate) {
       const minDate = this.parseDate(this.min);
-      if (selectedDate < minDate) {
-        currentErrors.push(`Date should be on or after ${this.min}`);
+      if (minDate && selectedDate < minDate) {
+        currentErrors.push(`${fieldName} must be on or after ${this.min}`);
       }
     }
 
     // Max date
     if (this.max && selectedDate) {
       const maxDate = this.parseDate(this.max);
-      if (selectedDate > maxDate) {
-        currentErrors.push(`Date should be on or before ${this.max}`);
+      if (maxDate && selectedDate > maxDate) {
+        currentErrors.push(`${fieldName} must be on or before ${this.max}`);
       }
     }
 
@@ -140,6 +163,7 @@ export class McvDatePicker {
       value: this.value,
       valid: this.errors.length === 0,
       errors: this.errors,
+      touched: this.isTouched
     });
   }
 }

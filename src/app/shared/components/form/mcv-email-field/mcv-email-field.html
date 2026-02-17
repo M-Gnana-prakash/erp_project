@@ -1,5 +1,5 @@
 <div class="flex flex-col w-full gap-1">
-     @if (label) {
+    @if (label) {
     <label [class]="{
             'text-xs': computedStyles.sizeVariant === 'sm',
             'text-sm': computedStyles.sizeVariant === 'md',
@@ -15,7 +15,7 @@
         [style.background-color]="isFocused ? computedStyles.activeBackgroundColor : computedStyles.backgroundColor">
 
         <input type="email" [value]="value" [placeholder]="placeholder" [disabled]="disabled" [readOnly]="readonly"
-            (input)="onInputChange($event)" (focus)="isFocused = true" (blur)="isFocused = false"
+            (input)="onInputChange($event)" (focus)="isFocused = true" (blur)="onBlur()"
             class="w-full bg-transparent border-none focus:outline-none" [ngClass]="{
                  'px-2 py-1 text-xs': computedStyles.sizeVariant === 'sm',
                  'px-3 py-2 text-sm': computedStyles.sizeVariant === 'md',
@@ -25,7 +25,7 @@
     </div>
 
     <!-- Validation -->
-    @if (needValidationStatusMessage && errors.length > 0) {
+    @if (needValidationStatusMessage && errors.length > 0 && isTouched) {
     <div class="mt-1">
         @for (error of errors; track error) {
         <p class="text-red-500 text-xs mt-0.5">
