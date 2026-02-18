@@ -1,3 +1,26 @@
 @import "tailwindcss";
 
-@source "./app/**/*.{html,ts}";
+:root {
+    --primary: #3C50E0;
+}
+
+@theme {
+    --color-boxdark: #24303F;
+    --color-boxdark-2: #1A222C;
+    --color-strokedark: #2E3A47;
+    --color-whiten: #F1F5F9;
+    --color-meta-4: #313D4A;
+    --color-bodydark: #AEB7C0;
+    --color-bodydark2: #8A99AF;
+
+    /* Map primary to the CSS variable */
+    --color-primary: var(--primary);
+
+    --color-secondary: #80CAEE;
+    --color-stroke: #E2E8F0;
+    --color-gray: #EFF4FB;
+    --color-gray-2: #F7F9FC;
+    --color-gray-3: #FAFAFA;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));

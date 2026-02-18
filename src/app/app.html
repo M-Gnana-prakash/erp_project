@@ -1,62 +1,25 @@
-<!-- <h1>Hello, {{ title() }}</h1>
+<div class="flex h-screen overflow-hidden bg-gray-100 dark:bg-black">
 
-<app-mcv-input-field [value]="name()" [placeholder]="'Enter your name'" [minLength]="3" [maxLength]="10"
-  [required]="true" [regex]="/^[a-zA-Z]+$/" [disabled]="false" [readonly]="false" [needValidationStatusMessage]="true"
-  [borderStyle]="'1px solid #ccc'" [outline]="'none'" [textColor]="'#333'" [backgroundColor]="'#fff'"
-  [sizeVariant]="'md'" (statusChange)="onStatusChange($event)">
-</app-mcv-input-field>
+  <!-- Sidebar (Vertical Layout) -->
+  <app-app-sidebar *ngIf="(sidebarService.layout$ | async) === 'vertical'"></app-app-sidebar>
 
-<app-mcv-email-field [value]="email()" [placeholder]="'Enter your Email'" [allowMultiple]="false" [required]="true"
-  [disabled]="false" [readonly]="false" [needValidationStatusMessage]="true" [borderStyle]="'1px solid #ccc'"
-  [outline]="'none'" [textColor]="'#333'" [backgroundColor]="'#fff'" [sizeVariant]="'md'"
-  (statusChange)="onStatusChange($event)">
-</app-mcv-email-field>
+  <!-- Content Area -->
+  <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
 
-<app-mcv-password-field [value]="password()" [placeholder]="'Enter your password'" [required]="true" [minLength]="6"
-  [canDisplayEye]="true" [disabled]="false" [readonly]="false" [regex]="/^[a-zA-Z0-9@$!%*?&]+$/"
-  [needValidationStatusMessage]="true" [borderStyle]="'1px solid #ccc'" [outline]="'none'" [sizeVariant]="'md'"
-  (statusChange)="onStatusChange($event)">
-</app-mcv-password-field>
+    <!-- Header -->
+    <app-app-header></app-app-header>
 
+    <!-- Horizontal Sidebar (Horizontal Layout) -->
+    <app-horizontal-sidebar *ngIf="(sidebarService.layout$ | async) === 'horizontal'"></app-horizontal-sidebar>
 
-<app-mcv-phone-field [value]="phone()" [placeholder]="'Enter your Phone Number'" [required]="true" [disabled]="false"
-  [readonly]="false" [needValidationStatusMessage]="true" [borderStyle]="'1px solid #ccc'" [outline]="'none'"
-  [textColor]="'#333'" [backgroundColor]="'#fff'" [sizeVariant]="'md'" (statusChange)="onStatusChange($event)">
-</app-mcv-phone-field>
+    <!-- Main Content -->
+    <main class="w-full p-4 md:p-6 2xl:p-10">
+      <div class="mx-auto max-w-screen-2xl">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
 
-<app-mcv-text-area [value]="description()" [placeholder]="'Enter Description'" [rows]="4" [required]="true"
-  [disabled]="false" [readonly]="false" [needValidationStatusMessage]="true" [borderStyle]="'1px solid #ccc'"
-  [outline]="'none'" [textColor]="'#333'" [backgroundColor]="'#fff'" [sizeVariant]="'md'"
-  (statusChange)="onStatusChange($event)">
-</app-mcv-text-area>
-
-<app-mcv-date-picker [value]="birthDate()" [placeholder]="'Select Birth Date'" [required]="true" [disabled]="false"
-  [readonly]="false" [needValidationStatusMessage]="true" [borderStyle]="'1px solid #ccc'" [outline]="'none'"
-  [textColor]="'#333'" [backgroundColor]="'#fff'" [sizeVariant]="'md'" (statusChange)="onStatusChange($event)">
-</app-mcv-date-picker>
-
-<app-mcv-time-picker [value]="time()" [step]="1" (statusChange)="onStatusChange($event)">
-</app-mcv-time-picker>
-
-<app-mcv-date-range-picker [value]="dateRange()" [disabled]="false" (statusChange)="dateRange.set($event)">
-</app-mcv-date-range-picker>
-
-<app-mcv-checkbox [checked]="isChecked()" (statusChange)="onStatusChange($event)">
-  Check me!
-</app-mcv-checkbox>
-
-
-
-<app-mcv-radio-field [options]="radioOptions" [value]="radioValue()" [required]="true" [layout]="'horizontal'"
-  [needValidationStatusMessage]="true" (statusChange)="onStatusChange($event)" (valueChange)="radioValue.set($event)">
-</app-mcv-radio-field>
-
-<app-mcv-radio-field [options]="genderOptions" [value]="genderValue()" [required]="true" [layout]="'vertical'"
-  [needValidationStatusMessage]="true" (statusChange)="onStatusChange($event)" (valueChange)="genderValue.set($event)">
-</app-mcv-radio-field>
-
-<app-mcv-toggle-field [value]="toggleValue()" [required]="true" [disabled]="false" [onLabel]="'Yes'" [offLabel]="'No'"
-  [activeColor]="'#2563eb'" [inactiveColor]="'#d1d5db'" [knobColor]="'#ffffff'" [sizeVariant]="'md'"
-  (valueChange)="onToggleChange($event)">
-</app-mcv-toggle-field> -->
-<app-form-demo></app-form-demo>
+    <!-- Settings Component -->
+    <app-settings></app-settings>
+  </div>
+</div>

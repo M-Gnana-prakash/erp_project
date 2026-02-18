@@ -1,0 +1,176 @@
+<div [class.translate-x-0]="isMobileOpen$ | async" [class.-translate-x-full]="!(isMobileOpen$ | async)"
+    class="sidebar fixed left-0 top-0 z-9999 flex h-screen w-72 flex-col overflow-y-hidden bg-white text-gray-700 dark:text-gray-300 dark:bg-boxdark duration-300 ease-linear lg:static lg:translate-x-0 border-r border-gray-200 dark:border-gray-800 shadow-xl"
+    [ngClass]="{
+    'w-72': sidebarService.isSidebarOpen(),
+    'w-20': !sidebarService.isSidebarOpen()
+  }">
+    <!-- Logo Section -->
+    <div class="logo p-6 flex items-center justify-between gap-3 border-b border-gray-200 dark:border-gray-800">
+        <a routerLink="/" class="flex items-center gap-2">
+            <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
+                <span class="text-white font-bold text-xl">E</span>
+            </div>
+            @if (sidebarService.isSidebarOpen()) {
+            <h1 class="text-xl font-bold tracking-tight text-gray-800 dark:text-white">ERP <span
+                    class="text-primary">PRO</span></h1>
+            }
+        </a>
+
+        <!-- Mobile Close Button -->
+        <button class="block lg:hidden text-gray-500 dark:text-gray-400" (click)="closeMobileMenu()">
+            <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M19 8.175H2.98748L9.36248 1.6875C9.69998 1.35 9.69998 0.825 9.36248 0.4875C9.02498 0.15 8.49998 0.15 8.16248 0.4875L0.399976 8.3625C0.0624756 8.7 0.0624756 9.225 0.399976 9.5625L8.16248 17.4375C8.31248 17.5875 8.53748 17.7 8.76248 17.7C8.98748 17.7 9.17498 17.625 9.36248 17.475C9.69998 17.1375 9.69998 16.6125 9.36248 16.275L3.02498 9.8625H19C19.45 9.8625 19.825 9.4875 19.825 9.0375C19.825 8.55 19.45 8.175 19 8.175Z"
+                    fill="" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Navigation Section -->
+    <nav class="nav sidebar-nav flex-1 overflow-y-auto py-6 px-4 space-y-8 no-scrollbar">
+        <!-- Main Menu -->
+        <div class="space-y-2">
+            @if (sidebarService.isSidebarOpen()) {
+            <h2 class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-widest mb-4">Main Menu</h2>
+            }
+            <ul class="space-y-1">
+                @for (item of navItems; track $index) {
+                <li>
+                    <!-- Parent Link -->
+                    <a [routerLink]="item.children ? null : item.route" (click)="toggleMenu(item)"
+                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group relative cursor-pointer"
+                        [class.bg-primary]="item.isActive" [class.text-white]="item.isActive"
+                        [class.hover:bg-gray-100]="!item.isActive" [class.hover:text-gray-900]="!item.isActive"
+                        [class.dark:hover:bg-gray-800]="!item.isActive" [class.dark:hover:text-white]="!item.isActive"
+                        [class.justify-center]="!sidebarService.isSidebarOpen()">
+
+                        <!-- Icon -->
+                        <div class="w-6 h-6 flex items-center justify-center shrink-0">
+                            <img [src]="item.icon" [alt]="item.label" class="w-full h-full transition-all"
+                                [ngClass]="{'brightness-0 invert': !item.isActive && ((themeService.theme$ | async) === 'dark')}" />
+                        </div>
+
+                        @if (sidebarService.isSidebarOpen()) {
+                        <span class="font-medium text-sm truncate">{{ item.label }}</span>
+                        }
+
+                        <!-- Chevron for items with children -->
+                        @if (sidebarService.isSidebarOpen() && item.children && item.children.length > 0) {
+                        <svg class="w-4 h-4 ml-auto transition-transform duration-200"
+                            [class.rotate-180]="item.isExpanded" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                        }
+                    </a>
+
+                    <!-- Sub-menu -->
+                    @if (sidebarService.isSidebarOpen() && item.children && item.children.length > 0 && item.isExpanded)
+                    {
+                    <ul class="mt-2 ml-9 space-y-1 border-l border-gray-200 dark:border-gray-800 pl-4">
+                        @for(child of item.children; track $index) {
+                        <li>
+                            <a [routerLink]="child.route"
+                                class="flex items-center gap-3 py-2 text-sm transition-all duration-200 hover:text-primary relative group/child"
+                                [class.text-primary]="child.isActive" [class.text-gray-600]="!child.isActive"
+                                [class.dark:text-gray-400]="!child.isActive"
+                                [class.dark:hover:text-white]="!child.isActive">
+
+                                @if (child.isActive) {
+                                <div class="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                                } @else {
+                                <div class="w-1.5 h-1.5 bg-gray-400 rounded-full group-hover/child:bg-gray-600"></div>
+                                }
+
+                                {{ child.label }}
+                            </a>
+                        </li>
+                        }
+                    </ul>
+                    }
+                </li>
+                }
+            </ul>
+        </div>
+
+        <!-- Others Section -->
+        <div class="space-y-2">
+            @if (sidebarService.isSidebarOpen()) {
+            <h2 class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-widest mb-4">Others</h2>
+            }
+            <ul class="space-y-1">
+                @for (item of otherItems; track $index) {
+                <li>
+                    <!-- Parent Link -->
+                    <a [routerLink]="item.children ? null : item.route" (click)="toggleMenu(item)"
+                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group relative cursor-pointer"
+                        [class.bg-primary]="item.isActive" [class.text-white]="item.isActive"
+                        [class.hover:bg-gray-100]="!item.isActive" [class.hover:text-gray-900]="!item.isActive"
+                        [class.dark:hover:bg-gray-800]="!item.isActive" [class.dark:hover:text-white]="!item.isActive"
+                        [class.justify-center]="!sidebarService.isSidebarOpen()">
+
+                        <div class="w-6 h-6 flex items-center justify-center shrink-0">
+                            <img [src]="item.icon" [alt]="item.label" class="w-full h-full transition-all"
+                                [ngClass]="{'brightness-0 invert': !item.isActive && ((themeService.theme$ | async) === 'dark')}" />
+                        </div>
+
+                        @if (sidebarService.isSidebarOpen()) {
+                        <span class="font-medium text-sm truncate">{{ item.label }}</span>
+                        }
+
+                        <!-- Chevron for items with children -->
+                        @if (sidebarService.isSidebarOpen() && item.children && item.children.length > 0) {
+                        <svg class="w-4 h-4 ml-auto transition-transform duration-200"
+                            [class.rotate-180]="item.isExpanded" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                        }
+                    </a>
+
+                    <!-- Sub-menu for Others -->
+                    @if (sidebarService.isSidebarOpen() && item.children && item.children.length > 0 && item.isExpanded)
+                    {
+                    <ul class="mt-2 ml-9 space-y-1 border-l border-gray-200 dark:border-gray-800 pl-4">
+                        @for(child of item.children; track $index) {
+                        <li>
+                            <a [routerLink]="child.route"
+                                class="flex items-center gap-3 py-2 text-sm transition-all duration-200 hover:text-primary relative group/child-other"
+                                [class.text-primary]="child.isActive" [class.text-gray-600]="!child.isActive"
+                                [class.dark:text-gray-400]="!child.isActive"
+                                [class.dark:hover:text-white]="!child.isActive">
+
+                                @if (child.isActive) {
+                                <div class="w-1.5 h-1.5 bg-primary rounded-full"></div>
+                                } @else {
+                                <div class="w-1.5 h-1.5 bg-gray-400 rounded-full group-hover/child-other:bg-gray-600">
+                                </div>
+                                }
+
+                                {{ child.label }}
+                            </a>
+                        </li>
+                        }
+                    </ul>
+                    }
+                </li>
+                }
+            </ul>
+        </div>
+    </nav>
+
+    <!-- User Profile Minimized -->
+    <div class="p-4 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-[#0f172a]">
+        <div class="flex items-center gap-3 px-2 py-2" [class.justify-center]="!sidebarService.isSidebarOpen()">
+            <div
+                class="w-9 h-9 shrink-0 rounded-full bg-linear-to-tr from-primary to-indigo-600 flex items-center justify-center text-white font-semibold">
+                {{ user().avatar }}
+            </div>
+            @if (sidebarService.isSidebarOpen()) {
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-800 dark:text-white truncate">{{ user().name }}</p>
+                <p class="text-xs text-gray-500 truncate">{{ user().role }}</p>
+            </div>
+            }
+        </div>
+    </div>
+</div>

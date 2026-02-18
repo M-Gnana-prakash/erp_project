@@ -1,14 +1,20 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { McvFieldStyles } from '../form-types';
 
 @Component({
   selector: 'app-mcv-input-field',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './mcv-input-field.html',
   styleUrl: './mcv-input-field.css',
 })
 export class McvInputField {
+  @ViewChild('inputField') inputField!: ElementRef<HTMLInputElement>;
+
+  focus() {
+    this.inputField.nativeElement.focus();
+  }
   // Inputs
   @Input() label: string = '';
   @Input() type: string = 'text'; // To select the type is text, email, password, number, date, time, etc.
@@ -42,6 +48,7 @@ export class McvInputField {
   @Input() disabled: boolean = false;
   @Input() readonly: boolean = false;
   @Input() needValidationStatusMessage: boolean = true;
+  @Input() inputClass: string = '';
 
   // CSS Inputs
   @Input() styles: McvFieldStyles = {};
@@ -49,17 +56,22 @@ export class McvInputField {
   private defaultStyles: McvFieldStyles = {
     borderStyle: '1px solid #ccc',
     outline: 'none',
-    textColor: '#333',
-    backgroundColor: '#fff',
-    activeBorderStyle: '1px solid #007bff',
+    textColor: '#1f2937',
+    backgroundColor: '#ffffff',
+    activeBorderStyle: '1px solid #3b82f6',
     activeOutline: 'none',
-    activeTextColor: '#333',
-    activeBackgroundColor: '#fff',
+    activeTextColor: '#111827',
+    activeBackgroundColor: '#ffffff',
     sizeVariant: 'md',
   };
 
   get computedStyles(): McvFieldStyles {
-    return { ...this.defaultStyles, ...this.styles };
+    const combined = { ...this.defaultStyles, ...this.styles };
+    // Fallbacks for active states if not provided in styles
+    if (!this.styles.activeBackgroundColor) combined.activeBackgroundColor = combined.backgroundColor;
+    if (!this.styles.activeTextColor) combined.activeTextColor = combined.textColor;
+    if (!this.styles.activeBorderStyle) combined.activeBorderStyle = combined.borderStyle;
+    return combined;
   }
 
   public isFocused: boolean = false;

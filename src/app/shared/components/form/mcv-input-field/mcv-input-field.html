@@ -14,15 +14,17 @@
         [style.outline]="isFocused ? computedStyles.activeOutline : computedStyles.outline"
         [style.background-color]="isFocused ? computedStyles.activeBackgroundColor : computedStyles.backgroundColor">
 
-        <input [type]="type" [value]="value" [placeholder]="placeholder" [disabled]="disabled" [readOnly]="readonly"
-            [minLength]="minLength" [maxLength]="maxLength === Infinity ? null : maxLength"
+        <input #inputField [type]="type" [placeholder]="placeholder" [disabled]="disabled" [readOnly]="readonly"
+            [minLength]="minLength" [maxLength]="maxLength === Infinity ? null : maxLength" [value]="value"
             (input)="onInputChange($event)" (focus)="isFocused = true" (blur)="onBlur()"
-            class="w-full bg-transparent border-none focus:outline-none" [ngClass]="{
-                 'px-2 py-1 text-xs': computedStyles.sizeVariant === 'sm',
-                 'px-3 py-2 text-sm': computedStyles.sizeVariant === 'md',
-                 'px-4 py-3 text-base': computedStyles.sizeVariant === 'lg',
-                 'opacity-50 cursor-not-allowed': disabled
-               }" [style.color]="isFocused ? computedStyles.activeTextColor : computedStyles.textColor" />
+            class="w-full bg-transparent border-none focus:outline-none" [ngClass]="[
+                 computedStyles.sizeVariant === 'sm' ? 'px-2 py-1 text-xs' : '',
+                 computedStyles.sizeVariant === 'md' ? 'px-3 py-2 text-sm' : '',
+                 computedStyles.sizeVariant === 'lg' ? 'px-4 py-3 text-base' : '',
+                 disabled ? 'opacity-50 cursor-not-allowed' : '',
+                 inputClass
+               ]"
+            [style.color]="isFocused ? (computedStyles.activeTextColor || null) : (computedStyles.textColor || null)" />
     </div>
 
     <!-- Validation -->
