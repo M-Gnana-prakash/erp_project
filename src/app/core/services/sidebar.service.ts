@@ -1,6 +1,15 @@
 import { Injectable, signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 
+export interface NavItem {
+    label: string;
+    icon: string;
+    route: string;
+    children?: NavItem[];
+    isActive?: boolean;
+    isExpanded?: boolean;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -14,12 +23,6 @@ export class SidebarService {
     readonly isMobileOpen$ = toObservable(this.isMobileOpen);
     readonly isSidebarOpen$ = toObservable(this.isSidebarOpen);
     readonly layout$ = toObservable(this.layout);
-
-    constructor() {
-        // Simple persistence logic in constructor or separate effect? 
-        // Signal effects are cleaner but require injection context. 
-        // Services have injection context.
-    }
 
     setLayout(newLayout: 'vertical' | 'horizontal') {
         this.layout.set(newLayout);
@@ -38,7 +41,7 @@ export class SidebarService {
         this.isSidebarOpen.update((val) => !val);
     }
 
-    navItems = [
+    navItems: NavItem[] = [
         {
             label: 'Dashboard',
             icon: '/images/side-bar-logos/dashboard-svgrepo-com.svg',
@@ -108,6 +111,7 @@ export class SidebarService {
                 { label: "Buttons", route: "/ui-elements/buttons", icon: "" },
                 { label: "Images", route: "/ui-elements/images", icon: "" },
                 { label: "Videos", route: "/ui-elements/videos", icon: "" },
+                { label: "Carousel", route: "/ui-elements/carousel", icon: "" },
             ]
         },
         {

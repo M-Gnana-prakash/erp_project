@@ -2,17 +2,8 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router, NavigationEnd } from "@angular/router";
 import { filter } from 'rxjs/operators';
-import { SidebarService } from '../../../../core/services/sidebar.service';
+import { SidebarService, NavItem } from '../../../../core/services/sidebar.service';
 import { ThemeService } from '../../../../core/services/theme.service';
-
-interface NavItem {
-    label: string;
-    icon: string;
-    route: string;
-    children?: NavItem[];
-    isActive?: boolean;
-    isExpanded?: boolean;
-};
 
 @Component({
     selector: 'app-horizontal-sidebar',
@@ -104,8 +95,8 @@ export class AppHorizontalSidebarComponent {
     themeService = inject(ThemeService);
     router = inject(Router);
 
-    navItems: any[] = this.sidebarService.navItems;
-    otherItems: any[] = this.sidebarService.otherItems;
+    navItems: NavItem[] = this.sidebarService.navItems;
+    otherItems: NavItem[] = this.sidebarService.otherItems;
 
     constructor() {
         this.router.events.pipe(

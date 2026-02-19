@@ -21,6 +21,8 @@ import { VideosComponent } from './pages/ui-elements/videos.component';
 import { SigninComponent } from './pages/auth/signin.component';
 import { SignupComponent } from './pages/auth/signup.component';
 
+import { CarouselDemoComponent } from './pages/ui-elements/carousel.component';
+
 export const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: 'dashboard', component: DashboardComponent },
@@ -64,7 +66,8 @@ export const routes: Routes = [
             { path: 'badges', component: BadgesComponent },
             { path: 'buttons', component: ButtonsComponent },
             { path: 'images', component: ImagesComponent },
-            { path: 'videos', component: VideosComponent }
+            { path: 'videos', component: VideosComponent },
+            { path: 'carousel', component: CarouselDemoComponent }
         ]
     },
     {

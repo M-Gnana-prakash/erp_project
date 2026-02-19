@@ -1,0 +1,31 @@
+<div class="carousel-container" [class.full-screen]="fullScreen">
+    <div class="carousel-wrapper" [style.transform]="'translateX(-' + currentIndex() * 100 + '%)'">
+        <div *ngFor="let item of items; let i = index" class="carousel-item">
+            <img [src]="item.image" [alt]="item.title || 'Slide ' + i" />
+            <div *ngIf="item.title || item.description" class="carousel-caption">
+                <h3 *ngIf="item.title">{{ item.title }}</h3>
+                <p *ngIf="item.description">{{ item.description }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <button *ngIf="!disablePrev" class="carousel-control prev" (click)="prev()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
+            class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+    </button>
+    <button *ngIf="!disableNext" class="carousel-control next" (click)="next()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"
+            class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+    </button>
+
+    <!-- Indicators -->
+    <div class="carousel-indicators">
+        <button *ngFor="let item of items; let i = index" [class.active]="i === currentIndex()" (click)="goTo(i)">
+        </button>
+    </div>
+</div>
