@@ -18,10 +18,17 @@ import { BadgesComponent } from './pages/ui-elements/badges.component';
 import { ButtonsComponent } from './pages/ui-elements/buttons.component';
 import { ImagesComponent } from './pages/ui-elements/images.component';
 import { VideosComponent } from './pages/ui-elements/videos.component';
+import { CarouselDemoComponent } from './pages/ui-elements/carousel.component';
+import { BreadcrumbsDemoComponent } from './pages/ui-elements/breadcrumbs.component';
+import { ListsDemoComponent } from './pages/ui-elements/lists.component';
+import { LinksDemoComponent } from './pages/ui-elements/links.component';
+import { ToastsComponent } from './pages/ui-elements/toasts.component';
+import { AccordionDemoComponent } from './pages/ui-elements/accordion.component';
+import { ButtonDropdownComponent } from './pages/ui-elements/button-dropdown.component';
+import { ProgressBarsComponent } from './pages/ui-elements/progress-bars.component';
+import { SpinnersComponent } from './pages/ui-elements/spinners.component';
 import { SigninComponent } from './pages/auth/signin.component';
 import { SignupComponent } from './pages/auth/signup.component';
-
-import { CarouselDemoComponent } from './pages/ui-elements/carousel.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -67,7 +74,15 @@ export const routes: Routes = [
             { path: 'buttons', component: ButtonsComponent },
             { path: 'images', component: ImagesComponent },
             { path: 'videos', component: VideosComponent },
-            { path: 'carousel', component: CarouselDemoComponent }
+            { path: 'carousel', component: CarouselDemoComponent },
+            { path: 'breadcrumbs', component: BreadcrumbsDemoComponent },
+            { path: 'lists', component: ListsDemoComponent },
+            { path: 'links', component: LinksDemoComponent },
+            { path: 'toasts', component: ToastsComponent },
+            { path: 'accordion', component: AccordionDemoComponent },
+            { path: 'button-dropdown', component: ButtonDropdownComponent },
+            { path: 'progress-bars', component: ProgressBarsComponent },
+            { path: 'spinners', component: SpinnersComponent },
         ]
     },
     {

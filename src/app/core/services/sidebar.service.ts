@@ -12,6 +12,7 @@ export interface NavItem {
 
 @Injectable({
     providedIn: 'root'
+
 })
 export class SidebarService {
     isSidebarOpen = signal(true);
@@ -108,6 +109,14 @@ export class SidebarService {
                 { label: "Alerts", route: "/ui-elements/alerts", icon: "" },
                 { label: "Avatar", route: "/ui-elements/avatar", icon: "" },
                 { label: "Badges", route: "/ui-elements/badges", icon: "" },
+                { label: "Breadcrumbs", route: "/ui-elements/breadcrumbs", icon: "" },
+                { label: "Lists", route: "/ui-elements/lists", icon: "" },
+                { label: "Links", route: "/ui-elements/links", icon: "" },
+                { label: "Toasts", route: "/ui-elements/toasts", icon: "" },
+                { label: "Accordion", route: "/ui-elements/accordion", icon: "" },
+                { label: "Button Dropdown", route: "/ui-elements/button-dropdown", icon: "" },
+                { label: "Progress Bars", route: "/ui-elements/progress-bars", icon: "" },
+                { label: "Spinners", route: "/ui-elements/spinners", icon: "" },
                 { label: "Buttons", route: "/ui-elements/buttons", icon: "" },
                 { label: "Images", route: "/ui-elements/images", icon: "" },
                 { label: "Videos", route: "/ui-elements/videos", icon: "" },

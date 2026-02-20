@@ -5,9 +5,9 @@ import { Injectable, signal } from '@angular/core';
 })
 export class UserService {
     currentUser = signal({
-        name: 'John Doe',
-        email: 'john.doe@example.com',
+        name: 'anbu',
+        email: 'anbu@gmail.com',
         role: 'Administrator',
-        avatar: 'JD'
+        avatar: 'anbu'
     });
 }
