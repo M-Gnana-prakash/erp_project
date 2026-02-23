@@ -66,4 +66,15 @@ describe('McvDateRangePicker', () => {
     expect(emittedData.start).toEqual(d1);
     expect(emittedData.end).toEqual(d2);
   });
+
+  it('should add correct padding in buildCalendar', () => {
+    // January 2026 starts on Thursday (weekday 4)
+    component.current = new Date(2026, 0, 1);
+    component.buildCalendar();
+
+    // There should be 4 null elements before 1st of January
+    const paddingCount = component.days.filter(d => d === null).length;
+    expect(paddingCount).toBe(4);
+    expect(component.days[4]?.getDate()).toBe(1);
+  });
 });

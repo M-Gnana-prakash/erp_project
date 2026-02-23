@@ -62,8 +62,19 @@ export class McvPasswordField {
 
   public isFocused: boolean = false;
   public isTouched: boolean = false;
+  public isDirty: boolean = false;
   public showPassword: boolean = false;
   protected readonly Infinity = Infinity;
+
+  public validationRules = {
+    minLength: true,
+    uppercase: false,
+    lowercase: false,
+    number: false,
+    specialChar: false
+  };
+
+  public isValid: boolean = false;
 
   // Output
   @Output() statusChange = new EventEmitter<{
@@ -78,7 +89,8 @@ export class McvPasswordField {
   onInputChange(event: Event) {
     const target = event.target as HTMLInputElement;
     this.value = target.value;
-    this.isTouched = true;
+    this.isDirty = true;
+
     this.validate();
   }
 
@@ -96,24 +108,27 @@ export class McvPasswordField {
     const currentErrors: string[] = [];
     const fieldName = this.label || 'Password';
 
+    // Rule Tracking
+    this.validationRules = {
+      minLength: this.value.length >= 8,
+      uppercase: /[A-Z]/.test(this.value),
+      lowercase: /[a-z]/.test(this.value),
+      number: /\d/.test(this.value),
+      specialChar: /[@$!%*?&]/.test(this.value)
+    };
+
+    // Overall Validity (based on the requested regex)
+    // Regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/
+    this.isValid = Object.values(this.validationRules).every(rule => rule);
+
     // Required check
     if (this.required && !this.value) {
       currentErrors.push(`${fieldName} is required`);
     }
 
-    // Min length check
-    if (this.value && this.value.length < this.minLength) {
-      currentErrors.push(`${fieldName} must be at least ${this.minLength} characters`);
-    }
-
-    // Max length check
-    if (this.value && this.value.length > this.maxLength) {
-      currentErrors.push(`${fieldName} cannot exceed ${this.maxLength} characters`);
-    }
-
-    // Regex pattern match
-    if (this.regex && this.value && !this.regex.test(this.value)) {
-      currentErrors.push(`${fieldName} has an invalid format`);
+    // Generic error for compatibility with statusChange emit
+    if (!this.isValid && this.value) {
+      currentErrors.push(`Invalid password format`);
     }
 
     this.errors = currentErrors;
