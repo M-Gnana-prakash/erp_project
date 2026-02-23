@@ -35,29 +35,35 @@ describe('McvPasswordField', () => {
         expect(component.errors).toContain('Password is required');
     });
 
-    it('should validate minimum length', () => {
-        component.minLength = 6;
-        component.value = '12345';
+    it('should validate all password rules', () => {
+        component.value = 'abc';
         component.validate();
-        expect(component.errors).toContain('Password must be at least 6 characters');
+        expect(component.validationRules.minLength).toBe(false);
+        expect(component.validationRules.uppercase).toBe(false);
+        expect(component.validationRules.lowercase).toBe(true);
+        expect(component.validationRules.number).toBe(false);
+        expect(component.validationRules.specialChar).toBe(false);
+        expect(component.isValid).toBe(false);
 
-        component.value = '123456';
+        component.value = 'Abc12345';
         component.validate();
-        expect(component.errors.length).toBe(0);
+        expect(component.validationRules.minLength).toBe(true);
+        expect(component.validationRules.uppercase).toBe(true);
+        expect(component.validationRules.lowercase).toBe(true);
+        expect(component.validationRules.number).toBe(true);
+        expect(component.validationRules.specialChar).toBe(false);
+        expect(component.isValid).toBe(false);
+
+        component.value = 'Abc12345!';
+        component.validate();
+        expect(component.isValid).toBe(true);
     });
 
-    /* Regex validation not fully implemented in component
-    it('should validate regex pattern', () => {
-        component.regex = /[A-Z]/; // Must have an uppercase letter
-        component.value = 'abcdef';
-        component.validate();
-        expect(component.errors).toContain('Invalid format');
-
-        component.value = 'abcDef';
-        component.validate();
-        expect(component.errors).not.toContain('Invalid format');
+    it('should set isDirty to true on input change', () => {
+        expect(component.isDirty).toBe(false);
+        component.onInputChange({ target: { value: 'test' } } as any);
+        expect(component.isDirty).toBe(true);
     });
-    */
 
     it('should emit statusChange on validation', () => {
         let emittedData: any;

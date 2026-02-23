@@ -39,7 +39,7 @@ export class McvDateRangePicker {
 
   show = false;
   current = new Date();
-  days: Date[] = [];
+  days: (Date | null)[] = [];
   isTouched = false;
   errors: string[] = [];
 
@@ -79,11 +79,24 @@ export class McvDateRangePicker {
   buildCalendar() {
     const y = this.current.getFullYear();
     const m = this.current.getMonth();
-    const total = new Date(y, m + 1, 0).getDate();
+    const firstDay = new Date(y, m, 1);
+    const lastDay = new Date(y, m + 1, 0);
+    const total = lastDay.getDate();
+    const startDay = firstDay.getDay(); // 0 is Sunday, 1 is Monday...
 
-    this.days = Array.from({ length: total }, (_, i) =>
-      new Date(y, m, i + 1)
-    );
+    const tempDays: (Date | null)[] = [];
+
+    // Add padding for the first week
+    for (let i = 0; i < startDay; i++) {
+      tempDays.push(null);
+    }
+
+    // Add actual days
+    for (let i = 1; i <= total; i++) {
+      tempDays.push(new Date(y, m, i));
+    }
+
+    this.days = tempDays;
   }
 
   change(step: number) {
