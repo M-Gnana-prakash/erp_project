@@ -145,7 +145,7 @@ export class McvDatePicker implements OnInit {
     if (this.min && selectedDate) {
       const minDate = this.parseDate(this.min);
       if (minDate && selectedDate < minDate) {
-        currentErrors.push(`${fieldName} must be on or after ${this.min}`);
+        currentErrors.push(`${fieldName} should be on or after ${this.min}`);
       }
     }
 
@@ -153,7 +153,7 @@ export class McvDatePicker implements OnInit {
     if (this.max && selectedDate) {
       const maxDate = this.parseDate(this.max);
       if (maxDate && selectedDate > maxDate) {
-        currentErrors.push(`${fieldName} must be on or before ${this.max}`);
+        currentErrors.push(`${fieldName} should be on or before ${this.max}`);
       }
     }
 

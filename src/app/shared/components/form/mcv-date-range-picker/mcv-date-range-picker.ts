@@ -22,11 +22,13 @@ export class McvDateRangePicker {
   @Input() disabled: boolean = false;
   @Input() needValidationStatusMessage: boolean = true;
   @Input() styles: McvFieldStyles = {};
+  @Input() min: Date | string = '';
+  @Input() max: Date | string = '';
 
   @Input() set value(val: { start: Date | null; end: Date | null } | null) {
     if (val) {
-      this.start = val.start;
-      this.end = val.end;
+      this.start = this.parseDate(val.start);
+      this.end = this.parseDate(val.end);
     }
   }
 
@@ -67,6 +69,33 @@ export class McvDateRangePicker {
     this.buildCalendar();
   }
 
+  private parseDate(d: Date | string | null): Date | null {
+    if (!d) return null;
+    if (d instanceof Date) return d;
+    const date = new Date(d);
+    return isNaN(date.getTime()) ? null : date;
+  }
+
+  isAllowed(d: Date): boolean {
+    const minDate = this.parseDate(this.min);
+    const maxDate = this.parseDate(this.max);
+
+    if (minDate) {
+      // Compare only dates
+      const compareD = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      const compareMin = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
+      if (compareD < compareMin) return false;
+    }
+
+    if (maxDate) {
+      const compareD = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      const compareMax = new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
+      if (compareD > compareMax) return false;
+    }
+
+    return true;
+  }
+
   toggle() {
     if (this.disabled) return;
     this.show = !this.show;
@@ -105,6 +134,7 @@ export class McvDateRangePicker {
   }
 
   select(d: Date) {
+    if (!this.isAllowed(d)) return;
 
     if (!this.start || this.end) {
       this.start = d;
@@ -128,6 +158,21 @@ export class McvDateRangePicker {
 
     if (this.required && (!this.start || !this.end)) {
       this.errors.push(`${fieldName} is required`);
+    }
+
+    const minDate = this.parseDate(this.min);
+    const maxDate = this.parseDate(this.max);
+
+    if (minDate) {
+      if (this.start && this.start < minDate) {
+        this.errors.push(`${fieldName} start must be on or after ${minDate.toLocaleDateString()}`);
+      }
+    }
+
+    if (maxDate) {
+      if (this.end && this.end > maxDate) {
+        this.errors.push(`${fieldName} end must be on or before ${maxDate.toLocaleDateString()}`);
+      }
     }
 
     // Emit validation status

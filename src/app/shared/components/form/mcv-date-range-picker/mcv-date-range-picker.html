@@ -77,7 +77,9 @@
     <!-- Dates -->
     <div class="grid grid-cols-7 text-center p-3 gap-y-2 text-sm">
 
-      <div *ngFor="let d of days" (click)="select(d)" class="relative cursor-pointer">
+      <div *ngFor="let d of days" (click)="select(d)" class="relative cursor-pointer" [ngClass]="{
+        'opacity-30 cursor-not-allowed pointer-events-none': !isAllowed(d)
+      }">
 
         <!-- Range background -->
         <div *ngIf="inRange(d)" class="absolute inset-0" [style.background-color]="computedStyles.selectedColor"

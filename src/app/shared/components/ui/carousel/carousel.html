@@ -2,10 +2,10 @@
     <div class="carousel-wrapper" [style.transform]="'translateX(-' + currentIndex() * 100 + '%)'">
         <div *ngFor="let item of items; let i = index" class="carousel-item">
             <img [src]="item.image" [alt]="item.title || 'Slide ' + i" />
-            <div *ngIf="item.title || item.description" class="carousel-caption">
+            <!-- <div *ngIf="item.title || item.description" class="carousel-caption">
                 <h3 *ngIf="item.title">{{ item.title }}</h3>
                 <p *ngIf="item.description">{{ item.description }}</p>
-            </div>
+            </div> -->
         </div>
     </div>
 
