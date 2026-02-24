@@ -1,0 +1,63 @@
+<div class="p-6 space-y-10">
+    <!-- Header -->
+    <div>
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Avatar</h2>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Reusable avatar component with status indicators, sizes, and
+            fallbacks.</p>
+    </div>
+
+    <!-- ── With Status Indicators ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">With
+            Indicators</h3>
+        <div class="flex flex-wrap items-end gap-8">
+            <app-mcv-avatar src="https://randomuser.me/api/portraits/men/32.jpg" status="online"></app-mcv-avatar>
+            <app-mcv-avatar src="https://randomuser.me/api/portraits/women/44.jpg" status="away"></app-mcv-avatar>
+            <app-mcv-avatar src="https://randomuser.me/api/portraits/men/15.jpg" status="busy"></app-mcv-avatar>
+            <app-mcv-avatar src="https://randomuser.me/api/portraits/women/67.jpg" status="offline"></app-mcv-avatar>
+            <app-mcv-avatar src="https://randomuser.me/api/portraits/men/77.jpg" badge="3"></app-mcv-avatar>
+        </div>
+    </section>
+
+    <!-- ── Sizes ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Sizes</h3>
+        <div class="flex flex-wrap items-end gap-6">
+            <app-mcv-avatar size="xs" src="https://randomuser.me/api/portraits/women/22.jpg"></app-mcv-avatar>
+            <app-mcv-avatar size="sm" src="https://randomuser.me/api/portraits/men/35.jpg"></app-mcv-avatar>
+            <app-mcv-avatar size="md" src="https://randomuser.me/api/portraits/women/55.jpg"></app-mcv-avatar>
+            <app-mcv-avatar size="lg" src="https://randomuser.me/api/portraits/men/60.jpg"></app-mcv-avatar>
+            <app-mcv-avatar size="xl" src="https://randomuser.me/api/portraits/women/80.jpg"></app-mcv-avatar>
+        </div>
+    </section>
+
+    <!-- ── Initials ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Initials</h3>
+        <div class="flex flex-wrap items-end gap-6">
+            <app-mcv-avatar *ngFor="let av of initialsAvatars" [initials]="av.initials" [bgColor]="av.color"
+                [status]="av.indicator?.includes('green') ? 'online' : av.indicator?.includes('yellow') ? 'away' : av.indicator?.includes('red') ? 'busy' : null">
+            </app-mcv-avatar>
+        </div>
+    </section>
+
+    <!-- ── Avatar Group ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Avatar Group
+        </h3>
+        <div class="flex -space-x-4">
+            <app-mcv-avatar class="ring-2 ring-white dark:ring-boxdark"
+                src="https://randomuser.me/api/portraits/men/10.jpg"></app-mcv-avatar>
+            <app-mcv-avatar class="ring-2 ring-white dark:ring-boxdark"
+                src="https://randomuser.me/api/portraits/women/11.jpg"></app-mcv-avatar>
+            <app-mcv-avatar class="ring-2 ring-white dark:ring-boxdark" initials="MK"
+                bgColor="#ef4444"></app-mcv-avatar>
+            <app-mcv-avatar class="ring-2 ring-white dark:ring-boxdark"
+                src="https://randomuser.me/api/portraits/women/13.jpg"></app-mcv-avatar>
+            <div
+                class="w-12 h-12 rounded-full ring-2 ring-white dark:ring-boxdark bg-indigo-500 flex items-center justify-center text-white text-xs font-bold z-10">
+                +4
+            </div>
+        </div>
+    </section>
+</div>

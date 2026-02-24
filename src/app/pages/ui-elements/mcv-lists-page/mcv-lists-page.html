@@ -1,0 +1,46 @@
+<div class="p-6 space-y-10 pb-20">
+    <!-- Header -->
+    <div>
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Lists</h2>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Flexible list component with various styles, interactivity, and
+            custom templates.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- ── Simple List ── -->
+        <section>
+            <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Simple
+                with Badges</h3>
+            <app-mcv-list [items]="simpleItems" variant="simple"></app-mcv-list>
+        </section>
+
+        <!-- ── Interactive List ── -->
+        <section>
+            <h3
+                class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4 flex justify-between">
+                Interactive Selection
+                <span class="text-indigo-600 dark:text-indigo-400 normal-case">Selected: {{ getSelectedName() }}</span>
+            </h3>
+            <app-mcv-list [items]="selectionItems" variant="interactive" [selectedId]="selectedItem()"
+                (onItemClick)="selectItem($event)"></app-mcv-list>
+        </section>
+
+        <!-- ── Checked List ── -->
+        <section>
+            <h3
+                class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4 flex justify-between">
+                Checklist
+                <span class="text-indigo-600 dark:text-indigo-400 normal-case">{{ checkedCount() }} / {{
+                    checkItems.length }} active</span>
+            </h3>
+            <app-mcv-list [items]="checkItems" variant="checked" (onCheckToggle)="toggleCheck($event)"></app-mcv-list>
+        </section>
+
+        <!-- ── Rich List ── -->
+        <section>
+            <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Rich
+                Content</h3>
+            <app-mcv-list [items]="richItems" variant="rich"></app-mcv-list>
+        </section>
+    </div>
+</div>

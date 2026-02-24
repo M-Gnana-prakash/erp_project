@@ -54,14 +54,14 @@ export class McvInputField {
   @Input() styles: McvFieldStyles = {};
 
   private defaultStyles: McvFieldStyles = {
-    borderStyle: '1px solid #ccc',
+    borderStyle: '1px solid var(--form-border, #ccc)',
     outline: 'none',
-    textColor: '#1f2937',
-    backgroundColor: '#ffffff',
-    activeBorderStyle: '1px solid #3b82f6',
+    textColor: 'var(--form-text, #1f2937)',
+    backgroundColor: 'var(--form-bg, #ffffff)',
+    activeBorderStyle: '1px solid var(--color-primary, #3b82f6)',
     activeOutline: 'none',
-    activeTextColor: '#111827',
-    activeBackgroundColor: '#ffffff',
+    activeTextColor: 'var(--form-text, #111827)',
+    activeBackgroundColor: 'var(--form-bg, #ffffff)',
     sizeVariant: 'md',
   };
 

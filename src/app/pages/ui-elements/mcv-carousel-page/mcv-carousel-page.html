@@ -1,0 +1,24 @@
+<div class="p-6 space-y-8">
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Carousel Component Demo</h2>
+        <p class="text-gray-600 dark:text-gray-400">Custom carousel component with manual and automatic modes.</p>
+    </div>
+
+    <!-- Manual Mode -->
+    <section>
+        <h3 class="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-300">Manual Mode</h3>
+        <app-mcv-carousel [items]="slides" mode="manual"></app-mcv-carousel>
+    </section>
+
+    <!-- Auto Mode -->
+    <section>
+        <h3 class="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-300">Auto Mode (Interval 2s)</h3>
+        <app-mcv-carousel [items]="slides" mode="auto" [interval]="2000"></app-mcv-carousel>
+    </section>
+
+    <!-- Disabled Next Button -->
+    <section>
+        <h3 class="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-300">Disabled Next Button</h3>
+        <app-mcv-carousel [items]="slides" mode="manual" [disableNext]="true"></app-mcv-carousel>
+    </section>
+</div>

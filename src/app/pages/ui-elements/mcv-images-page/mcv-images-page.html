@@ -1,0 +1,77 @@
+<div class="p-6 space-y-10 pb-20">
+    <!-- Header -->
+    <div>
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Images</h2>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Responsive image component with skeleton loaders, captions, and
+            built-in zoom lightbox.</p>
+    </div>
+
+    <!-- ── Basic Shapes ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Rounded Shapes
+        </h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <app-mcv-image src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="Nature"
+                rounded="none" height="160px" caption="No Rounded"></app-mcv-image>
+            <app-mcv-image src="https://images.unsplash.com/photo-1511497584788-876760111969" alt="Forest" rounded="sm"
+                height="160px" caption="Small"></app-mcv-image>
+            <app-mcv-image src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b" alt="Mountains"
+                rounded="md" height="160px" caption="Medium"></app-mcv-image>
+            <app-mcv-image src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e" alt="Trees" rounded="lg"
+                height="160px" caption="Large"></app-mcv-image>
+        </div>
+    </section>
+
+    <!-- ── Interaction & Zoom ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Interactive
+            Zoom & Captions</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <app-mcv-image src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05" alt="Landscape"
+                [zoomable]="true" [showCaption]="true" caption="Grand Canyon National Park — Click to zoom"
+                height="300px">
+            </app-mcv-image>
+            <app-mcv-image src="https://images.unsplash.com/photo-1447752875215-b2761acb3c5d" alt="Waterfall"
+                [zoomable]="true" [showCaption]="true" caption="Hidden Waterfall in Tropical Forest — Click to zoom"
+                height="300px">
+            </app-mcv-image>
+        </div>
+    </section>
+
+    <!-- ── Object Fits ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Object Fit
+            Modes</h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+            <div class="space-y-2">
+                <app-mcv-image src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e" height="200px"
+                    objectFit="cover"></app-mcv-image>
+                <p class="text-xs text-center text-gray-500">Object Fit: Cover</p>
+            </div>
+            <div class="space-y-2">
+                <app-mcv-image src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e" height="200px"
+                    objectFit="contain"></app-mcv-image>
+                <p class="text-xs text-center text-gray-500">Object Fit: Contain</p>
+            </div>
+            <div class="space-y-2">
+                <app-mcv-image src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e" height="200px"
+                    objectFit="fill"></app-mcv-image>
+                <p class="text-xs text-center text-gray-500">Object Fit: Fill</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Circle ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Circle
+            (Avatars)</h3>
+        <div class="flex gap-6">
+            <app-mcv-image src="https://i.pravatar.cc/150?u=1" width="60px" height="60px"
+                rounded="full"></app-mcv-image>
+            <app-mcv-image src="https://i.pravatar.cc/150?u=2" width="80px" height="80px"
+                rounded="full"></app-mcv-image>
+            <app-mcv-image src="https://i.pravatar.cc/150?u=3" width="100px" height="100px"
+                rounded="full"></app-mcv-image>
+        </div>
+    </section>
+</div>

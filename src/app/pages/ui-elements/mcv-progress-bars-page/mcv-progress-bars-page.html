@@ -1,0 +1,52 @@
+<div class="p-6 space-y-10">
+    <!-- Header -->
+    <div>
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Progress Bars</h2>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Dynamic visual indicators for task completion, loading states,
+            and metrics.</p>
+    </div>
+
+    <!-- ── Basic Progress Bars ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Basic</h3>
+        <div class="space-y-5">
+            <app-mcv-progress-bar *ngFor="let bar of basicBars" [label]="bar.label" [value]="bar.value"
+                [color]="bar.color" [showValue]="true">
+            </app-mcv-progress-bar>
+        </div>
+    </section>
+
+    <!-- ── Sizes ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Sizes</h3>
+        <div class="space-y-4">
+            <app-mcv-progress-bar label="Extra Small" [value]="60" size="xs"></app-mcv-progress-bar>
+            <app-mcv-progress-bar label="Small" [value]="70" size="sm"></app-mcv-progress-bar>
+            <app-mcv-progress-bar label="Medium" [value]="75" size="md"></app-mcv-progress-bar>
+            <app-mcv-progress-bar label="Large" [value]="80" size="lg" [showValue]="true"></app-mcv-progress-bar>
+        </div>
+    </section>
+
+    <!-- ── Animated Variants ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Animated
+            Variants</h3>
+        <div class="space-y-6">
+            <app-mcv-progress-bar label="Shimmer (Loading)" [value]="65" variant="shimmer"
+                color="#818cf8"></app-mcv-progress-bar>
+            <app-mcv-progress-bar label="Striped Animated" [value]="78" variant="striped"
+                color="#10b981"></app-mcv-progress-bar>
+        </div>
+    </section>
+
+    <!-- ── Label Inside Bar ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Label Inside
+            Bar</h3>
+        <div class="space-y-4">
+            <app-mcv-progress-bar *ngFor="let bar of labeledBars" [label]="bar.label" [value]="bar.value"
+                [color]="bar.color" [labelInside]="true" size="lg">
+            </app-mcv-progress-bar>
+        </div>
+    </section>
+</div>

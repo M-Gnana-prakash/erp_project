@@ -27,10 +27,10 @@ export class McvToggleField {
   public isTouched: boolean = false;
 
   private defaultStyles: McvFieldStyles = {
-    trackColor: '#ccc',
+    trackColor: 'var(--form-border, #ccc)',
     thumbColor: '#fff',
-    selectedColor: '#3b82f6',
-    labelColor: '#333',
+    selectedColor: 'var(--color-primary, #3b82f6)',
+    labelColor: 'var(--form-text, #333)',
     sizeVariant: 'md',
   };
 

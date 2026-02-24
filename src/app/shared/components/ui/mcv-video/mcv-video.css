@@ -1,0 +1,4 @@
+/* McvVideo Styles */
+video::-webkit-media-controls-enclosure {
+    border-radius: inherit;
+}

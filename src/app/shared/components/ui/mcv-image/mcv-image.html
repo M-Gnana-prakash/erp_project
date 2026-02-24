@@ -1,0 +1,38 @@
+<div class="relative group" [style.width]="width" [style.height]="height" [ngClass]="customClass">
+    <!-- Placeholder/Skeleton -->
+    <div *ngIf="!isLoaded() && !hasError()" class="absolute inset-0 bg-gray-200 dark:bg-white/5 animate-pulse"
+        [ngClass]="getRoundedClass()"></div>
+
+    <!-- Error State -->
+    <div *ngIf="hasError()"
+        class="absolute inset-0 bg-gray-100 dark:bg-white/10 flex flex-col items-center justify-center text-gray-400 gap-2"
+        [ngClass]="getRoundedClass()">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <span class="text-xs">Failed to load image</span>
+    </div>
+
+    <!-- The Image -->
+    <img *ngIf="!hasError()" [src]="src" [alt]="alt" [loading]="loading" (load)="handleLoad()" (error)="handleError()"
+        (click)="toggleZoom()" [ngClass]="[
+            'w-full h-full transition-all duration-300',
+            getRoundedClass(),
+            isLoaded() ? 'opacity-100' : 'opacity-0',
+            zoomable ? 'cursor-zoom-in group-hover:brightness-90' : ''
+        ]" [ngStyle]="{'object-fit': objectFit}" />
+
+    <!-- Caption Overlay -->
+    <div *ngIf="showCaption && caption && isLoaded()"
+        class="absolute bottom-4 left-4 right-4 p-3 bg-black/60 backdrop-blur-sm rounded-lg opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 pointer-events-none">
+        <p class="text-white text-xs font-medium">{{ caption }}</p>
+    </div>
+
+    <!-- Zoom Modal -->
+    <div *ngIf="isZoomed()" (click)="toggleZoom()"
+        class="fixed inset-0 z-10000 bg-black/90 backdrop-blur-sm p-4 md:p-12 flex items-center justify-center cursor-zoom-out animate-in fade-in zoom-in duration-300">
+        <img [src]="src" [alt]="alt" class="max-w-full max-h-full object-contain rounded-xl" />
+        <button class="absolute top-6 right-6 text-white text-4xl hover:text-gray-300">&times;</button>
+    </div>
+</div>

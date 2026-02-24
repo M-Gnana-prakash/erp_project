@@ -1,0 +1,80 @@
+<div class="p-6 space-y-10">
+    <!-- Header -->
+    <div>
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Badges</h2>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Reusable badge component for labels, counts, and status
+            indicators.</p>
+    </div>
+
+    <!-- ── Solid Badges ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Solid</h3>
+        <div class="flex flex-wrap gap-3">
+            <app-mcv-badge label="Default" variant="primary"></app-mcv-badge>
+            <app-mcv-badge label="Success" variant="success"></app-mcv-badge>
+            <app-mcv-badge label="Warning" variant="warning"></app-mcv-badge>
+            <app-mcv-badge label="Danger" variant="danger"></app-mcv-badge>
+            <app-mcv-badge label="Info" variant="info"></app-mcv-badge>
+            <app-mcv-badge label="Purple" variant="purple"></app-mcv-badge>
+            <app-mcv-badge label="Neutral" variant="neutral"></app-mcv-badge>
+            <app-mcv-badge label="Pink" variant="pink"></app-mcv-badge>
+        </div>
+    </section>
+
+    <!-- ── Soft / Light Badges ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Soft (Light)
+        </h3>
+        <div class="flex flex-wrap gap-3">
+            <app-mcv-badge label="Default" variant="primary" [soft]="true"></app-mcv-badge>
+            <app-mcv-badge label="Success" variant="success" [soft]="true"></app-mcv-badge>
+            <app-mcv-badge label="Warning" variant="warning" [soft]="true"></app-mcv-badge>
+            <app-mcv-badge label="Danger" variant="danger" [soft]="true"></app-mcv-badge>
+            <app-mcv-badge label="Info" variant="info" [soft]="true"></app-mcv-badge>
+            <app-mcv-badge label="Purple" variant="purple" [soft]="true"></app-mcv-badge>
+            <app-mcv-badge label="Neutral" variant="neutral" [soft]="true"></app-mcv-badge>
+        </div>
+    </section>
+
+    <!-- ── Outlined Badges ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Outlined</h3>
+        <div class="flex flex-wrap gap-3">
+            <app-mcv-badge label="Default" variant="primary" [outline]="true"></app-mcv-badge>
+            <app-mcv-badge label="Success" variant="success" [outline]="true"></app-mcv-badge>
+            <app-mcv-badge label="Warning" variant="warning" [outline]="true"></app-mcv-badge>
+            <app-mcv-badge label="Danger" variant="danger" [outline]="true"></app-mcv-badge>
+            <app-mcv-badge label="Info" variant="info" [outline]="true"></app-mcv-badge>
+        </div>
+    </section>
+
+    <!-- ── Badges with Dot ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">With Dot
+            Indicator</h3>
+        <div class="flex flex-wrap gap-3">
+            <app-mcv-badge label="Active" variant="success" [soft]="true" [dot]="true"></app-mcv-badge>
+            <app-mcv-badge label="Pending" variant="warning" [soft]="true" [dot]="true"></app-mcv-badge>
+            <app-mcv-badge label="Rejected" variant="danger" [soft]="true" [dot]="true"></app-mcv-badge>
+            <app-mcv-badge label="Inactive" variant="secondary" [soft]="true" [dot]="true"></app-mcv-badge>
+        </div>
+    </section>
+
+    <!-- ── Contextual Badges ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">In Context
+        </h3>
+        <div class="flex flex-wrap items-center gap-8">
+            <div class="relative inline-flex">
+                <button class="px-4 py-2 rounded-lg bg-indigo-500 text-white text-sm font-medium">Messages</button>
+                <app-mcv-badge class="absolute -top-2 -right-2" variant="danger">12</app-mcv-badge>
+            </div>
+            <div class="relative w-10 h-10">
+                <img src="https://randomuser.me/api/portraits/men/45.jpg" class="w-10 h-10 rounded-full object-cover"
+                    alt="user" />
+                <app-mcv-badge class="absolute -top-1 -right-1" variant="danger" [pill]="true"
+                    [soft]="false">2</app-mcv-badge>
+            </div>
+        </div>
+    </section>
+</div>

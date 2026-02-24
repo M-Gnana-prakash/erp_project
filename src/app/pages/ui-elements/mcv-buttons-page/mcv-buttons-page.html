@@ -1,0 +1,54 @@
+<div class="p-6 space-y-10">
+    <!-- Header -->
+    <div>
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Buttons</h2>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Reusable button component with various styles, sizes, and
+            states.</p>
+    </div>
+
+    <!-- ── Variants ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Variants</h3>
+        <div class="flex flex-wrap gap-4">
+            <app-mcv-button variant="primary">Primary</app-mcv-button>
+            <app-mcv-button variant="secondary">Secondary</app-mcv-button>
+            <app-mcv-button variant="outline">Outline</app-mcv-button>
+            <app-mcv-button variant="ghost">Ghost</app-mcv-button>
+            <app-mcv-button variant="danger">Danger</app-mcv-button>
+            <app-mcv-button variant="success">Success</app-mcv-button>
+            <app-mcv-button variant="warning">Warning</app-mcv-button>
+            <app-mcv-button variant="info">Info</app-mcv-button>
+        </div>
+    </section>
+
+    <!-- ── Sizes ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Sizes</h3>
+        <div class="flex flex-wrap items-center gap-4">
+            <app-mcv-button size="xs">Extra Small</app-mcv-button>
+            <app-mcv-button size="sm">Small</app-mcv-button>
+            <app-mcv-button size="md">Medium</app-mcv-button>
+            <app-mcv-button size="lg">Large</app-mcv-button>
+            <app-mcv-button size="xl">Extra Large</app-mcv-button>
+        </div>
+    </section>
+
+    <!-- ── Loading & Disabled ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">States</h3>
+        <div class="flex flex-wrap gap-4">
+            <app-mcv-button [loading]="true">Loading State</app-mcv-button>
+            <app-mcv-button [disabled]="true">Disabled State</app-mcv-button>
+            <app-mcv-button variant="outline" [loading]="true">Outline Loading</app-mcv-button>
+            <app-mcv-button variant="danger" [disabled]="true">Danger Disabled</app-mcv-button>
+        </div>
+    </section>
+
+    <!-- ── Full Width ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Layout</h3>
+        <div class="max-w-xs space-y-4">
+            <app-mcv-button [fullWidth]="true">Full Width Button</app-mcv-button>
+        </div>
+    </section>
+</div>

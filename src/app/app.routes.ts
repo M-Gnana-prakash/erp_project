@@ -12,21 +12,21 @@ import { AdvancedPageComponent } from './pages/extra-pages/advanced-page.compone
 import { LineChartComponent } from './pages/charts/line-chart.component';
 import { BarChartComponent } from './pages/charts/bar-chart.component';
 import { PieChartComponent } from './pages/charts/pie-chart.component';
-import { AlertsComponent } from './pages/ui-elements/alerts.component';
-import { AvatarComponent } from './pages/ui-elements/avatar.component';
-import { BadgesComponent } from './pages/ui-elements/badges.component';
-import { ButtonsComponent } from './pages/ui-elements/buttons.component';
-import { ImagesComponent } from './pages/ui-elements/images.component';
-import { VideosComponent } from './pages/ui-elements/videos.component';
-import { CarouselDemoComponent } from './pages/ui-elements/carousel.component';
-import { BreadcrumbsDemoComponent } from './pages/ui-elements/breadcrumbs.component';
-import { ListsDemoComponent } from './pages/ui-elements/lists.component';
-import { LinksDemoComponent } from './pages/ui-elements/links.component';
-import { ToastsComponent } from './pages/ui-elements/toasts.component';
-import { AccordionDemoComponent } from './pages/ui-elements/accordion.component';
-import { ButtonDropdownComponent } from './pages/ui-elements/button-dropdown.component';
-import { ProgressBarsComponent } from './pages/ui-elements/progress-bars.component';
-import { SpinnersComponent } from './pages/ui-elements/spinners.component';
+import { McvAlertsPage } from './pages/ui-elements/mcv-alerts-page/mcv-alerts-page';
+import { McvAvatarPage } from './pages/ui-elements/mcv-avatar-page/mcv-avatar-page';
+import { McvBadgesPage } from './pages/ui-elements/mcv-badges-page/mcv-badges-page';
+import { McvButtonsPage } from './pages/ui-elements/mcv-buttons-page/mcv-buttons-page';
+import { McvImagesPage } from './pages/ui-elements/mcv-images-page/mcv-images-page';
+import { McvVideosPage } from './pages/ui-elements/mcv-videos-page/mcv-videos-page';
+import { McvCarouselPage } from './pages/ui-elements/mcv-carousel-page/mcv-carousel-page';
+import { McvBreadcrumbsPage } from './pages/ui-elements/mcv-breadcrumbs-page/mcv-breadcrumbs-page';
+import { McvListsPage } from './pages/ui-elements/mcv-lists-page/mcv-lists-page';
+import { McvLinksPage } from './pages/ui-elements/mcv-links-page/mcv-links-page';
+import { McvToastsPage } from './pages/ui-elements/mcv-toasts-page/mcv-toasts-page';
+import { McvAccordionPage } from './pages/ui-elements/mcv-accordion-page/mcv-accordion-page';
+import { McvDropdownPage } from './pages/ui-elements/mcv-dropdown-page/mcv-dropdown-page';
+import { McvProgressBarsPage } from './pages/ui-elements/mcv-progress-bars-page/mcv-progress-bars-page';
+import { McvSpinnersPage } from './pages/ui-elements/mcv-spinners-page/mcv-spinners-page';
 import { SigninComponent } from './pages/auth/signin.component';
 import { SignupComponent } from './pages/auth/signup.component';
 
@@ -68,21 +68,21 @@ export const routes: Routes = [
     {
         path: 'ui-elements',
         children: [
-            { path: 'alerts', component: AlertsComponent },
-            { path: 'avatar', component: AvatarComponent },
-            { path: 'badges', component: BadgesComponent },
-            { path: 'buttons', component: ButtonsComponent },
-            { path: 'images', component: ImagesComponent },
-            { path: 'videos', component: VideosComponent },
-            { path: 'carousel', component: CarouselDemoComponent },
-            { path: 'breadcrumbs', component: BreadcrumbsDemoComponent },
-            { path: 'lists', component: ListsDemoComponent },
-            { path: 'links', component: LinksDemoComponent },
-            { path: 'toasts', component: ToastsComponent },
-            { path: 'accordion', component: AccordionDemoComponent },
-            { path: 'button-dropdown', component: ButtonDropdownComponent },
-            { path: 'progress-bars', component: ProgressBarsComponent },
-            { path: 'spinners', component: SpinnersComponent },
+            { path: 'alerts', component: McvAlertsPage },
+            { path: 'avatar', component: McvAvatarPage },
+            { path: 'badges', component: McvBadgesPage },
+            { path: 'buttons', component: McvButtonsPage },
+            { path: 'images', component: McvImagesPage },
+            { path: 'videos', component: McvVideosPage },
+            { path: 'carousel', component: McvCarouselPage },
+            { path: 'breadcrumbs', component: McvBreadcrumbsPage },
+            { path: 'lists', component: McvListsPage },
+            { path: 'links', component: McvLinksPage },
+            { path: 'toasts', component: McvToastsPage },
+            { path: 'accordion', component: McvAccordionPage },
+            { path: 'button-dropdown', component: McvDropdownPage },
+            { path: 'progress-bars', component: McvProgressBarsPage },
+            { path: 'spinners', component: McvSpinnersPage },
         ]
     },
     {

@@ -1,0 +1,90 @@
+/* McvSpinners Styles */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes bounce3 {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+        opacity: 0.3;
+    }
+
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(0.8);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+@keyframes dot-flashing {
+    0% {
+        background-color: currentColor;
+    }
+
+    50%,
+    100% {
+        background-color: transparent;
+        border-color: currentColor;
+    }
+}
+
+.spin {
+    animation: spin 0.8s linear infinite;
+}
+
+.spin-slow {
+    animation: spin 1.5s linear infinite;
+}
+
+.dot-bounce {
+    animation: bounce3 1.4s ease-in-out infinite;
+}
+
+.dot-bounce-d1 {
+    animation-delay: 0s;
+}
+
+.dot-bounce-d2 {
+    animation-delay: 0.16s;
+}
+
+.dot-bounce-d3 {
+    animation-delay: 0.32s;
+}
+
+.pulse-ring {
+    animation: pulse-ring 1.2s ease-out infinite;
+}
+
+/* Bar spinner */
+@keyframes bar-grow {
+
+    0%,
+    100% {
+        transform: scaleY(0.4);
+    }
+
+    50% {
+        transform: scaleY(1);
+    }
+}
+
+.bar-grow {
+    animation: bar-grow 1s ease-in-out infinite;
+}

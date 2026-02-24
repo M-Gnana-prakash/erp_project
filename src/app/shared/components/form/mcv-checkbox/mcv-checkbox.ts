@@ -31,10 +31,10 @@ export class McvCheckbox {
   public errors: string[] = [];
 
   private defaultStyles: McvFieldStyles = {
-    borderStyle: '1px solid #ccc',
-    selectedColor: '#007bff',
-    backgroundColor: '#fff',
-    labelColor: '#333',
+    borderStyle: '1px solid var(--form-border, #ccc)',
+    selectedColor: 'var(--color-primary, #007bff)',
+    backgroundColor: 'var(--form-bg, #fff)',
+    labelColor: 'var(--form-text, #333)',
     sizeVariant: 'md',
   };
 

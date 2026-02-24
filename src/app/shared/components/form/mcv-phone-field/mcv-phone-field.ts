@@ -1,11 +1,12 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { McvFieldStyles } from '../form-types';
 
 @Component({
   selector: 'app-mcv-phone-field',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './mcv-phone-field.html',
   styleUrl: './mcv-phone-field.css',
 })
@@ -14,26 +15,66 @@ export class McvPhoneField implements OnInit, OnChanges {
 
   @Input() label: string = '';
   @Input() set value(val: string) {
-    this.processIncomingValue(val);
+    if (this._innerValue === val) return;
+    this._innerValue = val || '';
+    this._rawValue = val || '';
+    this.processIncomingValue();
+    this.validate();
+    this.cdr.detectChanges();
   }
   get value(): string {
-    return this._value;
+    return this._innerValue;
   }
-  private _value: string = '';
-  @Input() countryCode: string = '';
-  @Input() showCountryCode: boolean = true;
+  private _innerValue: string = '';
+  private _rawValue: string = '';
+
+  private cdr = inject(ChangeDetectorRef);
+
+  private _countryCode: string = '';
+  @Input() set countryCode(val: string) {
+    if (this._countryCode === val) return;
+    this._countryCode = val || '';
+    this.initCountryCode();
+    this.processIncomingValue();
+    this.validate();
+    this.cdr.detectChanges();
+  }
+  get countryCode(): string {
+    return this._countryCode;
+  }
+
+  private _showCountryCode: boolean = true;
+  @Input() set showCountryCode(val: any) {
+    const newValue = val === true || val === 'true';
+    if (this._showCountryCode === newValue) return;
+    this._showCountryCode = newValue;
+    this.initCountryCode();
+    this.processIncomingValue();
+    this.validate();
+    this.cdr.detectChanges();
+  }
+  get showCountryCode(): boolean {
+    return this._showCountryCode;
+  }
+
   @Input() placeholder: string = 'Enter phone number';
   @Input() required: boolean = false;
   @Input() disabled: boolean = false;
   @Input() readonly: boolean = false;
-
-  // Validation message shown by default
   @Input() needValidationStatusMessage: boolean = true;
 
-  // Default country code
-  @Input() defaultCountryCode: string = '+91';
+  private _defaultCountryCode: string = '+91';
+  @Input() set defaultCountryCode(val: string) {
+    if (this._defaultCountryCode === val) return;
+    this._defaultCountryCode = val || '+91';
+    this.initCountryCode();
+    this.validate();
+    this.cdr.detectChanges();
+  }
+  get defaultCountryCode(): string {
+    return this._defaultCountryCode;
+  }
 
-  // Whole styles for phone field
   @Input() styles: McvFieldStyles = {};
 
   public isFocused: boolean = false;
@@ -56,7 +97,7 @@ export class McvPhoneField implements OnInit, OnChanges {
   get computedStyles(): McvFieldStyles {
     return { ...this.defaultStyles, ...this.styles };
   }
-  //country codes list
+
   public countryCodes = [
     { code: '+91', name: 'India' },
     { code: '+1', name: 'USA' },
@@ -76,35 +117,32 @@ export class McvPhoneField implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['countryCode'] || changes['defaultCountryCode'] || changes['value']) {
-      this.initCountryCode();
-      this.validate();
-    }
+    // Handling via setters now, but keeping for legacy compatibility if needed
   }
 
   private initCountryCode() {
-    // Priority: countryCode > defaultCountryCode > fallback +91
-    if (!this.countryCode) {
-      this.countryCode = this.defaultCountryCode || '+91';
+    // Ensure we have a valid country code if showCountryCode is active
+    if (this._showCountryCode && !this._countryCode) {
+      this._countryCode = this._defaultCountryCode || '+91';
     }
   }
 
-  private processIncomingValue(val: string) {
+  private processIncomingValue() {
+    const val = this._rawValue;
     if (!val) {
-      this._value = '';
+      this._innerValue = '';
       return;
     }
 
-    // Determine the code to strip
-    const code = this.countryCode || this.defaultCountryCode || '+91';
-
-    // If val starts with the country code AND we are showing country code separately,
-    // then strip it so we only show digits in the input box.
-    if (this.showCountryCode && val.startsWith(code)) {
-      this._value = val.substring(code.length);
-    } else {
-      this._value = val;
+    if (this._showCountryCode) {
+      const code = this._countryCode || this._defaultCountryCode || '+91';
+      if (val.startsWith(code)) {
+        this._innerValue = val.substring(code.length);
+        return;
+      }
     }
+
+    this._innerValue = val;
   }
 
   @Output() statusChange = new EventEmitter<{
@@ -131,7 +169,8 @@ export class McvPhoneField implements OnInit, OnChanges {
 
   onInputChange(event: Event) {
     const target = event.target as HTMLInputElement;
-    this.value = target.value;
+    this._rawValue = target.value;
+    this._innerValue = target.value;
     this.isTouched = true;
     this.validate();
   }
@@ -144,61 +183,49 @@ export class McvPhoneField implements OnInit, OnChanges {
 
   onCountryCodeChange(event: Event) {
     const target = event.target as HTMLSelectElement;
-    this.countryCode = target.value;
+    this._countryCode = target.value;
     this.validate();
   }
-
 
   public validate() {
     const currentErrors: string[] = [];
     const fieldName = this.label || 'Phone Number';
 
-    // Required validation
-    if (this.required && !this.value) {
+    if (this.required && !this._innerValue) {
       currentErrors.push(`${fieldName} is required`);
     }
 
-    // Allowed characters validation
-    const phoneRegex = /^[0-9\s\+\-\(\)]*$/;
-    if (this.value && !phoneRegex.test(this.value)) {
-      currentErrors.push(`${fieldName} has an invalid format`);
-    }
-
-    // Remove non-digits
-    const digitsOnly = this.value.replace(/\D/g, '');
-
-    // Decide effective country code
-    const effectiveCountryCode = this.showCountryCode
-      ? this.countryCode
-      : this.defaultCountryCode;
-
-    const expectedLength =
-      this.phoneLengthByCountryCode[effectiveCountryCode];
-
-    // Length validation (minimum)
-    if (this.value && digitsOnly.length > 0 && expectedLength) {
-      if (digitsOnly.length !== expectedLength) {
-        currentErrors.push(
-          `${fieldName} should only be ${expectedLength} digits`
-        );
+    if (this._innerValue) {
+      const phoneRegex = /^[0-9\s\+\-\(\)]*$/;
+      if (!phoneRegex.test(this._innerValue)) {
+        currentErrors.push(`${fieldName} has an invalid format`);
       }
     }
 
-    // Update errors
-    this.errors = currentErrors;
-
+    const digitsOnly = this._innerValue.replace(/\D/g, '');
+    let effectiveCode = '';
     let fullValue = '';
-    if (this.showCountryCode) {
-      fullValue = `${effectiveCountryCode}${digitsOnly}`;
+
+    if (this._showCountryCode) {
+      effectiveCode = this._countryCode || this._defaultCountryCode || '+91';
+      const expectedLength = this.phoneLengthByCountryCode[effectiveCode];
+
+      if (this._innerValue && digitsOnly.length > 0 && expectedLength) {
+        if (digitsOnly.length !== expectedLength) {
+          currentErrors.push(`${fieldName} should only be ${expectedLength} digits`);
+        }
+      }
+      fullValue = `${effectiveCode}${digitsOnly}`;
     } else {
-      // Free-form mode: just use the raw value
-      fullValue = this.value;
+      effectiveCode = '';
+      fullValue = this._rawValue || this._innerValue;
     }
 
-    // Emit validation status
+    this.errors = currentErrors;
+
     this.statusChange.emit({
       value: fullValue,
-      countryCode: this.showCountryCode ? effectiveCountryCode : '',
+      countryCode: effectiveCode,
       digits: digitsOnly,
       valid: this.errors.length === 0,
       errors: this.errors,

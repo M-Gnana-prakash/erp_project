@@ -1,0 +1,40 @@
+<div class="p-6 space-y-10">
+    <!-- Header -->
+    <div>
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Toasts</h2>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Lightweight notifications designed to mimic the push
+            notifications that have been popularized by mobile and desktop operating systems.</p>
+    </div>
+
+    <!-- ── Interactive Demo ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Click to
+            trigger</h3>
+        <div class="flex flex-wrap gap-4 underline-offset-4">
+            <button
+                (click)="showToast('success', 'Successfully Saved', 'Your changes have been reflected in the database.')"
+                class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-colors">
+                Success Toast
+            </button>
+            <button (click)="showToast('info', 'New Update', 'System version 2.4.0 is now available for download.')"
+                class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors">
+                Info Toast
+            </button>
+            <button (click)="showToast('warning', 'Low Battery', 'Your device is currently at 15% battery life.')"
+                class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg text-sm font-medium transition-colors">
+                Warning Toast
+            </button>
+            <button (click)="showToast('danger', 'Error Occurred', 'Failed to connect to the cloud services.')"
+                class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition-colors">
+                Danger Toast
+            </button>
+        </div>
+    </section>
+
+    <!-- ── Toast Container (Pinned) ── -->
+    <div class="fixed top-24 right-6 z-9999 flex flex-col gap-3 pointer-events-none">
+        <app-mcv-toast *ngFor="let toast of activeToasts()" class="pointer-events-auto" [type]="toast.type"
+            [title]="toast.title" [message]="toast.message" (onDismiss)="dismissToast(toast.id)">
+        </app-mcv-toast>
+    </div>
+</div>

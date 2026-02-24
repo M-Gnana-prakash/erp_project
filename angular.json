@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "ErpProject": {
+    "McvUiToolkit": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -57,10 +57,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "ErpProject:build:production"
+              "buildTarget": "McvUiToolkit:build:production"
             },
             "development": {
-              "buildTarget": "ErpProject:build:development"
+              "buildTarget": "McvUiToolkit:build:development"
             }
           },
           "defaultConfiguration": "development"
