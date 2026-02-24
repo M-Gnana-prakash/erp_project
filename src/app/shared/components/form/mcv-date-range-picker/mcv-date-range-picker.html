@@ -51,7 +51,7 @@
           class="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm bg-white dark:bg-boxdark text-gray-700 dark:text-gray-300"
           [value]="current.getMonth()" (change)="setMonth($any($event.target).value)">
 
-          <option *ngFor="let m of months; let i = index" [value]="i">
+          <option *ngFor="let m of months; let i = index" [value]="i" [selected]="current.getMonth() === i">
             {{ m }}
           </option>
 
