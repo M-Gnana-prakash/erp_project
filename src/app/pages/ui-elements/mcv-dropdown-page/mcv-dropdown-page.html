@@ -1,0 +1,51 @@
+<div class="p-6 space-y-10 pb-40">
+    <!-- Header -->
+    <div>
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Dropdowns</h2>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Reusable dropdown component with support for sections,
+            dividers, icons, and split variations.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- ── Primary ── -->
+        <section>
+            <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Primary
+                Variant</h3>
+            <app-mcv-dropdown label="Options" [items]="dropdownItems"
+                (onItemClick)="handleDropClick($event)"></app-mcv-dropdown>
+        </section>
+
+        <!-- ── Outline ── -->
+        <section>
+            <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Outline
+                Variant</h3>
+            <app-mcv-dropdown label="Menu" variant="outline" [items]="dropdownItems"></app-mcv-dropdown>
+        </section>
+
+        <!-- ── Ghost ── -->
+        <section>
+            <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Ghost
+                Variant</h3>
+            <app-mcv-dropdown label="Actions" variant="ghost" icon="fa fa-ellipsis-v"
+                [items]="dropdownItems"></app-mcv-dropdown>
+        </section>
+
+        <!-- ── Split ── -->
+        <section>
+            <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Split
+                Button</h3>
+            <app-mcv-dropdown label="Apply Changes" variant="split" [items]="dropdownItems"></app-mcv-dropdown>
+        </section>
+    </div>
+
+    <!-- ── Alignments ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Alignments
+        </h3>
+        <div
+            class="flex justify-between items-center p-8 bg-gray-50 dark:bg-white/2 border border-dashed border-gray-300 dark:border-white/10 rounded-xl">
+            <app-mcv-dropdown label="Left Aligned (Default)" [items]="dropdownItems" align="left"></app-mcv-dropdown>
+            <app-mcv-dropdown label="Right Aligned" [items]="dropdownItems" align="right"></app-mcv-dropdown>
+        </div>
+    </section>
+</div>

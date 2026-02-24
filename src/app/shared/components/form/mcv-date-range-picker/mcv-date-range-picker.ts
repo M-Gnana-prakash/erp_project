@@ -54,10 +54,11 @@ export class McvDateRangePicker {
   ];
 
   private defaultStyles: McvFieldStyles = {
-    borderStyle: '1px solid #ccc',
-    selectedColor: '#3b82f6',
-    backgroundColor: '#fff',
-    labelColor: '#333',
+    borderStyle: '1px solid var(--form-border, #ccc)',
+    selectedColor: 'var(--color-primary, #3b82f6)',
+    backgroundColor: 'var(--form-bg, #fff)',
+    textColor: 'var(--form-text, #333)',
+    labelColor: 'var(--form-text, #333)',
     sizeVariant: 'md',
   };
 

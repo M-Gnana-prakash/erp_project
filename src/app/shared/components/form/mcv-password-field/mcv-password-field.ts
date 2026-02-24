@@ -45,14 +45,14 @@ export class McvPasswordField {
   @Input() styles: McvFieldStyles = {};
 
   private defaultStyles: McvFieldStyles = {
-    borderStyle: '1px solid #ccc',
+    borderStyle: '1px solid var(--form-border, #ccc)',
     outline: 'none',
-    textColor: '#333',
-    backgroundColor: '#fff',
-    activeBorderStyle: '1px solid #007bff',
+    textColor: 'var(--form-text, #333)',
+    backgroundColor: 'var(--form-bg, #fff)',
+    activeBorderStyle: '1px solid var(--color-primary, #007bff)',
     activeOutline: 'none',
-    activeTextColor: '#333',
-    activeBackgroundColor: '#fff',
+    activeTextColor: 'var(--form-text, #333)',
+    activeBackgroundColor: 'var(--form-bg, #fff)',
     sizeVariant: 'md',
   };
 

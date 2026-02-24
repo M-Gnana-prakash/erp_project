@@ -1,0 +1,51 @@
+<div class="p-6 space-y-10">
+    <!-- Header -->
+    <div>
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Alerts</h2>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Reusable alert component for status messages and notifications.
+        </p>
+    </div>
+
+    <!-- ── Basic Alerts ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Basic Alerts
+        </h3>
+        <div class="space-y-3">
+            <app-mcv-alert type="success" title="Success"
+                message="Your changes have been saved successfully."></app-mcv-alert>
+            <app-mcv-alert type="warning" title="Warning"
+                message="Your subscription is about to expire in 3 days."></app-mcv-alert>
+            <app-mcv-alert type="danger" title="Danger"
+                message="Failed to delete the record. Please try again."></app-mcv-alert>
+            <app-mcv-alert type="info" title="Info"
+                message="A new software update is available. See what's new."></app-mcv-alert>
+        </div>
+    </section>
+
+    <!-- ── Dismissible Alerts ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Dismissible
+            Alerts</h3>
+        <div class="space-y-3">
+            <app-mcv-alert type="success" [dismissible]="true"
+                message="Your profile was updated successfully!"></app-mcv-alert>
+            <app-mcv-alert type="warning" [dismissible]="true"
+                message="This action cannot be undone. Proceed with caution."></app-mcv-alert>
+            <app-mcv-alert type="danger" [dismissible]="true"
+                message="Permission denied. Contact your administrator."></app-mcv-alert>
+        </div>
+    </section>
+
+    <!-- ── Solid / Filled Alerts ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Solid / Filled
+        </h3>
+        <div class="space-y-3">
+            <app-mcv-alert type="success" [solid]="true" message="Operation completed successfully!"></app-mcv-alert>
+            <app-mcv-alert type="warning" [solid]="true"
+                message="Low disk space — consider freeing up storage."></app-mcv-alert>
+            <app-mcv-alert type="danger" [solid]="true"
+                message="Critical error — server is unreachable."></app-mcv-alert>
+        </div>
+    </section>
+</div>

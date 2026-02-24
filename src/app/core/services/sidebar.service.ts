@@ -8,6 +8,7 @@ export interface NavItem {
     children?: NavItem[];
     isActive?: boolean;
     isExpanded?: boolean;
+    roles?: string[]; // Allowed roles (if empty, accessible to all)
 }
 
 @Injectable({
@@ -47,54 +48,61 @@ export class SidebarService {
             label: 'Dashboard',
             icon: '/images/side-bar-logos/dashboard-svgrepo-com.svg',
             route: '/dashboard',
+            roles: ['Administrator', 'Moderator', 'User'],
             children: [
-                { label: "ecommerce", route: '/dashboard/ecommerce', icon: 'home' }
+                { label: "ecommerce", route: '/dashboard/ecommerce', icon: 'home', roles: ['Administrator', 'Moderator'] }
             ]
         },
         {
             label: 'Calender',
             icon: '/images/side-bar-logos/calender-svgrepo-com.svg',
-            route: '/calender'
+            route: '/calender',
+            roles: ['Administrator', 'Moderator', 'User']
         },
         {
             label: 'User Profile',
             icon: '/images/side-bar-logos/user-profile-circle-svgrepo-com.svg',
-            route: '/user-profile'
+            route: '/user-profile',
+            roles: ['Administrator', 'Moderator', 'User']
         },
         {
             label: 'Forms',
             icon: '/images/side-bar-logos/google-forms-svgrepo-com.svg',
             route: '/forms',
+            roles: ['Administrator', 'Moderator'],
             children: [
-                { label: "basic-form", route: '/forms/basic-form', icon: 'home' },
-                { label: "advanced-form", route: '/forms/advanced-form', icon: 'home' },
+                { label: "basic-form", route: '/forms/basic-form', icon: 'home', roles: ['Administrator', 'Moderator', 'User'] },
+                { label: "advanced-form", route: '/forms/advanced-form', icon: 'home', roles: ['Administrator'] },
             ]
         },
         {
             label: 'Tables',
             icon: '/images/side-bar-logos/db-table-svgrepo-com.svg',
             route: '/tables',
+            roles: ['Administrator', 'Moderator'],
             children: [
                 { label: "basic-table", route: '/tables/basic-table', icon: 'home' },
-                { label: "advanced-table", route: '/tables/advanced-table', icon: 'home' },
+                { label: "advanced-table", route: '/tables/advanced-table', icon: 'home', roles: ['Administrator'] },
             ]
         },
         {
             label: 'Pages',
             icon: '/images/side-bar-logos/pages-svgrepo-com.svg',
             route: '/pages',
+            roles: ['Administrator', 'Moderator'],
             children: [
                 { label: "basic-page", route: '/pages/basic-page', icon: 'home' },
-                { label: "advanced-page", route: '/pages/advanced-page', icon: 'home' },
+                { label: "advanced-page", route: '/pages/advanced-page', icon: 'home', roles: ['Administrator'] },
             ]
         }
     ];
 
-    otherItems = [
+    otherItems: NavItem[] = [
         {
             label: 'Charts',
             icon: '/images/side-bar-logos/graph-svgrepo-com.svg',
             route: '/charts',
+            roles: ['Administrator', 'Moderator'],
             children: [
                 { label: "line-chart", route: '/charts/line-chart', icon: 'home' },
                 { label: "bar-chart", route: '/charts/bar-chart', icon: 'home' },
@@ -105,6 +113,7 @@ export class SidebarService {
             label: "ui elements",
             icon: "/images/side-bar-logos/box-minimalistic-svgrepo-com.svg",
             route: "/ui-elements",
+            roles: ['Administrator', 'Moderator', 'User'],
             children: [
                 { label: "Alerts", route: "/ui-elements/alerts", icon: "" },
                 { label: "Avatar", route: "/ui-elements/avatar", icon: "" },
@@ -127,10 +136,21 @@ export class SidebarService {
             label: "Authentication",
             icon: "/images/side-bar-logos/plug-svgrepo-com.svg",
             route: "/authentication",
+            roles: ['Administrator', 'Moderator', 'User'],
             children: [
                 { label: "Sign in", route: "/authentication/sign-in", icon: "" },
                 { label: "Sign up", route: "/authentication/sign-up", icon: "" },
             ]
         }
     ];
+
+    filterItemsByRole(items: NavItem[], userRole: string): NavItem[] {
+        return items
+            .filter(item => !item.roles || item.roles.includes(userRole))
+            .map(item => ({
+                ...item,
+                children: item.children ? this.filterItemsByRole(item.children, userRole) : undefined
+            }))
+            .filter(item => !item.children || item.children.length > 0 || (item.route && !item.children));
+    }
 }

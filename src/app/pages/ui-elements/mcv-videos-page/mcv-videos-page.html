@@ -1,0 +1,55 @@
+<div class="p-6 space-y-10 pb-20">
+    <!-- Header -->
+    <div>
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Videos</h2>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Responsive video component with support for custom players,
+            looping, and stylized overlays.</p>
+    </div>
+
+    <!-- ── Standard Players ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Standard
+            Players</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-4">
+                <app-mcv-video src="https://www.w3schools.com/html/mov_bbb.mp4"
+                    poster="https://peach.blender.org/wp-content/uploads/title_an_full.jpg"
+                    [controls]="true"></app-mcv-video>
+                <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Default Controls (Big Buck Bunny)</p>
+            </div>
+            <div class="space-y-4">
+                <app-mcv-video src="https://www.w3schools.com/html/movie.mp4" [controls]="true" [muted]="true"
+                    [autoplay]="true"></app-mcv-video>
+                <p class="text-sm font-medium text-gray-700 dark:text-gray-300">Autoplay & Muted (Bear)</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Custom Overlay ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Custom Overlay
+            (No Native Controls)</h3>
+        <div class="max-w-3xl mx-auto space-y-4">
+            <app-mcv-video src="https://www.w3schools.com/html/mov_bbb.mp4" [controls]="false"
+                rounded="lg"></app-mcv-video>
+            <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                <span>Hover to reveal play button and custom progress bar</span>
+                <span>480p • MP4</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Stylized Containers ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Rounded
+            Variants</h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+            <app-mcv-video src="https://www.w3schools.com/html/movie.mp4" rounded="none" height="150px"
+                [controls]="false" [loop]="true" [autoplay]="true" [muted]="true"></app-mcv-video>
+            <app-mcv-video src="https://www.w3schools.com/html/movie.mp4" rounded="md" height="150px" [controls]="false"
+                [loop]="true" [autoplay]="true" [muted]="true"></app-mcv-video>
+            <app-mcv-video src="https://www.w3schools.com/html/movie.mp4" rounded="lg" height="150px" [controls]="false"
+                [loop]="true" [autoplay]="true" [muted]="true"></app-mcv-video>
+        </div>
+    </section>
+</div>

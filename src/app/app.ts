@@ -26,6 +26,6 @@ export class App {
   router = inject(Router);
   sidebarService = inject(SidebarService);
   themeService = inject(ThemeService);
-  protected readonly title = signal('ErpProject');
+  protected readonly title = signal('MCV UI ToolKit');
 }
 

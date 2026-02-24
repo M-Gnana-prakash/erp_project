@@ -1,0 +1,36 @@
+<!-- Router Link -->
+<a *ngIf="route" [routerLink]="route" [ngClass]="[
+    'inline-flex items-center font-medium transition-all duration-200',
+    getVariantClasses(),
+    getUnderlineClasses(),
+    size === 'sm' ? 'text-sm' : size === 'lg' ? 'text-lg' : 'text-base',
+    customClass
+]">
+    <span *ngIf="icon && iconPosition === 'left'" class="mr-1.5"><i [class]="icon"></i></span>
+    <ng-content></ng-content>
+    <span *ngIf="label">{{ label }}</span>
+    <span *ngIf="icon && iconPosition === 'right'" class="ml-1.5"><i [class]="icon"></i></span>
+
+    <!-- Expanded Underline Effect -->
+    <span *ngIf="underline === 'expanded'"
+        class="absolute -bottom-1 left-0 w-0 h-0.5 bg-current transition-all duration-300 group-hover:w-full"></span>
+</a>
+
+<!-- External Link -->
+<a *ngIf="href" [href]="href" [target]="external ? '_blank' : '_self'" [rel]="external ? 'noopener noreferrer' : ''"
+    [attr.download]="download || null" [ngClass]="[
+    'inline-flex items-center font-medium transition-all duration-200',
+    getVariantClasses(),
+    getUnderlineClasses(),
+    size === 'sm' ? 'text-sm' : size === 'lg' ? 'text-lg' : 'text-base',
+    customClass
+]">
+    <span *ngIf="icon && iconPosition === 'left'" class="mr-1.5"><i [class]="icon"></i></span>
+    <ng-content></ng-content>
+    <span *ngIf="label">{{ label }}</span>
+    <span *ngIf="icon && iconPosition === 'right'" class="ml-1.5"><i [class]="icon"></i></span>
+
+    <!-- Expanded Underline Effect -->
+    <span *ngIf="underline === 'expanded'"
+        class="absolute -bottom-1 left-0 w-0 h-0.5 bg-current transition-all duration-300 group-hover:w-full"></span>
+</a>

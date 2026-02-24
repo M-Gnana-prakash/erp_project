@@ -1,0 +1,64 @@
+<div class="p-6 space-y-10 pb-20">
+    <!-- Header -->
+    <div>
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Links</h2>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Reusable link component for navigation, external resources, and
+            inline text interactions.</p>
+    </div>
+
+    <!-- ── Variants ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Color Variants
+        </h3>
+        <div class="flex flex-wrap gap-x-8 gap-y-4">
+            <app-mcv-link route="/" label="Primary Link"></app-mcv-link>
+            <app-mcv-link route="/" variant="secondary" label="Secondary Link"></app-mcv-link>
+            <app-mcv-link route="/" variant="success" label="Success Link"></app-mcv-link>
+            <app-mcv-link route="/" variant="danger" label="Danger Link"></app-mcv-link>
+            <app-mcv-link route="/" variant="warning" label="Warning Link"></app-mcv-link>
+            <app-mcv-link route="/" variant="info" label="Info Link"></app-mcv-link>
+        </div>
+    </section>
+
+    <!-- ── Underline Styles ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Underline
+            Styles</h3>
+        <div class="flex flex-wrap gap-x-12 gap-y-4">
+            <app-mcv-link route="/" underline="none" label="No Underline"></app-mcv-link>
+            <app-mcv-link route="/" underline="hover" label="Underline on Hover"></app-mcv-link>
+            <app-mcv-link route="/" underline="always" label="Always Underlined"></app-mcv-link>
+            <app-mcv-link route="/" underline="expanded" label="Expanded Underline"></app-mcv-link>
+        </div>
+    </section>
+
+    <!-- ── Icons & External ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Icons &
+            External</h3>
+        <div class="flex flex-wrap gap-x-10 gap-y-4">
+            <app-mcv-link href="https://google.com" label="External Site" [external]="true" icon="fa fa-external-link"
+                iconPosition="right"></app-mcv-link>
+            <app-mcv-link href="/assets/docs/sample.pdf" label="Download PDF" [download]="true"
+                icon="fa fa-download"></app-mcv-link>
+            <app-mcv-link route="/dashboard" label="Go to Dashboard" icon="fa fa-arrow-right"
+                iconPosition="right"></app-mcv-link>
+        </div>
+    </section>
+
+    <!-- ── Inline Example ── -->
+    <section>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Inline in
+            Paragraph</h3>
+        <div class="p-6 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-200 dark:border-white/10 max-w-2xl">
+            <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                By signing up, you agree to our
+                <app-mcv-link route="/terms" label="Terms of Service" underline="always"></app-mcv-link>
+                and acknowledge that you have read our
+                <app-mcv-link route="/privacy" label="Privacy Policy" underline="always"></app-mcv-link>.
+                If you have any questions, please contact our
+                <app-mcv-link route="/support" label="Support Team" underline="expanded"></app-mcv-link>.
+            </p>
+        </div>
+    </section>
+</div>

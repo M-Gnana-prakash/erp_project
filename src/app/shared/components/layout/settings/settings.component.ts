@@ -2,12 +2,13 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SidebarService } from '../../../../core/services/sidebar.service';
 import { ThemeService } from '../../../../core/services/theme.service';
+import { UserService, UserRole } from '../../../../core/services/user.service';
 
 @Component({
-    selector: 'app-settings',
-    standalone: true,
-    imports: [CommonModule],
-    template: `
+  selector: 'app-settings',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
     <div class="fixed bottom-8 right-8 z-99999">
       <!-- Floating Button -->
       <button 
@@ -68,7 +69,7 @@ import { ThemeService } from '../../../../core/services/theme.service';
         </div>
         
         <!-- Theme Toggle (Dark/Light) -->
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between mb-4">
             <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Dark Mode</label>
              <div 
                class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in"
@@ -82,10 +83,35 @@ import { ThemeService } from '../../../../core/services/theme.service';
              </div>
         </div>
 
+        <!-- Role Switcher -->
+        <div class="mb-6 border-t border-gray-200 dark:border-gray-700 pt-4 mt-2">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Role (RBAC Demo)</label>
+          <div class="flex flex-col gap-2">
+            <button *ngFor="let role of userService.availableRoles"
+              (click)="setRole(role)"
+              class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all border"
+              [class.bg-primary]="userService.currentUser().role === role"
+              [class.text-white]="userService.currentUser().role === role"
+              [class.border-primary]="userService.currentUser().role === role"
+              [class.text-gray-700]="userService.currentUser().role !== role"
+              [class.dark:text-gray-300]="userService.currentUser().role !== role"
+              [class.border-gray-200]="userService.currentUser().role !== role"
+              [class.dark:border-gray-700]="userService.currentUser().role !== role"
+              [class.hover:border-primary]="userService.currentUser().role !== role"
+            >
+              <span class="w-2 h-2 rounded-full"
+                [class.bg-white]="userService.currentUser().role === role"
+                [class.bg-primary]="userService.currentUser().role !== role"
+              ></span>
+              {{ role }}
+            </button>
+          </div>
+        </div>
+
       </div>
     </div>
   `,
-    styles: [`
+  styles: [`
     .animate-spin-slow {
       animation: spin 3s linear infinite;
     }
@@ -96,34 +122,39 @@ import { ThemeService } from '../../../../core/services/theme.service';
   `]
 })
 export class SettingsComponent {
-    sidebarService = inject(SidebarService);
-    themeService = inject(ThemeService);
+  sidebarService = inject(SidebarService);
+  themeService = inject(ThemeService);
+  userService = inject(UserService);
 
-    isOpen = signal(false);
-    primaryColor = this.themeService.primaryColor;
+  isOpen = signal(false);
+  primaryColor = this.themeService.primaryColor;
 
-    colors = [
-        { name: 'Blue', value: '#3C50E0' },
-        { name: 'Green', value: '#10B981' },
-        { name: 'Red', value: '#EF4444' },
-        { name: 'Orange', value: '#F97316' },
-        { name: 'Purple', value: '#8B5CF6' },
-        { name: 'Pink', value: '#EC4899' },
-        { name: 'Indigo', value: '#6366F1' },
-        { name: 'Teal', value: '#14B8A6' },
-        { name: 'Yellow', value: '#F59E0B' },
-        { name: 'Cyan', value: '#06B6D4' },
-    ];
+  colors = [
+    { name: 'Blue', value: '#3C50E0' },
+    { name: 'Green', value: '#10B981' },
+    { name: 'Red', value: '#EF4444' },
+    { name: 'Orange', value: '#F97316' },
+    { name: 'Purple', value: '#8B5CF6' },
+    { name: 'Pink', value: '#EC4899' },
+    { name: 'Indigo', value: '#6366F1' },
+    { name: 'Teal', value: '#14B8A6' },
+    { name: 'Yellow', value: '#F59E0B' },
+    { name: 'Cyan', value: '#06B6D4' },
+  ];
 
-    toggleSettings() {
-        this.isOpen.update(v => !v);
-    }
+  toggleSettings() {
+    this.isOpen.update(v => !v);
+  }
 
-    setLayout(layout: 'vertical' | 'horizontal') {
-        this.sidebarService.setLayout(layout);
-    }
+  setLayout(layout: 'vertical' | 'horizontal') {
+    this.sidebarService.setLayout(layout);
+  }
 
-    selectColor(color: string) {
-        this.themeService.setPrimaryColor(color);
-    }
+  setRole(role: UserRole) {
+    this.userService.setRole(role);
+  }
+
+  selectColor(color: string) {
+    this.themeService.setPrimaryColor(color);
+  }
 }

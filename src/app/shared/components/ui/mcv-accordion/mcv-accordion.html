@@ -1,0 +1,49 @@
+<div [ngClass]="[
+    'space-y-3',
+    variant === 'flush' ? 'border-y border-gray-200 dark:border-white/10' : ''
+]">
+    <div *ngFor="let item of items; let i = index" [ngClass]="[
+        'transition-all duration-300',
+        variant === 'default' ? 'border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden' : '',
+        variant === 'flush' ? 'border-b border-gray-200 dark:border-white/10 last:border-0' : '',
+        variant === 'icon' ? 'border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden' : ''
+    ]">
+        <!-- Header -->
+        <button (click)="toggle(i)" [ngClass]="[
+            'w-full flex items-center gap-3 px-5 py-4 text-left transition-colors',
+            variant === 'default' ? 'bg-white dark:bg-boxdark hover:bg-gray-50 dark:hover:bg-white/5' : '',
+            variant === 'flush' ? 'bg-transparent hover:bg-gray-50 dark:hover:bg-white/5 px-0' : '',
+            variant === 'icon' ? 'bg-white dark:bg-boxdark hover:bg-gray-50 dark:hover:bg-white/5' : ''
+        ]">
+            <!-- Icon for Icon Variant -->
+            <span *ngIf="variant === 'icon' && item.icon"
+                class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-white text-sm"
+                [ngStyle]="{'background': item.color || '#6366f1'}">
+                {{ item.icon }}
+            </span>
+
+            <span class="flex-1 text-sm font-semibold text-gray-800 dark:text-white">{{ item.title }}</span>
+
+            <!-- Arrow -->
+            <svg [ngClass]="[
+                'w-5 h-5 text-gray-400 transition-transform duration-300 shrink-0',
+                isOpen(i) ? 'rotate-180' : ''
+            ]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </button>
+
+        <!-- Content -->
+        <div [ngClass]="[
+            'overflow-hidden transition-all duration-300',
+            isOpen(i) ? 'max-h-[500px]' : 'max-h-0'
+        ]">
+            <div [ngClass]="[
+                'px-5 pb-5 text-sm text-gray-600 dark:text-gray-400 leading-relaxed',
+                variant === 'flush' ? 'px-0' : ''
+            ]">
+                {{ item.content }}
+            </div>
+        </div>
+    </div>
+</div>

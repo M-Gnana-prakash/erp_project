@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router, NavigationEnd } from "@angular/router";
 import { filter } from 'rxjs/operators';
@@ -24,19 +24,32 @@ export class AppSidebar {
   isMobileOpen$ = this.sidebarService.isMobileOpen$;
   isSidebarOpen$ = this.sidebarService.isSidebarOpen$;
 
-  navItems: NavItem[] = this.sidebarService.navItems;
-  otherItems: NavItem[] = this.sidebarService.otherItems;
+  navItems: NavItem[] = [];
+  otherItems: NavItem[] = [];
+
+  private updateFilteredItems() {
+    const role = this.user().role;
+    this.navItems = this.sidebarService.filterItemsByRole(this.sidebarService.navItems, role);
+    this.otherItems = this.sidebarService.filterItemsByRole(this.sidebarService.otherItems, role);
+  }
 
   closeMobileMenu() {
     this.sidebarService.toggleMobileOpen();
   }
 
   constructor() {
+    // Reactively re-filter whenever the user's role changes
+    effect(() => {
+      this.updateFilteredItems();
+      this.updateActiveState();
+    });
+
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
       this.updateActiveState();
     });
+    this.updateFilteredItems();
     // Initial update
     this.updateActiveState();
   }
