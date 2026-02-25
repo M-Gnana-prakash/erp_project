@@ -3,73 +3,87 @@
     showBorder ? 'border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden' : '',
     customClass
 ]">
-    <div *ngFor="let item of items; let i = index" (click)="handleItemClick(item)" [ngClass]="[
-            'transition-all duration-200',
-            variant === 'interactive' ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5' : '',
-            hoverEffects && variant !== 'interactive' ? 'hover:bg-gray-50/50 dark:hover:bg-white/5' : '',
-            selectedId === item.id ? 'bg-indigo-50 dark:bg-indigo-900/20' : ''
-        ]">
+    @for (item of items; track item.id || $index) {
+    <div (click)="handleItemClick(item)" [ngClass]="[
+                'transition-all duration-200',
+                variant === 'interactive' ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-white/5' : '',
+                hoverEffects && variant !== 'interactive' ? 'hover:bg-gray-50/50 dark:hover:bg-white/5' : '',
+                selectedId === item.id ? 'bg-indigo-50 dark:bg-indigo-900/20' : ''
+            ]">
 
-        <!-- Default Content Project if no template provided -->
-        <ng-container *ngIf="!itemTemplate">
-            <!-- Simple Variant -->
-            <div *ngIf="variant === 'simple'" class="flex items-center justify-between px-5 py-4">
-                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ item.label }}</span>
-                <span *ngIf="item.badge"
-                    [ngClass]="['px-2 py-0.5 rounded text-[10px] font-bold', item.badgeClass || 'bg-gray-100 text-gray-600']">
-                    {{ item.badge }}
-                </span>
+        @if (!itemTemplate) {
+        @switch (variant) {
+        @case ('simple') {
+        <div class="flex items-center justify-between px-5 py-4">
+            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ item.label }}</span>
+            @if (item.badge) {
+            <span
+                [ngClass]="['px-2 py-0.5 rounded text-[10px] font-bold', item.badgeClass || 'bg-gray-100 text-gray-600']">
+                {{ item.badge }}
+            </span>
+            }
+        </div>
+        }
+        @case ('rich') {
+        <div class="flex items-start gap-4 px-5 py-4">
+            @if (item.icon) {
+            <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-white"
+                [ngStyle]="{'background-color': item.color || '#6366f1'}">
+                {{ item.icon }}
             </div>
-
-            <!-- Rich Variant -->
-            <div *ngIf="variant === 'rich'" class="flex items-start gap-4 px-5 py-4">
-                <div *ngIf="item.icon"
-                    class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-white"
-                    [ngStyle]="{'background-color': item.color || '#6366f1'}">
-                    {{ item.icon }}
+            }
+            <div class="flex-1 min-w-0">
+                <div class="flex justify-between items-start">
+                    <p class="text-sm font-semibold text-gray-800 dark:text-white truncate">{{ item.title }}</p>
+                    @if (item.time) {
+                    <span class="text-[10px] text-gray-400 dark:text-gray-500">{{ item.time }}</span>
+                    }
                 </div>
-                <div class="flex-1 min-w-0">
-                    <div class="flex justify-between items-start">
-                        <p class="text-sm font-semibold text-gray-800 dark:text-white truncate">{{ item.title }}</p>
-                        <span *ngIf="item.time" class="text-[10px] text-gray-400 dark:text-gray-500">{{ item.time
-                            }}</span>
-                    </div>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">{{ item.desc }}</p>
-                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">{{ item.desc }}</p>
             </div>
-
-            <!-- Checked Variant -->
-            <div *ngIf="variant === 'checked'" class="flex items-center gap-4 px-5 py-4">
-                <div class="relative flex items-center">
-                    <input type="checkbox" [checked]="item.checked" (change)="toggleCheck(item, $event)"
-                        class="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600">
-                </div>
-                <div class="flex-1 min-w-0">
-                    <p class="text-sm font-medium text-gray-800 dark:text-white">{{ item.label }}</p>
-                    <p *ngIf="item.desc" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ item.desc }}</p>
-                </div>
-                <span *ngIf="item.count" class="text-[10px] text-gray-400 dark:text-gray-500">{{ item.count }}</span>
+        </div>
+        }
+        @case ('checked') {
+        <div class="flex items-center gap-4 px-5 py-4">
+            <div class="relative flex items-center">
+                <input type="checkbox" [checked]="item.checked" (change)="toggleCheck(item, $event)"
+                    class="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600">
             </div>
-
-            <!-- Interactive Variant (User List Example) -->
-            <div *ngIf="variant === 'interactive'" class="flex items-center gap-4 px-5 py-4">
-                <div *ngIf="item.initials"
-                    class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-white text-xs font-bold"
-                    [ngStyle]="{'background-color': item.color}">
-                    {{ item.initials }}
-                </div>
-                <div class="flex-1 min-w-0">
-                    <p class="text-sm font-semibold text-gray-800 dark:text-white">{{ item.name }}</p>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ item.role }}</p>
-                </div>
-                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-800 dark:text-white">{{ item.label }}</p>
+                @if (item.desc) {
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ item.desc }}</p>
+                }
             </div>
-        </ng-container>
+            @if (item.count) {
+            <span class="text-[10px] text-gray-400 dark:text-gray-500">{{ item.count }}</span>
+            }
+        </div>
+        }
+        @case ('interactive') {
+        <div class="flex items-center gap-4 px-5 py-4">
+            @if (item.initials) {
+            <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-white text-xs font-bold"
+                [ngStyle]="{'background-color': item.color}">
+                {{ item.initials }}
+            </div>
+            }
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-gray-800 dark:text-white">{{ item.name }}</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ item.role }}</p>
+            </div>
+            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </div>
+        }
+        }
+        }
 
-        <!-- Dynamic Template -->
-        <ng-container *ngIf="itemTemplate" [ngTemplateOutlet]="itemTemplate"
-            [ngTemplateOutletContext]="{ $implicit: item, index: i }"></ng-container>
+        @if (itemTemplate) {
+        <ng-container [ngTemplateOutlet]="itemTemplate"
+            [ngTemplateOutletContext]="{ $implicit: item, index: $index }"></ng-container>
+        }
     </div>
+    }
 </div>

@@ -1,10 +1,13 @@
 <div class="w-full">
     <!-- Header Label -->
-    <div *ngIf="label && !labelInside" class="flex justify-between text-sm mb-1.5">
+    @if (label && !labelInside) {
+    <div class="flex justify-between text-sm mb-1.5">
         <span class="font-medium text-gray-700 dark:text-gray-300">{{ label }}</span>
-        <span *ngIf="showValue" class="text-gray-500 dark:text-gray-400">{{ value }}{{ max === 100 ? '%' : '/' + max
-            }}</span>
+        @if (showValue) {
+        <span class="text-gray-500 dark:text-gray-400">{{ value }}{{ max === 100 ? '%' : '/' + max }}</span>
+        }
     </div>
+    }
 
     <!-- Progress Track -->
     <div [ngClass]="[
@@ -18,13 +21,16 @@
             variant === 'striped' ? 'striped' : ''
         ]" [ngStyle]="{'width': percentage + '%', 'background': color}">
             <!-- Inside Label -->
-            <span *ngIf="labelInside" class="text-white text-[10px] font-bold px-2 whitespace-nowrap">
+            @if (labelInside) {
+            <span class="text-white text-[10px] font-bold px-2 whitespace-nowrap">
                 {{ label }} {{ value }}%
             </span>
-            <span *ngIf="size === 'lg' && showValue && !labelInside"
-                class="ml-auto pr-2 text-white text-[10px] font-bold">
+            }
+            @if (size === 'lg' && showValue && !labelInside) {
+            <span class="ml-auto pr-2 text-white text-[10px] font-bold">
                 {{ value }}%
             </span>
+            }
         </div>
     </div>
 </div>

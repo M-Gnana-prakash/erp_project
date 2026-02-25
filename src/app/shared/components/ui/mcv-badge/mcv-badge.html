@@ -3,7 +3,11 @@
     pill ? 'rounded-full' : 'rounded-md',
     getVariantClasses()
   ]">
-    <span *ngIf="dot" class="w-1.5 h-1.5 rounded-full" [ngClass]="getDotColor()"></span>
+    @if (dot) {
+    <span class="w-1.5 h-1.5 rounded-full" [ngClass]="getDotColor()"></span>
+    }
     <ng-content></ng-content>
-    <span *ngIf="label">{{ label }}</span>
+    @if (label) {
+    <span>{{ label }}</span>
+    }
 </span>

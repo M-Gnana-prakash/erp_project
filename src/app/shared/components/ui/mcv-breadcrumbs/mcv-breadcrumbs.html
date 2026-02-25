@@ -3,37 +3,52 @@
     variant === 'background' ? 'bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10' : ''
 ]">
     <ol class="inline-flex items-center space-x-1 md:space-x-3">
-        <li *ngFor="let item of items; let last = last" class="inline-flex items-center">
+        @for (item of items; track $index; let last = $last, first = $first) {
+        <li class="inline-flex items-center">
             <div class="flex items-center">
                 <!-- Separator -->
-                <span *ngIf="item !== items[0]" class="mx-2 text-gray-400">
-                    <ng-container [ngSwitch]="separator">
-                        <span *ngSwitchCase="'/'">/</span>
-                        <span *ngSwitchCase="'>'">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </span>
-                        <span *ngSwitchCase="'-'">-</span>
-                    </ng-container>
+                @if (!first) {
+                <span class="mx-2 text-gray-400">
+                    @switch (separator) {
+                    @case ('/') {
+                    <span>/</span>
+                    }
+                    @case ('>') {
+                    <span>
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                    }
+                    @case ('-') {
+                    <span>-</span>
+                    }
+                    }
                 </span>
+                }
 
                 <!-- Link/Label -->
-                <a *ngIf="item.url && !last" [routerLink]="item.url"
+                @if (item.url && !last) {
+                <a [routerLink]="item.url"
                     class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-white transition-colors">
-                    <span *ngIf="item.icon" class="mr-2">{{ item.icon }}</span>
+                    @if (item.icon) {
+                    <span class="mr-2">{{ item.icon }}</span>
+                    }
                     {{ item.label }}
                 </a>
-
-                <span *ngIf="!item.url || last"
-                    class="inline-flex items-center text-sm font-medium text-indigo-600 dark:text-white"
+                } @else if (!item.url || last) {
+                <span class="inline-flex items-center text-sm font-medium text-indigo-600 dark:white"
                     aria-current="page">
-                    <span *ngIf="item.icon" class="mr-2">{{ item.icon }}</span>
+                    @if (item.icon) {
+                    <span class="mr-2">{{ item.icon }}</span>
+                    }
                     {{ item.label }}
                 </span>
+                }
             </div>
         </li>
+        }
     </ol>
 </nav>

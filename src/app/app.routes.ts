@@ -30,6 +30,7 @@ import { McvSpinnersPage } from './pages/ui-elements/mcv-spinners-page/mcv-spinn
 import { SigninComponent } from './pages/auth/signin.component';
 import { SignupComponent } from './pages/auth/signup.component';
 
+
 export const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: 'dashboard', component: DashboardComponent },
@@ -82,7 +83,7 @@ export const routes: Routes = [
             { path: 'accordion', component: McvAccordionPage },
             { path: 'button-dropdown', component: McvDropdownPage },
             { path: 'progress-bars', component: McvProgressBarsPage },
-            { path: 'spinners', component: McvSpinnersPage },
+            { path: 'spinners', component: McvSpinnersPage }
         ]
     },
     {
