@@ -6,6 +6,11 @@
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
+    "paths": {
+      "mcv-ui-toolkit": [
+        "./dist/mcv-ui-toolkit"
+      ]
+    },
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
@@ -29,6 +34,12 @@
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/mcv-ui-toolkit/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/mcv-ui-toolkit/tsconfig.spec.json"
     }
   ]
 }

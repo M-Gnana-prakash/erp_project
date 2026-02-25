@@ -29,6 +29,8 @@ import { McvProgressBarsPage } from './pages/ui-elements/mcv-progress-bars-page/
 import { McvSpinnersPage } from './pages/ui-elements/mcv-spinners-page/mcv-spinners-page';
 import { SigninComponent } from './pages/auth/signin.component';
 import { SignupComponent } from './pages/auth/signup.component';
+import { McvCardsPage } from './pages/ui-elements/mcv-cards-page/mcv-cards-page';
+import { McvModalsPage } from './pages/ui-elements/mcv-modals-page/mcv-modals-page';
 
 
 export const routes: Routes = [
@@ -83,7 +85,9 @@ export const routes: Routes = [
             { path: 'accordion', component: McvAccordionPage },
             { path: 'button-dropdown', component: McvDropdownPage },
             { path: 'progress-bars', component: McvProgressBarsPage },
-            { path: 'spinners', component: McvSpinnersPage }
+            { path: 'spinners', component: McvSpinnersPage },
+            { path: 'cards', component: McvCardsPage },
+            { path: 'modals', component: McvModalsPage },
         ]
     },
     {

@@ -1,0 +1,50 @@
+<div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300"
+    [ngClass]="{'hover:shadow-lg hover:-translate-y-1': hoverable, 'shadow-sm': !hoverable, 'shadow-md': hoverable}">
+
+    <!-- Optional Alert internal to card -->
+    <div *ngIf="showAlert" class="p-3 pb-0">
+        <app-mcv-alert [type]="alertType" [title]="alertTitle" [message]="alertMessage"
+            [dismissible]="true"></app-mcv-alert>
+    </div>
+
+    <!-- Card Header -->
+    <div *ngIf="title || avatarSrc || avatarInitials || badgeLabel"
+        class="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-gray-700/50">
+        <div class="flex items-center gap-3">
+            <!-- Integrated Avatar -->
+            <app-mcv-avatar *ngIf="avatarSrc || avatarInitials" [src]="avatarSrc" [initials]="avatarInitials"
+                [name]="avatarName" [size]="avatarSize">
+            </app-mcv-avatar>
+
+            <div>
+                <h3 class="font-semibold text-gray-900 dark:text-gray-100 leading-none">{{title}}</h3>
+                <p *ngIf="subtitle" class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{subtitle}}</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <!-- Integrated Badge -->
+            <app-mcv-badge *ngIf="badgeLabel" [label]="badgeLabel" [variant]="badgeVariant" [soft]="badgeSoft">
+            </app-mcv-badge>
+
+            <!-- Custom Actions Slot -->
+            <ng-container *ngTemplateOutlet="headerActions"></ng-container>
+        </div>
+    </div>
+
+    <!-- Card Body -->
+    <div [class]="padding">
+        <ng-content></ng-content>
+    </div>
+
+    <!-- Card Footer -->
+    <div *ngIf="footer"
+        class="px-5 py-3 bg-gray-50/50 dark:bg-gray-700/20 border-t border-gray-100 dark:border-gray-700/50">
+        <ng-container *ngTemplateOutlet="footerContent || defaultFooter"></ng-container>
+        <ng-template #defaultFooter>
+            <div class="text-sm text-gray-500 dark:text-gray-400">
+                Footer Content
+            </div>
+        </ng-template>
+    </div>
+</div>
