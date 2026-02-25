@@ -69,6 +69,32 @@
           "builder": "@angular/build:unit-test"
         }
       }
+    },
+    "mcv-ui-toolkit": {
+      "projectType": "library",
+      "root": "projects/mcv-ui-toolkit",
+      "sourceRoot": "projects/mcv-ui-toolkit/src",
+      "prefix": "mcv",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/mcv-ui-toolkit/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/mcv-ui-toolkit/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "projects/mcv-ui-toolkit/tsconfig.spec.json"
+          }
+        }
+      }
     }
   }
 }
