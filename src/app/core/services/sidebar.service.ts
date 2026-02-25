@@ -130,6 +130,8 @@ export class SidebarService {
                 { label: "Images", route: "/ui-elements/images", icon: "" },
                 { label: "Videos", route: "/ui-elements/videos", icon: "" },
                 { label: "Carousel", route: "/ui-elements/carousel", icon: "" },
+                { label: "Cards", route: "/ui-elements/cards", icon: "" },
+                { label: "Modals", route: "/ui-elements/modals", icon: "" },
             ]
         },
         {

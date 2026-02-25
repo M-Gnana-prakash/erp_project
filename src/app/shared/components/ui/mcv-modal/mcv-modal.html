@@ -1,0 +1,60 @@
+<div *ngIf="isOpen" class="fixed inset-0 z-[999999] flex items-center justify-center p-4 sm:p-6 md:p-10" role="dialog"
+    aria-modal="true">
+
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-md transition-opacity" (click)="closeModal()"
+        aria-hidden="true"></div>
+
+    <!-- Modal Content -->
+    <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full flex flex-col overflow-hidden animate-in fade-in zoom-in duration-300"
+        [ngClass]="getSizeClasses()">
+
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700">
+            <div class="flex items-center gap-3">
+                <!-- Integrated Avatar -->
+                <app-mcv-avatar *ngIf="avatarSrc || avatarInitials" [src]="avatarSrc" [initials]="avatarInitials"
+                    [name]="avatarName" size="sm">
+                </app-mcv-avatar>
+
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white leading-none">{{title}}</h3>
+
+                <!-- Integrated Badge -->
+                <app-mcv-badge *ngIf="badgeLabel" [label]="badgeLabel" [variant]="badgeVariant" [soft]="true">
+                </app-mcv-badge>
+            </div>
+
+            <button type="button" (click)="closeModal()"
+                class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Optional Integrated Alert Content -->
+        <div *ngIf="showAlert" class="px-6 pt-4">
+            <app-mcv-alert [type]="alertType" [title]="alertTitle" [message]="alertMessage"
+                [dismissible]="true"></app-mcv-alert>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="flex-1 px-6 py-6 overflow-y-auto min-h-[100px]">
+            <ng-content></ng-content>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="px-6 py-4 bg-gray-50/50 dark:bg-gray-700/20 border-t border-gray-100 dark:border-gray-700">
+            <ng-container *ngTemplateOutlet="footerContent || defaultModalFooter"></ng-container>
+            <ng-template #defaultModalFooter>
+                <div class="flex justify-end gap-3">
+                    <button (click)="closeModal()"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        Close
+                    </button>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>
