@@ -110,11 +110,12 @@ export class AdvancedTableComponent implements OnInit {
         if (val === null || val === undefined) return '';
 
         if (col.type === 'currency') {
-            return new Intl.NumberFormat('en-IN', {
+            const formatted = new Intl.NumberFormat('en-IN', {
                 style: 'currency',
                 currency: 'INR',
                 minimumFractionDigits: 2
             }).format(Number(val));
+            return formatted.replace('₹', '₹ ');
         }
 
         return String(val);
@@ -127,14 +128,16 @@ export class AdvancedTableComponent implements OnInit {
             this.columns.map(col => `"${this.formatValue(row, col)}"`).join(',')
         ).join('\n');
 
-        const csvContent = "data:text/csv;charset=utf-8," + headers + "\n" + rows;
-        const encodedUri = encodeURI(csvContent);
+        const csvContent = headers + "\n" + rows;
+        const blob = new Blob(["\uFEFF", csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
+        link.setAttribute("href", url);
         link.setAttribute("download", "table_export.csv");
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        URL.revokeObjectURL(url);
     }
 
     async exportPDF() {
