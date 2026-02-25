@@ -1,13 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { McvFieldStyles } from '../form-types';
+import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
+import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
 @Component({
   selector: 'app-mcv-toggle-field',
   templateUrl: './mcv-toogle-field.html',
   styleUrls: ['./mcv-toogle-field.css'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, McvFieldErrors],
 })
 export class McvToggleField {
 
@@ -27,11 +28,11 @@ export class McvToggleField {
   public isTouched: boolean = false;
 
   private defaultStyles: McvFieldStyles = {
+    ...DEFAULT_MCV_FIELD_STYLES,
     trackColor: 'var(--form-border, #ccc)',
     thumbColor: '#fff',
     selectedColor: 'var(--color-primary, #3b82f6)',
     labelColor: 'var(--form-text, #333)',
-    sizeVariant: 'md',
   };
 
   @Output() valueChange = new EventEmitter<boolean>();

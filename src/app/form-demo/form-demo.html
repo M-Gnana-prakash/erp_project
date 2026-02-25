@@ -32,7 +32,7 @@
 
   <!-- Password -->
   <app-mcv-password-field label="Password" [value]="form.get('password')?.value"
-    (statusChange)="handleStatusChange('password', $event)" [placeholder]="'Enter the password value'" [minLength]="8"
+    (statusChange)="handleStatusChange('password', $event)" [placeholder]="'Enter the password value'" [minLength]="5"
     [maxLength]="16" [required]="true" [regex]="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/"
     [disabled]="false" [readonly]="false" [styles]="{
       borderStyle: '1px solid var(--form-border, #ccc)',
@@ -93,7 +93,7 @@
 
   <!-- Date Range -->
   <app-mcv-date-range-picker label="Select Date Range" [value]="form.get('dateRange')?.value"
-    (statusChange)="handleStatusChange('dateRange', $event)" >
+    (statusChange)="handleStatusChange('dateRange', $event)">
   </app-mcv-date-range-picker>
 
   <!-- Checkbox -->

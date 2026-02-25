@@ -1,10 +1,19 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { McvFieldStyles } from '../form-types';
+import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
+import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
+
+export interface PasswordValidationRules {
+  minLength: boolean;
+  uppercase: boolean;
+  lowercase: boolean;
+  number: boolean;
+  specialChar: boolean;
+}
 
 @Component({
   selector: 'app-mcv-password-field',
-  imports: [CommonModule],
+  imports: [CommonModule, McvFieldErrors],
   templateUrl: './mcv-password-field.html',
   styleUrl: './mcv-password-field.css',
 })
@@ -41,20 +50,28 @@ export class McvPasswordField {
   @Input() canDisplayEye: boolean = true;
   @Input() needValidationStatusMessage: boolean = true;
 
+  /**
+   * Optional: regex pattern for allowed special characters.
+   * Defaults to [@$!%*?&]. Parent can override to allow/restrict specific chars.
+   */
+  @Input() specialCharPattern: RegExp = /[@$!%*?&]/;
+
+  /**
+   * Optional: supply pre-computed validation rule states from the parent.
+   * When not provided, rules are computed automatically by the component.
+   */
+  @Input() validationRules: PasswordValidationRules = {
+    minLength: false,
+    uppercase: false,
+    lowercase: false,
+    number: false,
+    specialChar: false
+  };
+
   // CSS Inputs
   @Input() styles: McvFieldStyles = {};
 
-  private defaultStyles: McvFieldStyles = {
-    borderStyle: '1px solid var(--form-border, #ccc)',
-    outline: 'none',
-    textColor: 'var(--form-text, #333)',
-    backgroundColor: 'var(--form-bg, #fff)',
-    activeBorderStyle: '1px solid var(--color-primary, #007bff)',
-    activeOutline: 'none',
-    activeTextColor: 'var(--form-text, #333)',
-    activeBackgroundColor: 'var(--form-bg, #fff)',
-    sizeVariant: 'md',
-  };
+  private defaultStyles: McvFieldStyles = { ...DEFAULT_MCV_FIELD_STYLES };
 
   get computedStyles(): McvFieldStyles {
     return { ...this.defaultStyles, ...this.styles };
@@ -65,14 +82,6 @@ export class McvPasswordField {
   public isDirty: boolean = false;
   public showPassword: boolean = false;
   protected readonly Infinity = Infinity;
-
-  public validationRules = {
-    minLength: true,
-    uppercase: false,
-    lowercase: false,
-    number: false,
-    specialChar: false
-  };
 
   public isValid: boolean = false;
 
@@ -108,17 +117,16 @@ export class McvPasswordField {
     const currentErrors: string[] = [];
     const fieldName = this.label || 'Password';
 
-    // Rule Tracking
+    // Rule Tracking (uses configurable minLength and specialCharPattern)
     this.validationRules = {
-      minLength: this.value.length >= 8,
+      minLength: this.value.length >= this.minLength,
       uppercase: /[A-Z]/.test(this.value),
       lowercase: /[a-z]/.test(this.value),
       number: /\d/.test(this.value),
-      specialChar: /[@$!%*?&]/.test(this.value)
+      specialChar: this.specialCharPattern.test(this.value)
     };
 
-    // Overall Validity (based on the requested regex)
-    // Regex: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/
+    // Overall Validity
     this.isValid = Object.values(this.validationRules).every(rule => rule);
 
     // Required check
@@ -140,4 +148,3 @@ export class McvPasswordField {
     });
   }
 }
-

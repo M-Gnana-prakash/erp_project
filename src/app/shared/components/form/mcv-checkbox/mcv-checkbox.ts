@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { McvFieldStyles } from '../form-types';
+import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
+import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
 @Component({
   selector: 'app-mcv-checkbox',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, McvFieldErrors],
   templateUrl: './mcv-checkbox.html',
   styleUrl: './mcv-checkbox.css',
 })
@@ -31,11 +32,9 @@ export class McvCheckbox {
   public errors: string[] = [];
 
   private defaultStyles: McvFieldStyles = {
-    borderStyle: '1px solid var(--form-border, #ccc)',
+    ...DEFAULT_MCV_FIELD_STYLES,
     selectedColor: 'var(--color-primary, #007bff)',
-    backgroundColor: 'var(--form-bg, #fff)',
     labelColor: 'var(--form-text, #333)',
-    sizeVariant: 'md',
   };
 
   get computedStyles(): McvFieldStyles {

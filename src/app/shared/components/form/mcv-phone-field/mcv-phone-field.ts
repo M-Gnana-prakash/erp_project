@@ -1,12 +1,14 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { McvFieldStyles } from '../form-types';
+import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
+import { COUNTRY_CODES, PHONE_MAX_LENGTH_BY_COUNTRY } from './phone-country-codes';
+import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
 @Component({
   selector: 'app-mcv-phone-field',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, McvFieldErrors],
   templateUrl: './mcv-phone-field.html',
   styleUrl: './mcv-phone-field.css',
 })
@@ -82,34 +84,13 @@ export class McvPhoneField implements OnInit, OnChanges {
   public isTouched: boolean = false;
   public errors: string[] = [];
 
-  private defaultStyles: McvFieldStyles = {
-    borderStyle: '1px solid #ccc',
-    outline: 'none',
-    textColor: '#333',
-    backgroundColor: '#fff',
-    activeBorderStyle: '1px solid #007bff',
-    activeOutline: 'none',
-    activeTextColor: '#333',
-    activeBackgroundColor: '#fff',
-    sizeVariant: 'md',
-  };
+  private defaultStyles: McvFieldStyles = { ...DEFAULT_MCV_FIELD_STYLES };
 
   get computedStyles(): McvFieldStyles {
     return { ...this.defaultStyles, ...this.styles };
   }
 
-  public countryCodes = [
-    { code: '+91', name: 'India' },
-    { code: '+1', name: 'USA' },
-    { code: '+44', name: 'UK' },
-    { code: '+61', name: 'Australia' },
-    { code: '+81', name: 'Japan' },
-    { code: '+86', name: 'China' },
-    { code: '+971', name: 'UAE' },
-    { code: '+92', name: 'Pakistan' },
-    { code: '+880', name: 'Bangladesh' },
-    { code: '+94', name: 'Sri Lanka' },
-  ];
+  public countryCodes = COUNTRY_CODES;
 
   ngOnInit() {
     this.initCountryCode();
@@ -154,18 +135,7 @@ export class McvPhoneField implements OnInit, OnChanges {
     touched: boolean;
   }>();
 
-  private phoneLengthByCountryCode: { [key: string]: number } = {
-    '+91': 10,
-    '+1': 10,
-    '+44': 10,
-    '+61': 9,
-    '+81': 10,
-    '+86': 11,
-    '+971': 9,
-    '+92': 10,
-    '+880': 11,
-    '+94': 9,
-  };
+  private phoneLengthByCountryCode = PHONE_MAX_LENGTH_BY_COUNTRY;
 
   onInputChange(event: Event) {
     const target = event.target as HTMLInputElement;

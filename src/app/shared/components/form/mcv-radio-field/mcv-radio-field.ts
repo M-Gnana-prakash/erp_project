@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { McvFieldStyles } from '../form-types';
+import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
+import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
 export interface RadioOption {
     label: string;
@@ -11,7 +12,7 @@ export interface RadioOption {
 @Component({
     selector: 'app-mcv-radio-field',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, McvFieldErrors],
     templateUrl: './mcv-radio-field.html',
     styleUrl: './mcv-radio-field.css',
 })
@@ -19,7 +20,7 @@ export class McvRadioField {
 
     @Input() value: string = '';
     @Input() options: RadioOption[] = [];
-    @Input() name: string = 'radio-group-' + Math.random().toString(36).substr(2, 9); // Unique name if not provided
+    @Input() name: string = 'radio-group-' + Math.random().toString(36).substring(2, 11);
     @Input() required: boolean = false;
     @Input() disabled: boolean = false;
     @Input() readonly: boolean = false;
@@ -36,11 +37,9 @@ export class McvRadioField {
     public isTouched: boolean = false;
 
     private defaultStyles: McvFieldStyles = {
-        borderStyle: '1px solid var(--form-border, #ccc)',
+        ...DEFAULT_MCV_FIELD_STYLES,
         selectedColor: 'var(--color-primary, #007bff)',
-        backgroundColor: 'var(--form-bg, #fff)',
         labelColor: 'var(--form-text, #333)',
-        sizeVariant: 'md',
     };
 
     get computedStyles(): McvFieldStyles {

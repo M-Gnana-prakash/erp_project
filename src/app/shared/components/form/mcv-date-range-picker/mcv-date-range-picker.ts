@@ -6,12 +6,13 @@ import {
   Output,
   EventEmitter
 } from '@angular/core';
-import { McvFieldStyles } from '../form-types';
+import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
+import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
 @Component({
   selector: 'app-mcv-date-range-picker',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, McvFieldErrors],
   templateUrl: './mcv-date-range-picker.html'
 })
 export class McvDateRangePicker {
@@ -54,12 +55,9 @@ export class McvDateRangePicker {
   ];
 
   private defaultStyles: McvFieldStyles = {
-    borderStyle: '1px solid var(--form-border, #ccc)',
+    ...DEFAULT_MCV_FIELD_STYLES,
     selectedColor: 'var(--color-primary, #3b82f6)',
-    backgroundColor: 'var(--form-bg, #fff)',
-    textColor: 'var(--form-text, #333)',
     labelColor: 'var(--form-text, #333)',
-    sizeVariant: 'md',
   };
 
   get computedStyles(): McvFieldStyles {

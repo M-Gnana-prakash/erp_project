@@ -52,13 +52,6 @@
   </div>
 
   <!-- Validation -->
-  @if (needValidationStatusMessage && errors.length > 0 && isTouched) {
-  <div class="mt-1">
-    @for (error of errors; track error) {
-    <p class="text-red-500 text-xs mt-0.5">
-      {{ error }}
-    </p>
-    }
-  </div>
-  }
+  <app-mcv-field-errors [errors]="errors" [show]="needValidationStatusMessage && errors.length > 0 && isTouched">
+  </app-mcv-field-errors>
 </div>

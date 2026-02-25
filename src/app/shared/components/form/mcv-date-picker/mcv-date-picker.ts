@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { McvFieldStyles } from '../form-types';
+import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
+import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
 @Component({
   selector: 'app-mcv-date-picker',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, McvFieldErrors],
   templateUrl: './mcv-date-picker.html',
   styleUrl: './mcv-date-picker.css',
 })
@@ -27,17 +28,7 @@ export class McvDatePicker implements OnInit {
   // Styles
   @Input() styles: McvFieldStyles = {};
 
-  private defaultStyles: McvFieldStyles = {
-    borderStyle: '1px solid var(--form-border, #ccc)',
-    outline: 'none',
-    textColor: 'var(--form-text, #333)',
-    backgroundColor: 'var(--form-bg, #fff)',
-    activeBorderStyle: '1px solid var(--color-primary, #007bff)',
-    activeOutline: 'none',
-    activeTextColor: 'var(--form-text, #333)',
-    activeBackgroundColor: 'var(--form-bg, #fff)',
-    sizeVariant: 'md',
-  };
+  private defaultStyles: McvFieldStyles = { ...DEFAULT_MCV_FIELD_STYLES };
 
   get computedStyles(): McvFieldStyles {
     return { ...this.defaultStyles, ...this.styles };
@@ -106,9 +97,9 @@ export class McvDatePicker implements OnInit {
 
     try {
       const parts = {
-        yyyy: dateStr.substr(format.indexOf('yyyy'), 4),
-        MM: dateStr.substr(format.indexOf('MM'), 2),
-        dd: dateStr.substr(format.indexOf('dd'), 2)
+        yyyy: dateStr.substring(format.indexOf('yyyy'), format.indexOf('yyyy') + 4),
+        MM: dateStr.substring(format.indexOf('MM'), format.indexOf('MM') + 2),
+        dd: dateStr.substring(format.indexOf('dd'), format.indexOf('dd') + 2)
       };
 
       const date = new Date(+parts.yyyy, +parts.MM - 1, +parts.dd);

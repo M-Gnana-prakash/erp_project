@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { McvFieldStyles } from '../form-types';
+import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
+import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
 @Component({
   selector: 'app-mcv-email-field',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, McvFieldErrors],
   templateUrl: './mcv-email-field.html',
   styleUrl: './mcv-email-field.css',
 })
@@ -29,17 +30,7 @@ export class McvEmailField {
   public isTouched: boolean = false;
   public errors: string[] = [];
 
-  private defaultStyles: McvFieldStyles = {
-    borderStyle: '1px solid var(--form-border, #ccc)',
-    outline: 'none',
-    textColor: 'var(--form-text, #333)',
-    backgroundColor: 'var(--form-bg, #fff)',
-    activeBorderStyle: '1px solid var(--color-primary, #007bff)',
-    activeOutline: 'none',
-    activeTextColor: 'var(--form-text, #333)',
-    activeBackgroundColor: 'var(--form-bg, #fff)',
-    sizeVariant: 'md',
-  };
+  private defaultStyles: McvFieldStyles = { ...DEFAULT_MCV_FIELD_STYLES };
 
   get computedStyles(): McvFieldStyles {
     return { ...this.defaultStyles, ...this.styles };

@@ -29,18 +29,12 @@
   </div>
 
   <!-- Validation -->
-  @if (needValidationStatusMessage && errors.length > 0 && isTouched) {
-  <div class="mt-1">
-    @for (error of errors; track error) {
-    <p class="text-red-500 text-xs mt-0.5">
-      {{ error }}
-    </p>
-    }
-  </div>
-  }
+  <app-mcv-field-errors [errors]="errors" [show]="needValidationStatusMessage && errors.length > 0 && isTouched">
+  </app-mcv-field-errors>
 
   <!-- Popup -->
-  <div *ngIf="show" class="absolute z-50 mt-2 bg-white dark:bg-boxdark rounded-lg shadow-xl w-80 overflow-hidden">
+  @if (show) {
+  <div class="absolute z-50 mt-2 bg-white dark:bg-boxdark rounded-lg shadow-xl w-80 overflow-hidden">
 
     <!-- Header -->
     <div class="bg-gray-100 dark:bg-meta-4 px-4 py-3 flex justify-between items-center">
@@ -51,9 +45,11 @@
           class="border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm bg-white dark:bg-boxdark text-gray-700 dark:text-gray-300"
           [value]="current.getMonth()" (change)="setMonth($any($event.target).value)">
 
-          <option *ngFor="let m of months; let i = index" [value]="i">
+          @for (m of months; track m; let i = $index) {
+          <option [value]="i">
             {{ m }}
           </option>
+          }
 
         </select>
 
@@ -71,21 +67,25 @@
     <!-- Weekdays -->
     <div
       class="grid grid-cols-7 text-center text-xs text-gray-500 dark:text-gray-400 py-2 border-b border-gray-200 dark:border-gray-700">
-      <div *ngFor="let d of ['S','M','T','W','T','F','S']">
+      @for (d of ['S','M','T','W','T','F','S']; track d + $index) {
+      <div>
         {{ d }}
       </div>
+      }
     </div>
 
     <!-- Dates -->
     <div class="grid grid-cols-7 text-center p-3 gap-y-2 text-sm text-gray-700 dark:text-gray-300">
 
-      <div *ngFor="let d of days" (click)="d && select(d)" class="relative h-8" [class.cursor-pointer]="d">
+      @for (d of days; track $index) {
+      <div (click)="d && select(d)" class="relative h-8" [class.cursor-pointer]="d">
 
         @if (d) {
         <!-- Range background -->
-        <div *ngIf="inRange(d)" class="absolute inset-0" [style.background-color]="computedStyles.selectedColor"
-          style="opacity: 0.1">
+        @if (inRange(d)) {
+        <div class="absolute inset-0" [style.background-color]="computedStyles.selectedColor" style="opacity: 0.1">
         </div>
+        }
 
         <!-- Date circle -->
         <div
@@ -99,9 +99,11 @@
         }
 
       </div>
+      }
 
     </div>
 
   </div>
+  }
 
 </div>

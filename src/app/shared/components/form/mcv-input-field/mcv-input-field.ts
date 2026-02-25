@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { McvFieldStyles } from '../form-types';
+import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
+import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
 @Component({
   selector: 'app-mcv-input-field',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, McvFieldErrors],
   templateUrl: './mcv-input-field.html',
   styleUrl: './mcv-input-field.css',
 })
@@ -54,15 +55,13 @@ export class McvInputField {
   @Input() styles: McvFieldStyles = {};
 
   private defaultStyles: McvFieldStyles = {
-    borderStyle: '1px solid var(--form-border, #ccc)',
-    outline: 'none',
+    ...DEFAULT_MCV_FIELD_STYLES,
+    // mcv-input-field uses slightly different primary tones
     textColor: 'var(--form-text, #1f2937)',
     backgroundColor: 'var(--form-bg, #ffffff)',
     activeBorderStyle: '1px solid var(--color-primary, #3b82f6)',
-    activeOutline: 'none',
     activeTextColor: 'var(--form-text, #111827)',
     activeBackgroundColor: 'var(--form-bg, #ffffff)',
-    sizeVariant: 'md',
   };
 
   get computedStyles(): McvFieldStyles {
