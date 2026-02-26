@@ -31,6 +31,7 @@ import { SigninComponent } from './pages/auth/signin.component';
 import { SignupComponent } from './pages/auth/signup.component';
 import { McvCardsPage } from './pages/ui-elements/mcv-cards-page/mcv-cards-page';
 import { McvModalsPage } from './pages/ui-elements/mcv-modals-page/mcv-modals-page';
+import { TtsComponent } from './pages/tts/tts.component';
 
 
 export const routes: Routes = [
@@ -38,6 +39,7 @@ export const routes: Routes = [
     { path: 'dashboard', component: DashboardComponent },
     { path: 'dashboard/ecommerce', component: EcommerceComponent },
     { path: 'calender', component: CalendarComponent },
+    { path: 'tts', component: TtsComponent },
     { path: 'user-profile', component: UserProfileComponent },
     {
         path: 'forms',
@@ -57,7 +59,8 @@ export const routes: Routes = [
         path: 'pages',
         children: [
             { path: 'basic-page', component: BasicPageComponent },
-            { path: 'advanced-page', component: AdvancedPageComponent }
+            { path: 'advanced-page', component: AdvancedPageComponent },
+            { path: 'tts', component: TtsComponent }
         ]
     },
     {

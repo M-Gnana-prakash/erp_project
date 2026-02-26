@@ -60,6 +60,12 @@ export class SidebarService {
             roles: ['Administrator', 'Moderator', 'User']
         },
         {
+            label: 'Text to Speech',
+            icon: '/images/side-bar-logos/pages-svgrepo-com.svg',
+            route: '/tts',
+            roles: ['Administrator', 'Moderator', 'User']
+        },
+        {
             label: 'User Profile',
             icon: '/images/side-bar-logos/user-profile-circle-svgrepo-com.svg',
             route: '/user-profile',
