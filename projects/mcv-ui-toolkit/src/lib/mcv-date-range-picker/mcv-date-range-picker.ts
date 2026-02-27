@@ -10,10 +10,11 @@ import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
 import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
 @Component({
-  selector: 'app-mcv-date-range-picker',
+  selector: 'mcv-date-range-picker',
   standalone: true,
   imports: [CommonModule, McvFieldErrors],
-  templateUrl: './mcv-date-range-picker.html'
+  templateUrl: './mcv-date-range-picker.html',
+  styleUrl: './mcv-date-range-picker.css'
 })
 export class McvDateRangePicker {
 

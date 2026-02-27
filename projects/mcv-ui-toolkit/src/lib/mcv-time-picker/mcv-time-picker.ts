@@ -4,7 +4,7 @@ import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
 import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
 @Component({
-  selector: 'app-mcv-time-picker',
+  selector: 'mcv-time-picker',
   standalone: true,
   imports: [CommonModule, McvFieldErrors],
   templateUrl: './mcv-time-picker.html',

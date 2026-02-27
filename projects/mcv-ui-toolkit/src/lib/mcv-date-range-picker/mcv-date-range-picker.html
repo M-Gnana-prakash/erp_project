@@ -29,8 +29,8 @@
   </div>
 
   <!-- Validation -->
-  <app-mcv-field-errors [errors]="errors" [show]="needValidationStatusMessage && errors.length > 0 && isTouched">
-  </app-mcv-field-errors>
+  <mcv-field-errors [errors]="errors" [show]="needValidationStatusMessage && errors.length > 0 && isTouched">
+  </mcv-field-errors>
 
   <!-- Popup -->
   @if (show) {

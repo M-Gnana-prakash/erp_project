@@ -4,7 +4,7 @@ import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
 import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
 @Component({
-  selector: 'app-mcv-email-field',
+  selector: 'mcv-email-field',
   standalone: true,
   imports: [CommonModule, McvFieldErrors],
   templateUrl: './mcv-email-field.html',

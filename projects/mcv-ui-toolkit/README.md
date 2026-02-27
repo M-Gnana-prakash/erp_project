@@ -1,6 +1,7 @@
-# McvUiToolkit
+# MCV UI Toolkit (Form Elements)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.0.
+MCV UI Toolkit is a specialized Angular library providing a suite of highly customizable, standalone form components. Focus is placed on developer experience, validation, and flexible styling.
+
 
 ## Code scaffolding
 

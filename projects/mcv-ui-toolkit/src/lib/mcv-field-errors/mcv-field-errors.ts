@@ -5,13 +5,13 @@ import { CommonModule } from '@angular/common';
  * Reusable component for displaying form field validation errors.
  *
  * Usage:
- *   <app-mcv-field-errors
+ *   <mcv-field-errors
  *     [errors]="errors"
  *     [show]="needValidationStatusMessage && errors.length > 0 && isTouched">
- *   </app-mcv-field-errors>
+ *   </mcv-field-errors>
  */
 @Component({
-    selector: 'app-mcv-field-errors',
+    selector: 'mcv-field-errors',
     standalone: true,
     imports: [CommonModule],
     templateUrl: './mcv-field-errors.html',
