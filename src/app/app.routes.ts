@@ -31,6 +31,7 @@ import { SigninComponent } from './pages/auth/signin.component';
 import { SignupComponent } from './pages/auth/signup.component';
 import { McvCardsPage } from './pages/ui-elements/mcv-cards-page/mcv-cards-page';
 import { McvModalsPage } from './pages/ui-elements/mcv-modals-page/mcv-modals-page';
+import { McvDatatreePage } from './pages/ui-elements/mcv-datatree-page/mcv-datatree-page';
 import { TtsComponent } from './pages/tts/tts.component';
 
 
@@ -91,6 +92,7 @@ export const routes: Routes = [
             { path: 'spinners', component: McvSpinnersPage },
             { path: 'cards', component: McvCardsPage },
             { path: 'modals', component: McvModalsPage },
+            { path: 'data-tree', component: McvDatatreePage },
         ]
     },
     {

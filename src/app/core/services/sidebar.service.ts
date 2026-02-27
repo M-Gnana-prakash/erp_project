@@ -138,6 +138,7 @@ export class SidebarService {
                 { label: "Carousel", route: "/ui-elements/carousel", icon: "" },
                 { label: "Cards", route: "/ui-elements/cards", icon: "" },
                 { label: "Modals", route: "/ui-elements/modals", icon: "" },
+                { label: "Data Tree", route: "/ui-elements/data-tree", icon: "" },
             ]
         },
         {

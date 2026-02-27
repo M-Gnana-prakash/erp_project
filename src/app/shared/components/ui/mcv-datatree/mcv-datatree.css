@@ -1,0 +1,22 @@
+.tree-root {
+  position: relative;
+}
+
+/* Custom Tree Lines */
+.group {
+  position: relative;
+}
+
+.mcv-datatree-container {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+button:focus {
+  outline: none;
+}
+
+/* Animation for expansion */
+.ng-animating {
+  transition: all 0.3s ease-in-out;
+}
