@@ -12,7 +12,7 @@ export interface PasswordValidationRules {
 }
 
 @Component({
-  selector: 'app-mcv-password-field',
+  selector: 'mcv-password-field',
   imports: [CommonModule, McvFieldErrors],
   templateUrl: './mcv-password-field.html',
   styleUrl: './mcv-password-field.css',

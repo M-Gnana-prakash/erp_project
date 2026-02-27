@@ -10,7 +10,7 @@ export interface RadioOption {
 }
 
 @Component({
-    selector: 'app-mcv-radio-field',
+    selector: 'mcv-radio-field',
     standalone: true,
     imports: [CommonModule, McvFieldErrors],
     templateUrl: './mcv-radio-field.html',

@@ -6,7 +6,7 @@ import { COUNTRY_CODES, PHONE_MAX_LENGTH_BY_COUNTRY } from './phone-country-code
 import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
 @Component({
-  selector: 'app-mcv-phone-field',
+  selector: 'mcv-phone-field',
   standalone: true,
   imports: [CommonModule, FormsModule, McvFieldErrors],
   templateUrl: './mcv-phone-field.html',

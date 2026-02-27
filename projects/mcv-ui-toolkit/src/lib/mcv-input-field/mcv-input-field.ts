@@ -4,7 +4,7 @@ import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
 import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
 @Component({
-  selector: 'app-mcv-input-field',
+  selector: 'mcv-input-field',
   standalone: true,
   imports: [CommonModule, McvFieldErrors],
   templateUrl: './mcv-input-field.html',

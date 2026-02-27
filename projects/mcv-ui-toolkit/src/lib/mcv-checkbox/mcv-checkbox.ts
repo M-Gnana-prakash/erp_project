@@ -4,7 +4,7 @@ import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
 import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
 @Component({
-  selector: 'app-mcv-checkbox',
+  selector: 'mcv-checkbox',
   standalone: true,
   imports: [CommonModule, McvFieldErrors],
   templateUrl: './mcv-checkbox.html',

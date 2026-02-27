@@ -4,9 +4,9 @@ import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
 import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
 
 @Component({
-  selector: 'app-mcv-toggle-field',
-  templateUrl: './mcv-toogle-field.html',
-  styleUrls: ['./mcv-toogle-field.css'],
+  selector: 'mcv-toggle-field',
+  templateUrl: './mcv-toggle-field.html',
+  styleUrl: './mcv-toggle-field.css',
   standalone: true,
   imports: [CommonModule, McvFieldErrors],
 })
