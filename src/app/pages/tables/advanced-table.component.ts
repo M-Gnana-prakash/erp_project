@@ -27,24 +27,46 @@ import { AdvancedTableComponent as UI_AdvancedTable, AdvancedTableColumn } from 
 })
 export class AdvancedTableComponent {
   columns: AdvancedTableColumn[] = [
+    { header: 'Date', field: 'date', sortable: true, type: 'date' },
     { header: 'Order ID', field: 'orderId', sortable: true },
     { header: 'Customer', field: 'customer', sortable: true },
+    { header: 'Category', field: 'category', sortable: true },
     { header: 'Product', field: 'product', sortable: true },
     { header: 'Quantity', field: 'quantity', sortable: true, type: 'number' },
     { header: 'Price', field: 'price', sortable: true, type: 'currency' },
+    { header: 'Discount', field: 'discount', sortable: true, type: 'number' },
+    { header: 'Total', field: 'total', sortable: true, type: 'currency' },
     { header: 'Status', field: 'status', sortable: true }
   ];
 
-  data = [
-    { orderId: '#ORD-7741', customer: 'Emma Watson', product: 'Wireless Mouse', quantity: 2, price: 50.00, status: 'Delivered' },
-    { orderId: '#ORD-8210', customer: 'John Doe', product: 'Gaming Keyboard', quantity: 1, price: 120.00, status: 'Pending' },
-    { orderId: '#ORD-9012', customer: 'Alice Smith', product: 'Monitor 27"', quantity: 1, price: 350.00, status: 'Shipped' },
-    { orderId: '#ORD-4432', customer: 'Robert Brown', product: 'USB-C Hub', quantity: 3, price: 45.00, status: 'Delivered' },
-    { orderId: '#ORD-1120', customer: 'Sarah Miller', product: 'Laptop Stand', quantity: 1, price: 85.00, status: 'Cancelled' },
-    { orderId: '#ORD-3390', customer: 'Michael Chen', product: 'Bluetooth Speaker', quantity: 2, price: 90.00, status: 'Delivered' },
-    { orderId: '#ORD-5561', customer: 'Olivia Taylor', product: 'Webcam HD', quantity: 1, price: 75.00, status: 'Pending' },
-    { orderId: '#ORD-2287', customer: 'David Wilson', product: 'External SSD 1TB', quantity: 1, price: 150.00, status: 'Shipped' },
-    { orderId: '#ORD-6612', customer: 'Sophia Garcia', product: 'Mechanical Pencil', quantity: 10, price: 1.50, status: 'Delivered' },
-    { orderId: '#ORD-8890', customer: 'James Anderson', product: 'Office Chair', quantity: 1, price: 210.00, status: 'Pending' }
-  ];
+  // Generate 1000 records for performance testing
+  data = Array.from({ length: 1000 }, (_, i) => {
+    const statuses = ['Delivered', 'Pending', 'Shipped', 'Cancelled'];
+    const products = ['Wireless Mouse', 'Gaming Keyboard', 'Monitor 27"', 'USB-C Hub', 'Laptop Stand', 'Bluetooth Speaker', 'Webcam HD', 'External SSD 1TB', 'Mechanical Pencil', 'Office Chair'];
+    const categories = ['Electronics', 'Accessories', 'Office Supplies', 'Furniture'];
+    const names = ['Emma Watson', 'John Doe', 'Alice Smith', 'Robert Brown', 'Sarah Miller', 'Michael Chen', 'Olivia Taylor', 'David Wilson', 'Sophia Garcia', 'James Anderson'];
+
+    const quantity = Math.floor(Math.random() * 10) + 1;
+    const price = Math.floor(Math.random() * 500) + 10;
+    const discount = Math.floor(Math.random() * 15);
+    const total = (price * quantity) - discount;
+
+    // Generate a random date within the last year
+    const start = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
+    const end = new Date();
+    const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime())).toISOString().split('T')[0];
+
+    return {
+      orderId: `#ORD-${7000 + i}`,
+      customer: `${names[i % names.length]} ${Math.floor(i / names.length) + 1}`,
+      product: products[i % products.length],
+      category: categories[i % categories.length],
+      quantity: quantity,
+      price: price,
+      discount: discount,
+      total: total > 0 ? total : 0,
+      date: date,
+      status: statuses[i % statuses.length]
+    };
+  });
 }

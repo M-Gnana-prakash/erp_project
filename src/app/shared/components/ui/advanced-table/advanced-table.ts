@@ -13,8 +13,7 @@ export interface AdvancedTableColumn {
     selector: 'app-mcv-advanced-table',
     standalone: true,
     imports: [CommonModule, FormsModule],
-    templateUrl: './advanced-table.html',
-    styleUrls: ['./advanced-table.css']
+    templateUrl: './advanced-table.html'
 })
 export class AdvancedTableComponent implements OnInit {
     @Input() columns: AdvancedTableColumn[] = [];
@@ -122,10 +121,20 @@ export class AdvancedTableComponent implements OnInit {
     }
 
     // Export
+    private escapeCSV(val: any): string {
+        if (val === null || val === undefined) return '""';
+        const str = String(val).replace(/"/g, '""');
+        return `"${str}"`;
+    }
+
     exportCSV() {
-        const headers = this.columns.map(c => c.header).join(',');
+        const headers = this.columns.map(c => this.escapeCSV(c.header)).join(',');
         const rows = this.filteredData().map(row =>
-            this.columns.map(col => `"${this.formatValue(row, col)}"`).join(',')
+            this.columns.map(col => {
+                const val = row[col.field];
+                // For CSV, we export raw numbers for better Excel/Calc compatibility
+                return this.escapeCSV(val);
+            }).join(',')
         ).join('\n');
 
         const csvContent = headers + "\n" + rows;
@@ -133,11 +142,28 @@ export class AdvancedTableComponent implements OnInit {
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.setAttribute("href", url);
-        link.setAttribute("download", "table_export.csv");
+        link.setAttribute("download", "table_export_clean.csv");
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
+    }
+
+    private formatPDFValue(item: any, col: AdvancedTableColumn): string {
+        const val = item[col.field];
+        if (val === null || val === undefined) return '';
+
+        if (col.type === 'currency') {
+            const formatted = new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                minimumFractionDigits: 2
+            }).format(Number(val));
+            // Standard PDF fonts don't support '₹', so we use 'Rs.' for the PDF export
+            return formatted.replace('₹', 'Rs. ');
+        }
+
+        return String(val);
     }
 
     async exportPDF() {
@@ -145,20 +171,42 @@ export class AdvancedTableComponent implements OnInit {
             const jsPDF = (await import('jspdf')).default;
             const autoTable = (await import('jspdf-autotable')).default;
 
-            const doc = new jsPDF();
+            // Use landscape orientation ('l') to fit 10 columns nicely
+            const doc = new jsPDF('l', 'mm', 'a4');
+
             const headers = [this.columns.map(c => c.header)];
             const body = this.filteredData().map(row =>
-                this.columns.map(col => this.formatValue(row, col))
+                this.columns.map(col => this.formatPDFValue(row, col))
             );
 
             autoTable(doc, {
                 head: headers,
                 body: body,
                 theme: 'grid',
-                headStyles: { fillColor: [79, 70, 229] } // Indigo-600
+                headStyles: {
+                    fillColor: [79, 70, 229],
+                    fontSize: 8,
+                    halign: 'center'
+                },
+                bodyStyles: {
+                    fontSize: 7,
+                    valign: 'middle'
+                },
+                columnStyles: {
+                    // Right-align numeric columns in PDF too
+                    5: { halign: 'right' }, // Quantity
+                    6: { halign: 'right' }, // Price
+                    7: { halign: 'right' }, // Discount
+                    8: { halign: 'right' }, // Total
+                },
+                margin: { top: 15, right: 10, bottom: 10, left: 10 },
+                didDrawPage: (data) => {
+                    doc.setFontSize(10);
+                    doc.text('Advanced Data Table - Performance Export', 14, 10);
+                }
             });
 
-            doc.save('table_export.pdf');
+            doc.save('table_export_pro.pdf');
         } catch (error) {
             console.error('Failed to export PDF:', error);
         }

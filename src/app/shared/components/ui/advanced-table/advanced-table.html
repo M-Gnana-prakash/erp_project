@@ -1,5 +1,5 @@
 <div
-    class="mcv-advanced-table-container bg-white dark:bg-boxdark rounded-xl shadow-sm border border-stroke dark:border-strokedark transition-all">
+    class="mcv-advanced-table-container bg-white dark:bg-boxdark rounded-xl shadow-sm border border-stroke dark:border-strokedark transition-all overflow-hidden block w-full">
     <!-- Header Controls -->
     @if (searchEnabled || exportEnabled) {
     <div
@@ -48,23 +48,23 @@
     <div class="max-w-full overflow-x-auto min-h-[300px]">
         <table class="w-full table-auto text-left">
             <thead>
-                <tr class="bg-gray-2 dark:bg-meta-4 border-b border-stroke dark:border-strokedark">
+                <tr class="bg-gray-2 dark:bg-meta-4 border-b border-stroke dark:border-strokedark transform-gpu">
                     @for (col of columns; track col.field) {
                     <th (click)="toggleSort(col.field)" [ngClass]="{
                             'cursor-pointer hover:bg-gray-100 dark:hover:bg-white/5': col.sortable !== false,
-                            'py-4 px-6 font-bold text-xs uppercase tracking-wider text-black dark:text-white transition-all': true
+                            'py-4 px-6 font-bold text-xs uppercase tracking-wider text-black dark:text-white whitespace-nowrap transition-all': true
                         }">
                         <div class="flex items-center gap-1.5">
                             {{ col.header }}
                             @if (col.sortable !== false) {
                             <div class="flex flex-col text-gray-400">
                                 <svg class="w-2.5 h-2.5"
-                                    [ngClass]="{'text-primary': sortField() === col.field && sortOrder() === 'asc'}"
+                                    [ngClass]="{'text-primary drop-shadow-[0_0_2px_rgba(59,130,246,0.5)]': sortField() === col.field && sortOrder() === 'asc'}"
                                     fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M12 4l-8 8h16z" />
                                 </svg>
                                 <svg class="w-2.5 h-2.5 -mt-1"
-                                    [ngClass]="{'text-primary': sortField() === col.field && sortOrder() === 'desc'}"
+                                    [ngClass]="{'text-primary drop-shadow-[0_0_2px_rgba(59,130,246,0.5)]': sortField() === col.field && sortOrder() === 'desc'}"
                                     fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M12 20l8-8H4z" />
                                 </svg>
@@ -79,7 +79,7 @@
                 @for (row of paginatedData(); track $index) {
                 <tr class="hover:bg-gray-50/50 dark:hover:bg-white/2 transition-colors duration-200">
                     @for (col of columns; track col.field) {
-                    <td class="py-4 px-6 text-sm text-body dark:text-bodydark font-medium"
+                    <td class="py-4 px-6 text-sm text-body dark:text-bodydark font-medium whitespace-nowrap"
                         [ngClass]="{'text-right': col.type === 'currency' || col.type === 'number'}">
                         {{ formatValue(row, col) }}
                     </td>
