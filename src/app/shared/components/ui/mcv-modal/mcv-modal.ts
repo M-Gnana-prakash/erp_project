@@ -13,6 +13,7 @@ import { McvAlert, McvAlertStatus } from '../mcv-alert/mcv-alert';
 })
 export class McvModal {
     @Input() isOpen: boolean = false;
+    @Input() titleBase: string = ''; // Renamed internally to avoid conflict if necessary, but actually let's just keep 'title'
     @Input() title: string = '';
     @Input() size: 'sm' | 'md' | 'lg' | 'xl' | 'full' = 'md';
 
@@ -20,16 +21,26 @@ export class McvModal {
     @Input() avatarSrc: string = '';
     @Input() avatarInitials: string = '';
     @Input() avatarName: string = '';
+    @Input() avatarSize: any = 'sm';
 
     // Badge Inputs
     @Input() badgeLabel: string = '';
     @Input() badgeVariant: any = 'primary';
+    @Input() badgeSoft: boolean = true;
 
     // Alert Inputs
     @Input() alertMessage: string = '';
     @Input() alertTitle: string = '';
     @Input() alertType: McvAlertStatus = 'info';
     @Input() showAlert: boolean = false;
+    @Input() alertDismissible: boolean = true;
+
+    // Title Icon
+    @Input() titleIcon: string = '';
+
+    // Direct Content & Buttons Inputs
+    @Input() content: string = '';
+    @Input() buttons: { label: string, onClick?: () => void, variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger', icon?: string }[] = [];
 
     @Output() close = new EventEmitter<void>();
 

@@ -1,4 +1,5 @@
-<div *ngIf="isOpen" class="fixed inset-0 z-[999999] flex items-center justify-center p-4 sm:p-6 md:p-10" role="dialog"
+@if (isOpen) {
+<div class="fixed inset-0 z-[999999] flex items-center justify-center p-4 sm:p-6 md:p-10" role="dialog"
     aria-modal="true">
 
     <!-- Backdrop -->
@@ -13,15 +14,23 @@
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700">
             <div class="flex items-center gap-3">
                 <!-- Integrated Avatar -->
-                <app-mcv-avatar *ngIf="avatarSrc || avatarInitials" [src]="avatarSrc" [initials]="avatarInitials"
-                    [name]="avatarName" size="sm">
+                @if (avatarSrc || avatarInitials) {
+                <app-mcv-avatar [src]="avatarSrc" [initials]="avatarInitials" [name]="avatarName" [size]="avatarSize">
                 </app-mcv-avatar>
+                }
 
-                <h3 class="text-xl font-bold text-gray-900 dark:text-white leading-none">{{title}}</h3>
+                <div class="flex items-center gap-2">
+                    @if (titleIcon) {
+                    <i [class]="titleIcon + ' text-gray-400 dark:text-gray-500'"></i>
+                    }
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white leading-none">{{title}}</h3>
+                </div>
 
                 <!-- Integrated Badge -->
-                <app-mcv-badge *ngIf="badgeLabel" [label]="badgeLabel" [variant]="badgeVariant" [soft]="true">
+                @if (badgeLabel) {
+                <app-mcv-badge [label]="badgeLabel" [variant]="badgeVariant" [soft]="badgeSoft">
                 </app-mcv-badge>
+                }
             </div>
 
             <button type="button" (click)="closeModal()"
@@ -34,19 +43,46 @@
         </div>
 
         <!-- Optional Integrated Alert Content -->
-        <div *ngIf="showAlert" class="px-6 pt-4">
+        @if (showAlert) {
+        <div class="px-6 pt-4">
             <app-mcv-alert [type]="alertType" [title]="alertTitle" [message]="alertMessage"
-                [dismissible]="true"></app-mcv-alert>
+                [dismissible]="alertDismissible"></app-mcv-alert>
         </div>
+        }
 
         <!-- Modal Body -->
         <div class="flex-1 px-6 py-6 overflow-y-auto min-h-[100px]">
+            @if (content) {
+            <div class="text-gray-600 dark:text-gray-400" [innerHTML]="content"></div>
+            } @else {
             <ng-content></ng-content>
+            }
         </div>
 
         <!-- Modal Footer -->
         <div class="px-6 py-4 bg-gray-50/50 dark:bg-gray-700/20 border-t border-gray-100 dark:border-gray-700">
-            <ng-container *ngTemplateOutlet="footerContent || defaultModalFooter"></ng-container>
+            <ng-container
+                *ngTemplateOutlet="footerContent || (buttons.length ? customButtonsFooter : defaultModalFooter)"></ng-container>
+
+            <ng-template #customButtonsFooter>
+                <div class="flex justify-end gap-3">
+                    @for (btn of buttons; track btn.label) {
+                    <button (click)="btn.onClick ? btn.onClick() : null" [ngClass]="{
+                                    'px-4 py-2 text-sm font-medium rounded-lg transition-colors': true,
+                                    'bg-indigo-600 text-white hover:bg-indigo-700': btn.variant === 'primary' || !btn.variant,
+                                    'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700': btn.variant === 'secondary' || btn.variant === 'outline',
+                                    'bg-red-600 text-white hover:bg-red-700': btn.variant === 'danger',
+                                    'bg-transparent text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700': btn.variant === 'ghost'
+                                }">
+                        @if (btn.icon) {
+                        <i [class]="btn.icon + ' mr-2'"></i>
+                        }
+                        {{btn.label}}
+                    </button>
+                    }
+                </div>
+            </ng-template>
+
             <ng-template #defaultModalFooter>
                 <div class="flex justify-end gap-3">
                     <button (click)="closeModal()"
@@ -58,3 +94,4 @@
         </div>
     </div>
 </div>
+}

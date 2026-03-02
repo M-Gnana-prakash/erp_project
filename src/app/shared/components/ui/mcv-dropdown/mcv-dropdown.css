@@ -14,3 +14,23 @@
 .animate-in {
     animation: in 0.2s ease-out forwards;
 }
+
+/* Custom Scrollbar for Dropdown */
+.max-h-\[280px\] {
+    overflow-y: auto !important;
+    scrollbar-width: thin;
+    scrollbar-color: #6366f1 transparent;
+}
+
+.max-h-\[280px\]::-webkit-scrollbar {
+    width: 5px;
+}
+
+.max-h-\[280px\]::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.max-h-\[280px\]::-webkit-scrollbar-thumb {
+    background: #6366f1;
+    border-radius: 10px;
+}

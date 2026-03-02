@@ -5,71 +5,31 @@
             support.</p>
     </div>
 
+    <!-- Trigger Buttons -->
     <div class="flex flex-wrap gap-4">
-        <button (click)="toggleBasic()"
-            class="px-6 py-2.5 bg-indigo-600 text-white rounded-xl shadow-lg shadow-indigo-500/30 hover:bg-indigo-700 transition-all font-medium">
-            Basic Modal
+        @for (modal of modalConfigs; track modal.id) {
+        <button (click)="toggleModal(modal.id)" [ngClass]="{
+                    'px-6 py-2.5 text-white rounded-xl shadow-lg transition-all font-medium': true,
+                    'bg-indigo-600 shadow-indigo-500/30 hover:bg-indigo-700': modal.id === 'basic',
+                    'bg-purple-600 shadow-purple-500/30 hover:bg-purple-700': modal.id === 'profile',
+                    'bg-red-600 shadow-red-500/30 hover:bg-red-700': modal.id === 'alert',
+                    'bg-green-600 shadow-green-500/30 hover:bg-green-700': modal.id === 'dynamic'
+                }">
+            {{modal.title}}
         </button>
-        <button (click)="toggleProfile()"
-            class="px-6 py-2.5 bg-purple-600 text-white rounded-xl shadow-lg shadow-purple-500/30 hover:bg-purple-700 transition-all font-medium">
-            Profile Modal
-        </button>
-        <button (click)="toggleAlert()"
-            class="px-6 py-2.5 bg-red-600 text-white rounded-xl shadow-lg shadow-red-500/30 hover:bg-red-700 transition-all font-medium">
-            Alert Modal
-        </button>
+        }
     </div>
 
-    <!-- Basic Modal -->
-    <app-mcv-modal title="Settings" [isOpen]="isBasicOpen()" (close)="toggleBasic()">
-        <p class="text-gray-600 dark:text-gray-400">
-            Configure your application preferences here. These changes will be applied instantly to your workspace.
-        </p>
+    <!-- Data-driven Modals -->
+    @for (modal of modalConfigs; track modal.id) {
+    <app-mcv-modal [title]="modal.title" [isOpen]="modal.isOpen()" (close)="toggleModal(modal.id)"
+        [content]="modal.content || ''" [buttons]="modal.buttons || []" [avatarSrc]="modal.avatarSrc || ''"
+        [avatarInitials]="modal.avatarInitials || ''" [avatarName]="modal.avatarName || ''"
+        [avatarSize]="modal.avatarSize || 'sm'" [badgeLabel]="modal.badgeLabel || ''"
+        [badgeVariant]="modal.badgeVariant || 'primary'" [badgeSoft]="modal.badgeSoft !== false"
+        [titleIcon]="modal.titleIcon || ''" [showAlert]="modal.showAlert || false" [alertTitle]="modal.alertTitle || ''"
+        [alertMessage]="modal.alertMessage || ''" [alertType]="modal.alertType || 'info'"
+        [alertDismissible]="modal.alertDismissible !== false">
     </app-mcv-modal>
-
-    <!-- Profile Modal with Avatar & Badge -->
-    <app-mcv-modal title="Account Details" [isOpen]="isProfileOpen()" (close)="toggleProfile()"
-        avatarSrc="https://i.pravatar.cc/150?u=account" [badgeLabel]="'Verified'" [badgeVariant]="'success'">
-
-        <div class="space-y-4">
-            <div class="grid grid-cols-2 gap-4">
-                <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
-                    <p class="text-xs text-gray-500 uppercase">Username</p>
-                    <p class="font-medium text-gray-900 dark:text-white">johndoe_dev</p>
-                </div>
-                <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
-                    <p class="text-xs text-gray-500 uppercase">Role</p>
-                    <p class="font-medium text-gray-900 dark:text-white">Administrator</p>
-                </div>
-            </div>
-            <p class="text-sm text-gray-600 dark:text-gray-400">
-                Member since January 2024. Last login was 2 hours ago from New York, USA.
-            </p>
-        </div>
-
-        <ng-template #footerContent>
-            <div class="flex justify-end gap-3">
-                <button (click)="toggleProfile()"
-                    class="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm">Cancel</button>
-                <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm shadow-md">Save Changes</button>
-            </div>
-        </ng-template>
-    </app-mcv-modal>
-
-    <!-- Alert Modal -->
-    <app-mcv-modal title="Security Breach" [isOpen]="isAlertOpen()" (close)="toggleAlert()" [showAlert]="true"
-        [badgeLabel]="'Critical'" [badgeVariant]="'danger'" alertTitle="Suspicious Login"
-        alertMessage="An unusual login attempt was detected from Moscow, Russia." alertType="danger">
-
-        <div class="p-4 border-l-4 border-yellow-400 bg-yellow-50 dark:bg-yellow-900/10 mb-4">
-            <p class="text-sm text-yellow-800 dark:text-yellow-200">
-                For your security, your account has been temporarily locked. Please verify your identity.
-            </p>
-        </div>
-
-        <p class="text-gray-600 dark:text-gray-400 text-sm">
-            Contact support immediately if this wasn't you. You will need to reset your password and enable 2FA after
-            verification.
-        </p>
-    </app-mcv-modal>
+    }
 </div>

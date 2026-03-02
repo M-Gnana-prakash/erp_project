@@ -54,10 +54,10 @@ export class McvDropdown {
 
     getButtonClasses(): string {
         const variants = {
-            primary: 'bg-indigo-600 text-white hover:bg-indigo-700',
-            outline: 'border border-gray-300 bg-white dark:bg-boxdark text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5',
-            ghost: 'bg-transparent text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5',
-            split: 'bg-indigo-600 text-white rounded-l-lg hover:bg-indigo-700'
+            primary: 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm cursor-pointer',
+            outline: 'border border-gray-300 bg-white dark:bg-boxdark text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 shadow-sm cursor-pointer',
+            ghost: 'bg-transparent text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 cursor-pointer',
+            split: 'bg-indigo-600 text-white rounded-l-lg hover:bg-indigo-700 cursor-pointer'
         };
         return variants[this.variant] || variants.primary;
     }
