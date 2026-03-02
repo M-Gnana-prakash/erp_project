@@ -31,6 +31,8 @@
   </app-mcv-email-field>
 
   <!-- Password -->
+   
+  
   <app-mcv-password-field label="Password" [value]="form.get('password')?.value"
     (statusChange)="handleStatusChange('password', $event)" [placeholder]="'Enter the password value'" [minLength]="5"
     [maxLength]="16" [required]="true" [regex]="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/"
@@ -48,7 +50,7 @@
   </app-mcv-password-field>
 
   <!-- Phone -->
-  <app-mcv-phone-field label="Phone Number" [showCountryCode]="true" [countryCode]="'+1'"
+  <app-mcv-phone-field label="Phone Number" [showCountryCode]="true" [countryCode]="'+91'"
     [value]="form.get('phone')?.value" (statusChange)="handleStatusChange('phone', $event)" [styles]="{
       borderStyle: '1px solid var(--form-border, #ccc)',
       outline: 'none',

@@ -1,45 +1,47 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { McvDatatree, McvDatatreeNode } from '../../../shared/components/ui/mcv-datatree/mcv-datatree';
 
 @Component({
     selector: 'app-mcv-datatree-page',
     standalone: true,
-    imports: [CommonModule, McvDatatree],
+    imports: [CommonModule, McvDatatree, FormsModule],
     templateUrl: './mcv-datatree-page.html',
     styleUrl: './mcv-datatree-page.css'
 })
 export class McvDatatreePage {
+    isReadOnly = false;
+    rbacAdd = true;
+    rbacEdit = true;
+    rbacDelete = true;
+    rbacExpandCollapse = true;
+
     treeData: McvDatatreeNode[] = [
         // {
         //     id: '1',
-        //     label: 'node1',
+        //     label: 'Google',
+        //     url: 'https://www.google.com',
         //     expanded: true,
         //     children: [
         //         {
         //             id: '1.1',
-        //             label: 'node1.1',
-        //             expanded: true,
-        //             children: [
-        //                 { id: '1.1.1', label: 'node1.1.1' }
-        //             ]
+        //             label: 'Gmail',
+        //             url: 'https://mail.google.com',
         //         },
-        //         { id: '1.2', label: 'node1.2' }
+        //         {
+        //             id: '1.2',
+        //             label: 'Calendar',
+        //             url: 'https://calendar.google.com',
+        //         }
         //     ]
         // },
         // {
         //     id: '2',
-        //     label: 'node2',
+        //     label: 'GitHub',
+        //     url: 'https://github.com',
         //     children: [
-        //         { id: '2.1', label: 'node2.1' },
-        //         { id: '2.2', label: 'node2.2' }
-        //     ]
-        // },
-        // {
-        //     id: '3',
-        //     label: 'node3',
-        //     children: [
-        //         { id: '3.1', label: 'node3.1' }
+        //         { id: '2.1', label: 'My Repositories', url: 'https://github.com?tab=repositories' }
         //     ]
         // }
     ];

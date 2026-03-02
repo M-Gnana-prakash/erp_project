@@ -11,6 +11,8 @@
 
   <!-- Input -->
   <div class="relative">
+
+    
     <input [disabled]="disabled" readonly (click)="toggle()" [value]="format(start) + (end ? ' – ' + format(end) : '')"
       placeholder="Enter a date range" class="w-full focus:outline-none transition-all duration-200"
       [style.border]="computedStyles.borderStyle" [style.background-color]="computedStyles.backgroundColor"

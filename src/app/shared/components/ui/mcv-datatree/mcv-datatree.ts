@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 export interface McvDatatreeNode {
     id: string;
     label: string;
+    url?: string;
     expanded?: boolean;
     isEditing?: boolean;
     children?: McvDatatreeNode[];
@@ -20,6 +21,13 @@ export interface McvDatatreeNode {
 export class McvDatatree {
     @Input() data: McvDatatreeNode[] = [];
     @Input() title: string = 'Data Tree';
+    @Input() readOnly: boolean = false;
+
+    // RBAC Inputs
+    @Input() canAdd: boolean = true;
+    @Input() canEdit: boolean = true;
+    @Input() canDelete: boolean = true;
+    @Input() canExpandCollapse: boolean = true;
 
     @Output() onAdd = new EventEmitter<McvDatatreeNode>();
     @Output() onDelete = new EventEmitter<McvDatatreeNode>();
@@ -31,6 +39,7 @@ export class McvDatatree {
     }
 
     startEditing(node: McvDatatreeNode, event: MouseEvent) {
+        if (this.readOnly || !this.canEdit) return;
         event.stopPropagation();
         node.isEditing = true;
     }
@@ -58,6 +67,7 @@ export class McvDatatree {
     }
 
     moveLastToBeginning() {
+        if (this.readOnly || !this.canEdit) return;
         if (this.data.length > 1) {
             const last = this.data.pop();
             if (last) {
@@ -67,6 +77,7 @@ export class McvDatatree {
     }
 
     addNode(parentNode?: McvDatatreeNode) {
+        if (this.readOnly || !this.canAdd) return;
         const newNode: McvDatatreeNode = {
             id: Math.random().toString(36).substring(2, 11),
             label: parentNode ? `${parentNode.label}.${(parentNode.children?.length || 0) + 1}` : `node${this.data.length + 1}`,
@@ -85,8 +96,16 @@ export class McvDatatree {
     }
 
     deleteNode(node: McvDatatreeNode) {
+        if (this.readOnly || !this.canDelete) return;
         this.data = this.removeNodeById(this.data, node.id);
         this.onDelete.emit(node);
+    }
+
+    openLink(node: McvDatatreeNode, event: MouseEvent) {
+        event.stopPropagation();
+        if (node.url) {
+            window.open(node.url, '_blank');
+        }
     }
 
     private removeNodeById(nodes: McvDatatreeNode[], id: string): McvDatatreeNode[] {

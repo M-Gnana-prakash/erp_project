@@ -4,6 +4,7 @@
     <div class="flex items-center justify-between mb-6 flex-wrap gap-4">
         <h2 class="text-2xl font-semibold text-gray-800 dark:text-white">{{ title }}</h2>
         <div class="flex gap-3 flex-wrap">
+            @if (!readOnly && canAdd) {
             <button (click)="addNode()"
                 class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors text-sm font-medium shadow-sm flex items-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -11,10 +12,12 @@
                 </svg>
                 New Node
             </button>
+            }
             <!-- <button (click)="moveLastToBeginning()"
                 class="px-4 py-2 bg-orange-400 hover:bg-orange-500 text-white rounded-lg transition-colors text-sm font-medium shadow-sm">
                 Ascending Order / Descending Order
             </button> -->
+            @if (canExpandCollapse) {
             <button (click)="expandAll()"
                 class="px-4 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/10 text-gray-600 dark:text-gray-300 rounded-lg transition-colors text-sm font-medium shadow-sm">
                 Expand all
@@ -23,6 +26,7 @@
                 class="px-4 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-white/10 text-gray-600 dark:text-gray-300 rounded-lg transition-colors text-sm font-medium shadow-sm">
                 Short all
             </button>
+            }
         </div>
     </div>
 
@@ -41,10 +45,12 @@
             </div>
             <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">No nodes found. Start by adding a new root node.
             </p>
+            @if (!readOnly && canAdd) {
             <button (click)="addNode()"
                 class="px-6 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-xl transition-all font-medium shadow-md hover:shadow-lg active:scale-95">
                 Add First Node
             </button>
+            }
         </div>
         }
     </div>
@@ -60,7 +66,7 @@
                 class="relative flex items-center gap-3 p-3 rounded-xl border border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 transition-all shadow-sm">
 
                 <!-- Toggle Icon -->
-                @if (node.children && node.children.length > 0) {
+                @if (node.children && node.children.length > 0 && canExpandCollapse) {
                 <button (click)="toggleNode(node)"
                     class="w-6 h-6 flex items-center justify-center rounded-md bg-green-500 text-white transition-transform duration-200"
                     [class.rotate-180]="node.expanded">
@@ -75,13 +81,24 @@
                 <!-- Node Label -->
                 <div class="flex-1 min-w-0 pr-4">
                     @if (node.isEditing) {
-                    <input [(ngModel)]="node.label" (blur)="stopEditing(node)" (keyup.enter)="stopEditing(node)"
-                        (click)="$event.stopPropagation()"
-                        class="w-full px-2 py-1 text-sm bg-white dark:bg-boxdark border border-blue-500 rounded-md outline-none focus:ring-2 focus:ring-blue-500/20"
-                        #editInput [autofocus]="true" />
+                    <div class="flex flex-col gap-2">
+                        <input [(ngModel)]="node.label" (keyup.enter)="stopEditing(node)"
+                            (click)="$event.stopPropagation()"
+                            class="w-full px-2 py-1 text-sm bg-white dark:bg-boxdark border border-blue-500 rounded-md outline-none focus:ring-2 focus:ring-blue-500/20"
+                            placeholder="Label" #labelInput [autofocus]="true" />
+                        <input [(ngModel)]="node.url" (keyup.enter)="stopEditing(node)"
+                            (click)="$event.stopPropagation()"
+                            class="w-full px-2 py-1 text-sm bg-white dark:bg-boxdark border border-blue-500 rounded-md outline-none focus:ring-2 focus:ring-blue-500/20"
+                            placeholder="URL (optional)" />
+                        <div class="flex justify-end">
+                            <button (click)="stopEditing(node)"
+                                class="text-xs text-blue-500 hover:text-blue-600 font-medium">Save</button>
+                        </div>
+                    </div>
                     } @else {
-                    <span (click)="startEditing(node, $event)"
-                        class="block text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-blue-500 cursor-pointer transition-colors truncate">
+                    <span (click)="startEditing(node, $event)" [class.cursor-pointer]="!readOnly && canEdit"
+                        [class.hover:text-blue-500]="!readOnly && canEdit"
+                        class="block text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors truncate">
                         {{ node.label }}
                     </span>
                     }
@@ -89,20 +106,36 @@
 
                 <!-- Actions -->
                 <div class="flex gap-2">
+                    @if (node.url) {
+                    <button (click)="openLink(node, $event)"
+                        class="p-1.5 rounded-md bg-green-500 hover:bg-green-600 text-white transition-colors shadow-sm"
+                        title="Open Link">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                    </button>
+                    }
+                    @if (!readOnly && canAdd) {
                     <button (click)="addNode(node)"
-                        class="p-1.5 rounded-md bg-blue-500 hover:bg-blue-600 text-white transition-colors shadow-sm">
+                        class="p-1.5 rounded-md bg-blue-500 hover:bg-blue-600 text-white transition-colors shadow-sm"
+                        title="Add Child Node">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                 d="M12 4v16m8-8H4" />
                         </svg>
                     </button>
+                    }
+                    @if (!readOnly && canDelete) {
                     <button (click)="deleteNode(node)"
-                        class="p-1.5 rounded-md bg-red-500 hover:bg-red-600 text-white transition-colors shadow-sm">
+                        class="p-1.5 rounded-md bg-red-500 hover:bg-red-600 text-white transition-colors shadow-sm"
+                        title="Delete Node">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                 d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
+                    }
                 </div>
 
                 <!-- Indentation Line -->

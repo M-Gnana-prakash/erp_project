@@ -14,6 +14,7 @@ export interface NavItem {
 @Injectable({
     providedIn: 'root'
 
+
 })
 export class SidebarService {
     isSidebarOpen = signal(true);
