@@ -1,5 +1,5 @@
 import { Component, signal, inject } from '@angular/core';
-import { AppHeaderComponent } from './shared/components/layout/app-header/app-header';
+import { AppHeader } from './shared/components/layout/app-header/app-header';
 import { AppSidebar } from './shared/components/layout/app-sidebar/app-sidebar';
 import { AppHorizontalSidebarComponent } from './shared/components/layout/app-horizontal-sidebar/app-horizontal-sidebar';
 import { SettingsComponent } from './shared/components/layout/settings/settings.component';
@@ -13,7 +13,7 @@ import { Router, RouterOutlet } from '@angular/router';
   standalone: true,
   imports: [
     CommonModule,
-    AppHeaderComponent,
+    AppHeader,
     AppSidebar,
     AppHorizontalSidebarComponent,
     SettingsComponent,

@@ -67,6 +67,12 @@ export class SidebarService {
             roles: ['Administrator', 'Moderator', 'User']
         },
         {
+            label: 'Speech to Text',
+            icon: '/images/side-bar-logos/pages-svgrepo-com.svg',
+            route: '/stt',
+            roles: ['Administrator', 'Moderator', 'User']
+        },
+        {
             label: 'User Profile',
             icon: '/images/side-bar-logos/user-profile-circle-svgrepo-com.svg',
             route: '/user-profile',

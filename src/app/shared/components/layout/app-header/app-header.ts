@@ -21,7 +21,7 @@ import { McvInputField } from '../../form/mcv-input-field/mcv-input-field';
   templateUrl: './app-header.html',
   styleUrl: './app-header.css',
 })
-export class AppHeaderComponent implements AfterViewInit, OnDestroy {
+export class AppHeader implements AfterViewInit, OnDestroy {
   isApplicationMenuOpen = false;
   readonly isMobileOpen$;
 

@@ -10,7 +10,7 @@ describe('AppHeader', () => {
     await TestBed.configureTestingModule({
       imports: [AppHeader]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(AppHeader);
     component = fixture.componentInstance;

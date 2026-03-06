@@ -23,8 +23,11 @@
     </div>
 
     <!-- Hidden Input for accessibility/form submission if needed (optional since we handle logic in TS) -->
-    <input type="checkbox" [checked]="value" [disabled]="disabled" [required]="required"
-      (change)="onInputChange($event)" (focus)="isFocused = true" (blur)="isFocused = false" class="sr-only" />Check Me!
+    <div style="color: var(--form-text); width: 100px;">
+      <input type="checkbox" [checked]="value" [disabled]="disabled" [required]="required"
+        (change)="onInputChange($event)" (focus)="isFocused = true" (blur)="isFocused = false" class="sr-only" />Check
+      Me!
+    </div>
 
     <!-- Label -->
     @if (label) {

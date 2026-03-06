@@ -55,7 +55,7 @@ export class FormDemo {
       gender: ['', Validators.required],
       isAgreed: [false, Validators.requiredTrue],
       time: [''],
-      dateRange: [''],
+      dateRange: [{ start: null, end: null }],
       CheckboxControlValueAccessor: [false, Validators.requiredTrue],
     });
   }
@@ -74,6 +74,7 @@ export class FormDemo {
 
   onSubmit() {
     if (this.form.valid) {
+      console.log('Form Data:', this.form.value);
       this.isSubmitted.set(true);
     }
   }

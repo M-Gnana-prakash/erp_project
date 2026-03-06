@@ -10,11 +10,11 @@
   }
 
   <!-- Input -->
-  <div class="relative">
+  <div class="relative w-auto">
 
-    
+
     <input [disabled]="disabled" readonly (click)="toggle()" [value]="format(start) + (end ? ' – ' + format(end) : '')"
-      placeholder="Enter a date range" class="w-full focus:outline-none transition-all duration-200"
+      placeholder="Enter a date range" class="w-60 focus:outline-none transition-all duration-200"
       [style.border]="computedStyles.borderStyle" [style.background-color]="computedStyles.backgroundColor"
       [style.color]="computedStyles.textColor" [ngClass]="{
           'px-2 py-1 text-xs': computedStyles.sizeVariant === 'sm',
@@ -24,7 +24,7 @@
           'rounded': true
       }" />
 
-    <span (click)="toggle()" class="absolute right-3 top-1/2 -translate-y-1/2 text-blue-600 cursor-pointer"
+    <span (click)="toggle()" class="absolute right-3 top-1/2 -translate-y-1/2 text-blue-600 cursor-pointer w-25"
       [style.color]="computedStyles.selectedColor">
       📅
     </span>

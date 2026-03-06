@@ -31,8 +31,6 @@
   </app-mcv-email-field>
 
   <!-- Password -->
-   
-  
   <app-mcv-password-field label="Password" [value]="form.get('password')?.value"
     (statusChange)="handleStatusChange('password', $event)" [placeholder]="'Enter the password value'" [minLength]="5"
     [maxLength]="16" [required]="true" [regex]="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/"
@@ -119,16 +117,18 @@
 </form>
 
 @if (isSubmitted()) {
-<p>Form Submitted Successfully</p>
-<p>Name: {{ form.get('name')?.value }}</p>
-<p>Email: {{ form.get('email')?.value }}</p>
-<p>Password: {{ form.get('password')?.value }}</p>
-<p>Phone: {{ form.get('phone')?.value }}</p>
-<p>DOB: {{ form.get('dob')?.value }}</p>
-<p>Description: {{ form.get('description')?.value }}</p>
-<p>Time: {{ form.get('time')?.value }}</p>
-<p>Gender: {{ form.get('gender')?.value }}</p>
-<p>Is Agreed: {{ form.get('isAgreed')?.value }}</p>
-<p>Checkbox: {{ form.get('CheckboxControlValueAccessor')?.value }}</p>
-<p>Date Range: {{ form.get('dateRange')?.value }}</p>
+<div style="color: var(--form-text);">
+  <p>Form Submitted Successfully</p>
+  <p>Name: {{ form.get('name')?.value }}</p>
+  <p>Email: {{ form.get('email')?.value }}</p>
+  <p>Password: {{ form.get('password')?.value }}</p>
+  <p>Phone: {{ form.get('phone')?.value }}</p>
+  <p>DOB: {{ form.get('dob')?.value }}</p>
+  <p>Description: {{ form.get('description')?.value }}</p>
+  <p>Time: {{ form.get('time')?.value }}</p>
+  <p>Gender: {{ form.get('gender')?.value }}</p>
+  <p>Is Agreed: {{ form.get('isAgreed')?.value }}</p>
+  <p>Checkbox: {{ form.get('CheckboxControlValueAccessor')?.value }}</p>
+  <p>Date Range: {{ form.get('dateRange')?.value?.start | date }} - {{ form.get('dateRange')?.value?.end | date }}</p>
+</div>
 }

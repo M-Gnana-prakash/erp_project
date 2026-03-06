@@ -33,6 +33,7 @@ import { McvCardsPage } from './pages/ui-elements/mcv-cards-page/mcv-cards-page'
 import { McvModalsPage } from './pages/ui-elements/mcv-modals-page/mcv-modals-page';
 import { McvDatatreePage } from './pages/ui-elements/mcv-datatree-page/mcv-datatree-page';
 import { TtsComponent } from './pages/tts/tts.component';
+import { SttComponent } from './pages/stt/stt.component';
 
 
 export const routes: Routes = [
@@ -41,6 +42,7 @@ export const routes: Routes = [
     { path: 'dashboard/ecommerce', component: EcommerceComponent },
     { path: 'calender', component: CalendarComponent },
     { path: 'tts', component: TtsComponent },
+    { path: 'stt', component: SttComponent },
     { path: 'user-profile', component: UserProfileComponent },
     {
         path: 'forms',
