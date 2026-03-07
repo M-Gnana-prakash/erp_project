@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
 import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
+import { SttService } from '../../../services/stt.service';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-mcv-email-field',
@@ -11,6 +13,36 @@ import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
   styleUrl: './mcv-email-field.css',
 })
 export class McvEmailField {
+  private sttService = inject(SttService);
+  public isRecordingSTT = false;
+  private recognitionInstance: any;
+
+  toggleSTT(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (this.isRecordingSTT) {
+      this.recognitionInstance?.stop();
+      this.isRecordingSTT = false;
+      return;
+    }
+    this.isRecordingSTT = true;
+    this.recognitionInstance = this.sttService.recognize(
+      (text) => {
+        // Remove spaces and lowercase for emails
+        let cleanedText = text.replace(/\\s+/g, '').toLowerCase();
+        // Replace phonetics with actual characters
+        cleanedText = cleanedText.replace(/at/g, '@').replace(/dot/g, '.');
+
+        // Remove ANY remaining spaces again just to be safe
+        cleanedText = cleanedText.trim().replace(/ /g, '');
+
+        this.value = cleanedText;
+        this.isTouched = true;
+        this.validate();
+      },
+      () => { this.isRecordingSTT = false; }
+    );
+  }
 
   @Input() label: string = '';
   @Input() value: string = '';

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
 import { COUNTRY_CODES, PHONE_MAX_LENGTH_BY_COUNTRY } from './phone-country-codes';
 import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
+import { SttService } from '../../../services/stt.service';
 
 @Component({
   selector: 'app-mcv-phone-field',
@@ -31,6 +32,35 @@ export class McvPhoneField implements OnInit, OnChanges {
   private _rawValue: string = '';
 
   private cdr = inject(ChangeDetectorRef);
+  private sttService = inject(SttService);
+
+  public isRecordingSTT = false;
+  private recognitionInstance: any;
+
+  toggleSTT(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (this.isRecordingSTT) {
+      this.recognitionInstance?.stop();
+      this.isRecordingSTT = false;
+      return;
+    }
+    this.isRecordingSTT = true;
+    this.recognitionInstance = this.sttService.recognize(
+      (text) => {
+        // Parse and leave only digits
+        let parsed = this.sttService.parseNumber(text);
+        this.value = parsed.replace(/\\D/g, '');
+        this.isTouched = true;
+        this.validate();
+        this.cdr.detectChanges();
+      },
+      () => {
+        this.isRecordingSTT = false;
+        this.cdr.detectChanges();
+      }
+    );
+  }
 
   private _countryCode: string = '';
   @Input() set countryCode(val: string) {

@@ -3,7 +3,7 @@
   <!-- Name -->
   <app-mcv-input-field label="Name" [value]="form.get('name')?.value"
     (statusChange)="handleStatusChange('name', $event)" [placeholder]="'Enter the input value'" [minLength]="3"
-    [maxLength]="10" [required]="true" [regex]="/^[a-zA-Z]+$/" [disabled]="false" [readonly]="false" [styles]="{
+    [maxLength]="30" [required]="true" [regex]="/^[a-zA-Z ]+$/" [disabled]="false" [readonly]="false" [styles]="{
       borderStyle: '1px solid var(--form-border, #ccc)',
       outline: 'none',
       textColor: 'var(--form-text, #333)',
@@ -73,7 +73,7 @@
       activeTextColor: 'var(--form-text, #333)',
       activeBackgroundColor: 'var(--form-bg, #fff)',
       sizeVariant: 'md'
-    }" [format]="'yyyy-MM-dd'" [min]="'2025/12/25'" [max]="'2026/02/28'">
+    }" [format]="'yyyy-MM-dd'" [min]="'2000-01-01'" [max]="'2026-02-28'">
   </app-mcv-date-picker>
 
   <!-- Text Area -->

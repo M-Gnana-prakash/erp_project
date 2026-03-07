@@ -25,6 +25,17 @@
                  inputClass
                ]"
             [style.color]="isFocused ? (computedStyles.activeTextColor || null) : (computedStyles.textColor || null)" />
+
+        <!-- Microphone Button -->
+        <button type="button" (click)="toggleSTT($event)"
+            class="p-2 text-gray-400 hover:text-indigo-600 focus:outline-none transition-colors"
+            [ngClass]="{'text-red-500 animate-pulse': isRecordingSTT}">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z">
+                </path>
+            </svg>
+        </button>
     </div>
 
     <!-- Validation -->

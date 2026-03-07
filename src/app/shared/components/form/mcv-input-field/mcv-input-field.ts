@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, Output, ViewChild, ElementRef } from '@
 import { CommonModule } from '@angular/common';
 import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
 import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
+import { SttService } from '../../../services/stt.service';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-mcv-input-field',
@@ -11,6 +13,33 @@ import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
   styleUrl: './mcv-input-field.css',
 })
 export class McvInputField {
+  private sttService = inject(SttService);
+  public isRecordingSTT = false;
+  private recognitionInstance: any;
+
+  toggleSTT(event: Event) {
+    event.preventDefault(); // Prevent accidental form submit
+    event.stopPropagation();
+    if (this.isRecordingSTT) {
+      this.recognitionInstance?.stop();
+      this.isRecordingSTT = false;
+      return;
+    }
+    this.isRecordingSTT = true;
+    this.recognitionInstance = this.sttService.recognize(
+      (text) => {
+        if (this.type === 'number' || this.label?.toLowerCase().includes('age')) {
+          this.value = this.sttService.parseNumber(text);
+        } else {
+          this.value = text;
+        }
+        this.isTouched = true;
+        this.validate();
+      },
+      () => { this.isRecordingSTT = false; }
+    );
+  }
+
   @ViewChild('inputField') inputField!: ElementRef<HTMLInputElement>;
 
   focus() {

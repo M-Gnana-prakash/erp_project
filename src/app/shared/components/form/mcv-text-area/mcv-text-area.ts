@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { McvFieldStyles, DEFAULT_MCV_FIELD_STYLES } from '../form-types';
 import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
+import { SttService } from '../../../services/stt.service';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-mcv-text-area',
@@ -11,6 +13,36 @@ import { McvFieldErrors } from '../mcv-field-errors/mcv-field-errors';
   styleUrl: './mcv-text-area.css',
 })
 export class McvTextArea {
+  private sttService = inject(SttService);
+  public isRecordingSTT = false;
+  private recognitionInstance: any;
+
+  toggleSTT(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (this.isRecordingSTT) {
+      this.recognitionInstance?.stop();
+      this.isRecordingSTT = false;
+      return;
+    }
+    this.isRecordingSTT = true;
+    this.recognitionInstance = this.sttService.recognize(
+      (text) => {
+        let processed = this.sttService.parsePunctuation(text);
+
+        // Ensure proper spacing and capitalization when appending
+        if (this.value && !this.value.endsWith(' ')) {
+          this.value += ' ';
+        }
+
+        this.value += processed;
+        this.isTouched = true;
+        this.validate();
+      },
+      () => { this.isRecordingSTT = false; },
+      true
+    );
+  }
 
   @Input() label: string = '';
   @Input() value: string = '';
