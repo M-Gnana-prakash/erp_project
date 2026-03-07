@@ -17,7 +17,7 @@ import { AdvancedTableComponent as UI_AdvancedTable, AdvancedTableColumn } from 
         <app-mcv-advanced-table 
           [columns]="columns" 
           [data]="data" 
-          [pageSize]="5"
+          [pageSize]="10"
           [searchEnabled]="true"
           [exportEnabled]="true">
         </app-mcv-advanced-table>

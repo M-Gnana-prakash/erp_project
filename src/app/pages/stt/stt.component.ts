@@ -17,12 +17,15 @@ interface IWindow extends Window {
 export class SttComponent implements OnInit, OnDestroy {
 
     transcribedText: string = '';
+    originalText: string = '';
     interimTranscript: string = '';
     selectedLanguage: string = 'en-IN';
 
     isRecording: boolean = false;
     recognition: any = null;
     errorMessage: string = '';
+
+    translateToEnglish: boolean = true;
 
     constructor(private ngZone: NgZone) { }
 
@@ -80,8 +83,7 @@ export class SttComponent implements OnInit, OnDestroy {
                 }
 
                 if (finalTranscript) {
-                    this.transcribedText +=
-                        (this.transcribedText ? ' ' : '') + finalTranscript;
+                    this.processFinalTranscript(finalTranscript);
                 }
             });
         };
@@ -170,16 +172,60 @@ export class SttComponent implements OnInit, OnDestroy {
     // -------------------------------
     clearText(): void {
         this.transcribedText = '';
+        this.originalText = '';
         this.interimTranscript = '';
     }
 
     // -------------------------------
     // Display Combined Text
     // -------------------------------
-    get displayText(): string {
-        return this.transcribedText +
+    get displayOriginalText(): string {
+        return this.originalText +
             (this.interimTranscript
-                ? (this.transcribedText ? ' ' : '') + this.interimTranscript
+                ? (this.originalText ? ' ' : '') + this.interimTranscript
                 : '');
+    }
+
+    get displayTranslatedText(): string {
+        return this.transcribedText;
+    }
+
+    // -------------------------------
+    // Translation Logic
+    // -------------------------------
+    private async processFinalTranscript(text: string) {
+        if (!text.trim()) return;
+
+        this.originalText += (this.originalText ? ' ' : '') + text;
+
+        if (this.translateToEnglish && !this.selectedLanguage.startsWith('en')) {
+            try {
+                const translatedText = await this.translateText(text, this.selectedLanguage, 'en');
+                this.ngZone.run(() => {
+                    this.transcribedText += (this.transcribedText ? ' ' : '') + translatedText;
+                });
+            } catch (error) {
+                console.error('Translation failed', error);
+                this.ngZone.run(() => {
+                    this.transcribedText += (this.transcribedText ? ' ' : '') + text;
+                });
+            }
+        } else {
+            this.transcribedText += (this.transcribedText ? ' ' : '') + text;
+        }
+    }
+
+    private async translateText(text: string, sourceLang: string, targetLang: string = 'en'): Promise<string> {
+        const langMap: { [key: string]: string } = {
+            'en-IN': 'en', 'en-US': 'en', 'en-GB': 'en',
+            'es-ES': 'es', 'fr-FR': 'fr', 'hi-IN': 'hi', 'ta-IN': 'ta'
+        };
+        const sl = langMap[sourceLang] || 'auto';
+
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Translation API failed');
+        const data = await response.json();
+        return data[0].map((item: any) => item[0]).join('');
     }
 }
