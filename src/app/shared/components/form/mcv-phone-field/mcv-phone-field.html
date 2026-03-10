@@ -33,7 +33,8 @@
           ? computedStyles.activeTextColor
           : computedStyles.textColor">
       @for (item of countryCodes; track item.code) {
-      <option [value]="item.code">{{ item.code }}</option>
+      <option [value]="item.code" class="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">{{ item.code}}
+      </option>
       }
     </select>
     }

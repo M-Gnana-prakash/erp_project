@@ -196,23 +196,68 @@ export class SttComponent implements OnInit, OnDestroy {
     private async processFinalTranscript(text: string) {
         if (!text.trim()) return;
 
-        this.originalText += (this.originalText ? ' ' : '') + text;
+        const processedText = this.parsePunctuation(text);
+
+        this.originalText += (this.originalText ? ' ' : '') + processedText;
 
         if (this.translateToEnglish && !this.selectedLanguage.startsWith('en')) {
             try {
-                const translatedText = await this.translateText(text, this.selectedLanguage, 'en');
+                const translatedText = await this.translateText(processedText, this.selectedLanguage, 'en');
                 this.ngZone.run(() => {
                     this.transcribedText += (this.transcribedText ? ' ' : '') + translatedText;
                 });
             } catch (error) {
                 console.error('Translation failed', error);
                 this.ngZone.run(() => {
-                    this.transcribedText += (this.transcribedText ? ' ' : '') + text;
+                    this.transcribedText += (this.transcribedText ? ' ' : '') + processedText;
                 });
             }
         } else {
-            this.transcribedText += (this.transcribedText ? ' ' : '') + text;
+            this.transcribedText += (this.transcribedText ? ' ' : '') + processedText;
         }
+    }
+
+    parsePunctuation(text: string): string {
+        const punctuationMap: { [key: string]: string } = {
+            'period': '.',
+            'comma': ',',
+            'question mark': '?',
+            'exclamation mark': '!',
+            'colon': ':',
+            'semicolon': ';',
+            'dash': '-',
+            'hyphen': '-',
+            'underscore': '_',
+            'star': '*',
+            'asterisk': '*',
+            'at sign': '@',
+            'hash': '#',
+            'pound': '#',
+            'dollar sign': '$',
+            'percent': '%',
+            'ampersand': '&',
+            'plus': '+',
+            'equals': '=',
+            'by': '/',
+            'backslash': '\\'
+        };
+
+        let processedText = text.toLowerCase();
+
+        // Use regex with word boundaries to replace punctuation words
+        Object.keys(punctuationMap).forEach(word => {
+            const regex = new RegExp(`\\b${word}\\b`, 'gi');
+            processedText = processedText.replace(regex, punctuationMap[word]);
+        });
+
+        // Also handle cases where there might be a space before the punctuation
+        // e.g., "Hello world ." -> "Hello world."
+        processedText = processedText.replace(/\s+([.,!?:;])/g, '$1');
+
+        // Capitalize first letter of sentences if possible (crude approach)
+        processedText = processedText.replace(/(^|[.!?]\s+)([a-z])/g, (match) => match.toUpperCase());
+
+        return processedText;
     }
 
     private async translateText(text: string, sourceLang: string, targetLang: string = 'en'): Promise<string> {

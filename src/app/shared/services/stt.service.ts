@@ -127,7 +127,7 @@ export class SttService {
             'ampersand': '&',
             'plus': '+',
             'equals': '=',
-            'slash': '/',
+            'by': '/',
             'backslash': '\\'
         };
 
@@ -148,4 +148,39 @@ export class SttService {
 
         return processedText;
     }
+
+    parsePassword(passwordStr: string): string {
+        // Replace spelled out special characters with actual symbols
+        const specialCharMap: { [key: string]: string } = {
+            'at': '@',
+            'dot': '.',
+            'underscore': '_',
+            'dash': '-',
+            'hyphen': '-',
+            'ampersand': '&',
+            'plus': '+',
+            'equals': '=',
+            'slash': '/',
+            'backslash': '\\'
+        };
+
+        // Split by spaces and process each part
+        const parts = passwordStr.split(' ');
+        let result = '';
+
+        for (const part of parts) {
+            const lowerPart = part.toLowerCase();
+
+            if (specialCharMap[lowerPart]) {
+                result += specialCharMap[lowerPart];
+            } else if (lowerPart === 'space') {
+                result += ' ';
+            } else {
+                result += part;
+            }
+        }
+
+        return result;
+    }
+
 }

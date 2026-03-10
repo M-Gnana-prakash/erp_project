@@ -1,3 +1,25 @@
+<div class="flex justify-start mb-6 -mx-4">
+  <button (click)="toggleListening()" [class.bg-red-500]="isListening()" [class.bg-blue-500]="!isListening()"
+    class="flex items-center gap-2 px-6 py-3 rounded-full text-white font-medium transition-all hover:scale-105 active:scale-95 shadow-lg overflow-hidden relative">
+    @if (isListening()) {
+    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z">
+      </path>
+    </svg>
+    <span>Listening...</span>
+    } @else {
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z">
+      </path>
+    </svg>
+    <span>Start Voice Fill</span>
+    }
+  </button>
+</div>
+
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="grid grid-cols-4 gap-4">
 
   <!-- Name -->
@@ -33,7 +55,7 @@
   <!-- Password -->
   <app-mcv-password-field label="Password" [value]="form.get('password')?.value"
     (statusChange)="handleStatusChange('password', $event)" [placeholder]="'Enter the password value'" [minLength]="5"
-    [maxLength]="16" [required]="true" [regex]="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/"
+    [maxLength]="16" [required]="true" [regex]="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@!%*?&])[A-Za-z\d@$!%*?&]{8,}$/"
     [disabled]="false" [readonly]="false" [styles]="{
       borderStyle: '1px solid var(--form-border, #ccc)',
       outline: 'none',
@@ -87,7 +109,7 @@
   </app-mcv-time-picker>
 
   <!-- Toggle -->
-  <app-mcv-toggle-field label="Agree to Terms" [value]="form.get('isAgreed')?.value" onLabel="Yes" offLabel="No"
+  <app-mcv-toggle-field label="Terms and Conditions" [value]="form.get('isAgreed')?.value" onLabel="Yes" offLabel="No"
     [required]="true" (statusChange)="handleStatusChange('isAgreed', $event)">
   </app-mcv-toggle-field>
 
@@ -97,8 +119,8 @@
   </app-mcv-date-range-picker>
 
   <!-- Checkbox -->
-  <app-mcv-checkbox label="Subscribe to Newsletter" [checked]="form.get('CheckboxControlValueAccessor')?.value"
-    [required]="true" (statusChange)="handleStatusChange('CheckboxControlValueAccessor', $event)">
+  <app-mcv-checkbox label="Subscribe" [checked]="form.get('CheckboxControlValueAccessor')?.value" [required]="true"
+    (statusChange)="handleStatusChange('CheckboxControlValueAccessor', $event)">
   </app-mcv-checkbox>
 
   <!-- Radio Field -->
@@ -127,8 +149,8 @@
   <p>Description: {{ form.get('description')?.value }}</p>
   <p>Time: {{ form.get('time')?.value }}</p>
   <p>Gender: {{ form.get('gender')?.value }}</p>
-  <p>Is Agreed: {{ form.get('isAgreed')?.value }}</p>
-  <p>Checkbox: {{ form.get('CheckboxControlValueAccessor')?.value }}</p>
+  <p>Terms Toggle: {{ form.get('isAgreed')?.value }}</p>
+  <p>Check Me: {{ form.get('checkMe')?.value }}</p>
   <p>Date Range: {{ form.get('dateRange')?.value?.start | date }} - {{ form.get('dateRange')?.value?.end | date }}</p>
 </div>
 }
