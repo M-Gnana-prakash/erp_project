@@ -69,21 +69,24 @@ export class SttComponent implements OnInit, OnDestroy {
         // Result Event
         this.recognition.onresult = (event: any) => {
             this.ngZone.run(() => {
-                let finalTranscript = '';
+                let fullTranscript = '';
                 this.interimTranscript = '';
 
-                for (let i = event.resultIndex; i < event.results.length; i++) {
+                for (let i = 0; i < event.results.length; i++) {
                     const transcript = event.results[i][0].transcript;
 
                     if (event.results[i].isFinal) {
-                        finalTranscript += transcript;
+                        // For display logic in this component, we still distinguish
+                        // but for the "transcribedText" (translated), we can update more aggressively
+                        fullTranscript += (fullTranscript ? ' ' : '') + transcript;
                     } else {
                         this.interimTranscript += transcript;
                     }
                 }
 
-                if (finalTranscript) {
-                    this.processFinalTranscript(finalTranscript);
+                // If we have any stable part or just want to process what we have
+                if (fullTranscript) {
+                    this.processRealTimeTranscript(fullTranscript);
                 }
             });
         };
@@ -193,27 +196,28 @@ export class SttComponent implements OnInit, OnDestroy {
     // -------------------------------
     // Translation Logic
     // -------------------------------
-    private async processFinalTranscript(text: string) {
+    private async processRealTimeTranscript(text: string) {
         if (!text.trim()) return;
 
         const processedText = this.parsePunctuation(text);
 
-        this.originalText += (this.originalText ? ' ' : '') + processedText;
+        // In real-time mode, text is the FULL transcript so far
+        this.originalText = processedText;
 
         if (this.translateToEnglish && !this.selectedLanguage.startsWith('en')) {
             try {
                 const translatedText = await this.translateText(processedText, this.selectedLanguage, 'en');
                 this.ngZone.run(() => {
-                    this.transcribedText += (this.transcribedText ? ' ' : '') + translatedText;
+                    this.transcribedText = translatedText;
                 });
             } catch (error) {
                 console.error('Translation failed', error);
                 this.ngZone.run(() => {
-                    this.transcribedText += (this.transcribedText ? ' ' : '') + processedText;
+                    this.transcribedText = processedText;
                 });
             }
         } else {
-            this.transcribedText += (this.transcribedText ? ' ' : '') + processedText;
+            this.transcribedText = processedText;
         }
     }
 

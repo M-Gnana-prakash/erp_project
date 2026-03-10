@@ -16,6 +16,7 @@ export class McvTextArea {
   private sttService = inject(SttService);
   public isRecordingSTT = false;
   private recognitionInstance: any;
+  private initialValueDuringSTT = '';
 
   toggleSTT(event: Event) {
     event.preventDefault();
@@ -25,17 +26,15 @@ export class McvTextArea {
       this.isRecordingSTT = false;
       return;
     }
+    this.initialValueDuringSTT = this.value;
     this.isRecordingSTT = true;
     this.recognitionInstance = this.sttService.recognize(
       (text) => {
         let processed = this.sttService.parsePunctuation(text);
 
-        // Ensure proper spacing and capitalization when appending
-        if (this.value && !this.value.endsWith(' ')) {
-          this.value += ' ';
-        }
+        const spacer = this.initialValueDuringSTT && !this.initialValueDuringSTT.endsWith(' ') ? ' ' : '';
+        this.value = this.initialValueDuringSTT + spacer + processed;
 
-        this.value += processed;
         this.isTouched = true;
         this.validate();
       },

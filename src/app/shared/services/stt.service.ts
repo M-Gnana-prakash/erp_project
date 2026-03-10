@@ -27,19 +27,17 @@ export class SttService {
 
         const recognition = new SpeechRecognitionClass();
         recognition.continuous = continuous;
-        recognition.interimResults = false;
+        recognition.interimResults = true;
         recognition.lang = 'en-US';
 
         recognition.onresult = (event: any) => {
             this.ngZone.run(() => {
-                let finalTranscript = '';
-                for (let i = event.resultIndex; i < event.results.length; i++) {
-                    if (event.results[i].isFinal) {
-                        finalTranscript += event.results[i][0].transcript;
-                    }
+                let transcript = '';
+                for (let i = 0; i < event.results.length; i++) {
+                    transcript += (transcript ? ' ' : '') + event.results[i][0].transcript;
                 }
-                if (finalTranscript) {
-                    onResult(finalTranscript.trim());
+                if (transcript) {
+                    onResult(transcript);
                 }
             });
         };
@@ -80,7 +78,7 @@ export class SttService {
 
         let total = 0;
         let current = 0;
-        const words = text.toLowerCase().split(/\\s|-/);
+        const words = text.toLowerCase().split(/\s|-/);
 
         let isNumberWords = false;
         for (const w of words) {

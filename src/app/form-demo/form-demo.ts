@@ -43,6 +43,7 @@ export class FormDemo {
 
   isSubmitted = signal<boolean>(false);
   isListening = signal<boolean>(false);
+  currentTranscript = signal<string>("");
   recognition: any;
 
   form: FormGroup;
@@ -93,12 +94,15 @@ export class FormDemo {
 
   startListening() {
     this.isListening.set(true);
+    this.currentTranscript.set("");
     this.recognition = this.sttService.recognize(
       (text) => {
+        this.currentTranscript.set(text);
         this.handleVoiceCommand(text);
       },
       () => {
         this.isListening.set(false);
+        this.currentTranscript.set("");
       },
       true // Continuous
     );
