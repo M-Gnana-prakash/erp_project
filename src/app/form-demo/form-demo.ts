@@ -99,6 +99,8 @@ export class FormDemo {
       (text) => {
         this.currentTranscript.set(text);
         this.handleVoiceCommand(text);
+        // Log to backend
+        this.sttService.saveTranscription(text, 'basic-form-global', 'multiple-fields');
       },
       () => {
         this.isListening.set(false);

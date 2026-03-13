@@ -1,4 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
 
 interface IWindow extends Window {
     SpeechRecognition: any;
@@ -9,8 +11,31 @@ interface IWindow extends Window {
     providedIn: 'root'
 })
 export class SttService {
-    constructor(private ngZone: NgZone) { }
+    private recognition: any = null;
 
+    constructor(private ngZone: NgZone, private http: HttpClient) { }
+
+    /**
+     * Sends recognized text to the backend for MySQL storage
+     */
+    async saveTranscription(transcript: string, formId: string = 'unknown', fieldName: string = 'none') {
+        try {
+            await lastValueFrom(this.http.post('http://localhost:8000/api/stt_save.php', {
+                transcript,
+                form_id: formId,
+                field_name: fieldName
+            }));
+        } catch (error) {
+            console.error('Failed to save transcription to backend', error);
+        }
+    }
+
+    /**
+     * Start browser-native speech recognition
+     * @param onResult Callback for final or interim text
+     * @param onEnd Callback when recognition stops
+     * @param continuous Keep listening or stop after one sentence
+     */
     recognize(
         onResult: (text: string) => void,
         onEnd: () => void,
@@ -20,21 +45,21 @@ export class SttService {
         const SpeechRecognitionClass = win.SpeechRecognition || win.webkitSpeechRecognition;
 
         if (!SpeechRecognitionClass) {
-            console.error('Speech Recognition API not supported.');
+            console.error('Browser Speech Recognition API not supported.');
             onEnd();
             return null;
         }
 
-        const recognition = new SpeechRecognitionClass();
-        recognition.continuous = continuous;
-        recognition.interimResults = true;
-        recognition.lang = 'en-US';
+        this.recognition = new SpeechRecognitionClass();
+        this.recognition.continuous = continuous;
+        this.recognition.interimResults = true;
+        this.recognition.lang = 'en-US';
 
-        recognition.onresult = (event: any) => {
+        this.recognition.onresult = (event: any) => {
             this.ngZone.run(() => {
                 let transcript = '';
-                for (let i = 0; i < event.results.length; i++) {
-                    transcript += (transcript ? ' ' : '') + event.results[i][0].transcript;
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    transcript += event.results[i][0].transcript;
                 }
                 if (transcript) {
                     onResult(transcript);
@@ -42,29 +67,36 @@ export class SttService {
             });
         };
 
-        recognition.onerror = (event: any) => {
+        this.recognition.onerror = (event: any) => {
             console.error('STT error', event.error);
             this.ngZone.run(() => {
                 onEnd();
             });
         };
 
-        recognition.onend = () => {
+        this.recognition.onend = () => {
             this.ngZone.run(() => {
                 onEnd();
             });
         };
 
         try {
-            recognition.start();
+            this.recognition.start();
         } catch (e) {
             console.error(e);
             onEnd();
         }
-        return recognition;
+        return this.recognition;
     }
 
-    // Parse words to number (e.g. "twenty three" -> 23)
+    stop() {
+        if (this.recognition) {
+            this.recognition.stop();
+        }
+    }
+
+    // --- Helpers ---
+
     parseNumber(text: string): string {
         const numWords: { [key: string]: number } = {
             zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9,
@@ -73,8 +105,7 @@ export class SttService {
             twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90
         };
 
-        // Check if it's already a number
-        if (!isNaN(Number(text.replace(/\\s/g, '')))) return text.replace(/\\s/g, '');
+        if (!isNaN(Number(text.replace(/\s/g, '')))) return text.replace(/\s/g, '');
 
         let total = 0;
         let current = 0;
@@ -95,90 +126,25 @@ export class SttService {
             }
         }
         total += current;
-
-        if (isNumberWords) {
-            return total.toString();
-        }
-
-        return text;
+        return isNumberWords ? total.toString() : text;
     }
 
-    // Convert spoken punctuation words into symbols
     parsePunctuation(text: string): string {
         const punctuationMap: { [key: string]: string } = {
-            'period': '.',
-            'comma': ',',
-            'question mark': '?',
-            'exclamation mark': '!',
-            'colon': ':',
-            'semicolon': ';',
-            'dash': '-',
-            'hyphen': '-',
-            'underscore': '_',
-            'star': '*',
-            'asterisk': '*',
-            'at sign': '@',
-            'hash': '#',
-            'pound': '#',
-            'dollar sign': '$',
-            'percent': '%',
-            'ampersand': '&',
-            'plus': '+',
-            'equals': '=',
-            'by': '/',
-            'backslash': '\\'
+            'period': '.', 'comma': ',', 'question mark': '?', 'exclamation mark': '!',
+            'colon': ':', 'semicolon': ';', 'dash': '-', 'hyphen': '-',
+            'underscore': '_', 'star': '*', 'asterisk': '*', 'at sign': '@',
+            'hash': '#', 'pound': '#', 'dollar sign': '$', 'percent': '%',
+            'ampersand': '&', 'plus': '+', 'equals': '=', 'by': '/', 'backslash': '\\'
         };
 
         let processedText = text.toLowerCase();
-
-        // Use regex with word boundaries to replace punctuation words
         Object.keys(punctuationMap).forEach(word => {
             const regex = new RegExp(`\\b${word}\\b`, 'gi');
             processedText = processedText.replace(regex, punctuationMap[word]);
         });
-
-        // Also handle cases where there might be a space before the punctuation
-        // e.g., "Hello world ." -> "Hello world."
         processedText = processedText.replace(/\s+([.,!?:;])/g, '$1');
-
-        // Capitalize first letter of sentences if possible (crude approach)
         processedText = processedText.replace(/(^|[.!?]\s+)([a-z])/g, (match) => match.toUpperCase());
-
         return processedText;
     }
-
-    parsePassword(passwordStr: string): string {
-        // Replace spelled out special characters with actual symbols
-        const specialCharMap: { [key: string]: string } = {
-            'at': '@',
-            'dot': '.',
-            'underscore': '_',
-            'dash': '-',
-            'hyphen': '-',
-            'ampersand': '&',
-            'plus': '+',
-            'equals': '=',
-            'slash': '/',
-            'backslash': '\\'
-        };
-
-        // Split by spaces and process each part
-        const parts = passwordStr.split(' ');
-        let result = '';
-
-        for (const part of parts) {
-            const lowerPart = part.toLowerCase();
-
-            if (specialCharMap[lowerPart]) {
-                result += specialCharMap[lowerPart];
-            } else if (lowerPart === 'space') {
-                result += ' ';
-            } else {
-                result += part;
-            }
-        }
-
-        return result;
-    }
-
 }
